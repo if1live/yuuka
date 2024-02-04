@@ -16,6 +16,11 @@ import { registerSW } from "virtual:pwa-register";
 const updateSW = registerSW({
   onNeedRefresh() {
     console.log("onNeedRefresh");
+
+    // https://adueck.github.io/blog/caching-everything-for-totally-offline-pwa-vite-react/
+    if (confirm("New content available. Reload?")) {
+      updateSW(true);
+    }
   },
   onOfflineReady() {
     console.log("onOfflineReady");
