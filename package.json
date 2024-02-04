@@ -27,7 +27,12 @@
     "@vitejs/plugin-react": "^4.2.1",
     "typescript": "^5.3.3",
     "vite": "^5.0.12",
+    "vite-plugin-pwa": "^0.17.5",
     "vitest": "^1.2.2"
+  },
+  "peerDependencies": {
+    "workbox-build": "^7.0.0",
+    "workbox-window": "^7.0.0"
   },
   "packageManager": "pnpm@8.15.1"
 }

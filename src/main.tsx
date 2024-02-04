@@ -11,6 +11,16 @@ import App from "./App.tsx";
 import { PriceCalculatorPage } from "./features/PriceCalculatorPage.tsx";
 import { TimeValueOfMoneyCalculatorPage } from "./features/TimeValueOfMoneyCalculatorPage.tsx";
 import "./index.css";
+import { registerSW } from "virtual:pwa-register";
+
+const updateSW = registerSW({
+  onNeedRefresh() {
+    console.log("onNeedRefresh");
+  },
+  onOfflineReady() {
+    console.log("onOfflineReady");
+  },
+});
 
 const router = createHashRouter(
   createRoutesFromElements(
