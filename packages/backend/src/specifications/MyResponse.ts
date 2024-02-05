@@ -1,1 +1,3 @@
-export class MyResponse {}
+export class MyResponse<T> {
+  constructor(readonly body: T) {}
+}

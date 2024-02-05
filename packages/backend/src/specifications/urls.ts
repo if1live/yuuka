@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { HttpEndpoint, HttpInOut, HttpRpc, HttpSchema } from "./rpc.js";
+import { HttpEndpoint, HttpInOut, HttpRpc, InOutSchema } from "./rpc.js";
 
 const AddReq = z.object({
   a: z.coerce.number().optional().default(0),
@@ -11,7 +11,7 @@ const AddRes = z.object({
 });
 
 const add_endpoint = HttpEndpoint.define({
-  method: "post",
+  method: "get",
   path: "/add",
 });
 
@@ -20,7 +20,7 @@ const add_inout = HttpInOut.define({
   _out: {} as z.infer<typeof AddRes>,
 });
 
-const add_schema = HttpSchema.define({
+const add_schema = InOutSchema.define({
   req: AddReq,
   res: AddRes,
 });

@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { MyRequest } from "./MyRequest.js";
+import { MyResponse } from "./MyResponse.js";
 
 export type HttpMethod = "get" | "post" | "delete" | "put";
 
@@ -37,25 +39,40 @@ export const HttpInOut = {
   define: define_inout,
 };
 
-export interface HttpSchema<I extends z.ZodType, O extends z.ZodType> {
-  req: z.infer<I>;
-  res: z.infer<O>;
+export interface InOutSchema<IZ extends z.ZodType, OZ extends z.ZodType> {
+  req: IZ;
+  res: OZ;
+  _in: z.infer<IZ>;
+  _out: z.infer<OZ>;
 }
 
-const define_schema = <I extends z.ZodType, O extends z.ZodType>(args: {
-  req: I;
-  res: O;
-}): HttpSchema<I, O> => {
-  return args;
+const define_schema = <IZ extends z.ZodType, OZ extends z.ZodType>(args: {
+  req: IZ;
+  res: OZ;
+}): InOutSchema<IZ, OZ> => {
+  return {
+    req: args.req,
+    res: args.res,
+    _in: {} as z.infer<IZ>,
+    _out: {} as z.infer<OZ>,
+  };
 };
 
-export const HttpSchema = {
+export const InOutSchema = {
   define: define_schema,
 };
 
-export interface HttpRpc<M extends HttpMethod, P extends `/${string}`, I, O> {
+export interface HttpRpc<
+  M extends HttpMethod,
+  P extends `/${string}`,
+  I,
+  O,
+  IZ extends z.ZodType,
+  OZ extends z.ZodType,
+> {
   endpoint: HttpEndpoint<M, P>;
   inout: HttpInOut<I, O>;
+  schema: InOutSchema<IZ, OZ>;
 }
 
 const define_rpc = <
@@ -68,11 +85,24 @@ const define_rpc = <
 >(args: {
   endpoint: HttpEndpoint<M, P>;
   inout: HttpInOut<I, O>;
-  schema: HttpSchema<IZ, OZ>;
-}): HttpRpc<M, P, I, O> => {
+  schema: InOutSchema<IZ, OZ>;
+}): HttpRpc<M, P, I, O, IZ, OZ> => {
   return args;
 };
 
 export const HttpRpc = {
   define: define_rpc,
 };
+
+export type ControllerFn<I, O> = (req: MyRequest<I>) => Promise<MyResponse<O>>;
+
+export type AsControllerFn<T> = T extends HttpRpc<
+  infer M,
+  infer P,
+  infer I,
+  infer O,
+  infer IZ,
+  infer OZ
+>
+  ? ControllerFn<I, O>
+  : never;
