@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
 import App from "./App.tsx";
+import { ArithmeticCalculatorPage } from "./features/ArithmeticCalculatorPage.tsx";
 import { PriceCalculatorPage } from "./features/PriceCalculatorPage.tsx";
 import { TimeValueOfMoneyCalculatorPage } from "./features/TimeValueOfMoneyCalculatorPage.tsx";
 import "./index.css";
@@ -30,6 +31,8 @@ const updateSW = registerSW({
 const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      <Route index element={<ArithmeticCalculatorPage />} />
+      <Route path="/arithmetic" element={<ArithmeticCalculatorPage />} />
       <Route path="/cost" element={<PriceCalculatorPage />} />
       <Route path="/tvm" element={<TimeValueOfMoneyCalculatorPage />} />
     </Route>,
