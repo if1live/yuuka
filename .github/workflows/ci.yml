@@ -44,7 +44,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
+      - name: backend
+        working-directory: packages/backend
+        run: |
+          pnpm build
+          pnpm artifact
+
       - name: frontend
+        working-directory: packages/frontend
         run: |
           pnpm build
 

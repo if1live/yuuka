@@ -12,7 +12,7 @@ const AddRes = z.object({
 
 const add_endpoint = HttpEndpoint.define({
   method: "get",
-  path: "/add",
+  path: "/api/add",
 });
 
 const add_inout = HttpInOut.define({

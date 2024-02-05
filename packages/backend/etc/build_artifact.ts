@@ -1,12 +1,6 @@
 import fs from "node:fs/promises";
 import esbuild from "esbuild";
 
-const banner_js_esm = `
-import { createRequire as topLevelCreateRequire } from 'module';
-const require = topLevelCreateRequire(import.meta.url);
-const __dirname = '.';
-`.trim();
-
 // https://github.com/evanw/esbuild/issues/946#issuecomment-911869872
 const opts_common: esbuild.BuildOptions = {
   // identifiers까지 minifiy 적용하면 소스맵에 들어가는 이름도 뭉개진다
@@ -26,9 +20,6 @@ const opts_common: esbuild.BuildOptions = {
   platform: "browser",
   target: "node20",
   format: "esm",
-  banner: {
-    js: banner_js_esm,
-  },
 };
 
 function readableSize(val: number) {
@@ -74,4 +65,7 @@ const build = async (
   });
 };
 
-await Promise.allSettled([build("./src/main.ts", "main.js", opts_common)]);
+// TODO: service-worker 경로를 더 멀쩡하게 만드는 방법?
+await Promise.allSettled([
+  build("./src/sw.ts", "../../frontend/public/service-worker.js", opts_common),
+]);

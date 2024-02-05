@@ -12,8 +12,10 @@ import { ArithmeticCalculatorPage } from "./features/ArithmeticCalculatorPage.ts
 import { PriceCalculatorPage } from "./features/PriceCalculatorPage.tsx";
 import { TimeValueOfMoneyCalculatorPage } from "./features/TimeValueOfMoneyCalculatorPage.tsx";
 import "./index.css";
-import { registerSW } from "virtual:pwa-register";
 
+/*
+TODO: vite pwa로 날로 먹으면서 fetch 갈아끼우는 방법 어디 없나?
+import { registerSW } from "virtual:pwa-register";
 const updateSW = registerSW({
   onNeedRefresh() {
     console.log("onNeedRefresh");
@@ -27,6 +29,7 @@ const updateSW = registerSW({
     console.log("onOfflineReady");
   },
 });
+*/
 
 const router = createHashRouter(
   createRoutesFromElements(
