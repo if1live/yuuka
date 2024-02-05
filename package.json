@@ -1,0 +1,20 @@
+{
+  "name": "yuuka",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm -r dev",
+    "fix": "pnpm -r fix",
+    "lint": "pnpm -r lint"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.5.3",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@8.15.1"
+}
