@@ -6,11 +6,11 @@ self.addEventListener("install", (ev) => {
   // 설치 작업을 처리합니다. 예를 들어 캐시 파일 목록을 저장할 수 있습니다.
   // TODO: vite로 생성되는 파일은 어떻게 대응하지?
   evt.waitUntil(
-    caches
-      .open("v1")
-      .then((cache) =>
-        cache.addAll(["/index.html", "/styles/main.css", "/scripts/main.js"]),
-      ),
+    caches.open("v1").then(async (cache) => {
+      // TODO: Uncaught (in promise) TypeError: Failed to execute 'addAll' on 'Cache': Request failed
+      // 배포 이후 발생하는 에러 언제 고치냐...
+      // cache.addAll(["/index.html", "/styles/main.css", "/scripts/main.js"]),
+    }),
   );
 });
 
