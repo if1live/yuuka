@@ -1,8 +1,11 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { MyRequest, MyResponse, dataSheet } from "./specifications/index.js";
 import { AsControllerFn } from "./specifications/rpc.js";
 
 export const app = new Hono();
+
+app.use("*", cors());
 
 const spec = dataSheet.add;
 
