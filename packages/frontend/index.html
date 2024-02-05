@@ -16,7 +16,8 @@
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", function () {
-          navigator.serviceWorker.register("/yuuka/service-worker.mjs").then(
+          // github pages 쓸때는 base url 붙어야한다
+          navigator.serviceWorker.register("/service-worker.mjs").then(
             function (registration) {
               // 등록 성공
               console.log(

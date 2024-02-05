@@ -26,6 +26,7 @@ const vitePWA = VitePWA({
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/yuuka/",
+  // github pages 쓸때는 base url 붙어야한다.
+  // base: "/yuuka/",
   plugins: [react()],
 });
