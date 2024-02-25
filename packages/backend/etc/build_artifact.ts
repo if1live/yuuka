@@ -17,7 +17,7 @@ const opts_common: esbuild.BuildOptions = {
   bundle: true,
   sourcemap: true,
   treeShaking: true,
-  platform: "browser",
+  platform: "node",
   target: "node20",
   format: "esm",
 };
@@ -65,7 +65,6 @@ const build = async (
   });
 };
 
-// TODO: service-worker 경로를 더 멀쩡하게 만드는 방법?
 await Promise.allSettled([
-  build("./src/sw.ts", "../../frontend/public/service-worker.js", opts_common),
+  build("./src/handlers/http_main.ts", "http_main.js", opts_common),
 ]);

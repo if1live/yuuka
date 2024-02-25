@@ -17,7 +17,8 @@ class MyNotificationListenerService : NotificationListenerService() {
     private val notificationKeyList = CopyOnWriteArrayList<String>()
 
     // TODO: 주소 수정
-    private var url = "http://192.168.0.103:3000/messages/"
+    // private val url = "http://192.168.0.103:3000/messages/"
+    private val url = "https://9skmgzitgk.execute-api.ap-northeast-1.amazonaws.com/"
     private val sender = MessageSender(url)
 
     // 어떤 패키지의 메세지가 관심있는지 확신이 denyList로 관리
@@ -25,6 +26,7 @@ class MyNotificationListenerService : NotificationListenerService() {
         "com.google.android.gm",
         "kr.co.burgerkinghybrid",
         "com.discord",
+        "com.samsung.android.app.tips",
     )
     val allowList = hashSetOf<String>()
 
@@ -46,6 +48,11 @@ class MyNotificationListenerService : NotificationListenerService() {
         val id: Int = sbn?.id ?: -1
         val postTime: Long = sbn?.postTime ?: -1;
 
+        if (denyList.contains(packageName)) {
+            Log.d(TAG, "onNotificationPosted: $packageName in denyList")
+            return
+        }
+
         // 똑같은 메세지로 onNotificationPosted가 2번 호출되는 경우가 있다.
         // "A unique instance key for this notification record."인 key를 사용해서 중복 제거
         val found = notificationKeyList.indexOf(key);
@@ -57,11 +64,6 @@ class MyNotificationListenerService : NotificationListenerService() {
         notificationKeyList.add(key)
         if (notificationKeyList.count() > 10)
             notificationKeyList.removeFirst()
-
-        if (denyList.contains(packageName)) {
-            Log.d(TAG, "onNotificationPosted: $packageName in denyList")
-            return
-        }
 
         val extras = sbn?.notification?.extras
 
