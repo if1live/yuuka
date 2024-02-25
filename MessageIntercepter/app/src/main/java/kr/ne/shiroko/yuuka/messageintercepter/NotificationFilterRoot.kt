@@ -29,6 +29,7 @@ class NotificationFilterRoot : NotificationFilter {
         "kr.pe.designerj.airbudspopup.free",
         "com.heavenburnsred",
         "com.microsoft.office.outlook",
+        "com.nhn.android.webtoon",
     )
 
     override fun predicate(data: MyNotification): Boolean {
