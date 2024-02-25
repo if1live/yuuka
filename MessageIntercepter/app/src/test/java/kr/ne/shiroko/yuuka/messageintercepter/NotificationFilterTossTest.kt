@@ -5,6 +5,7 @@ import org.junit.Test
 
 class NotificationFilterTossTest {
     private val subject = NotificationFilterToss()
+    private val packageName = NotificationFilterToss.packageName
 
     @Test
     fun blank() {
@@ -17,7 +18,7 @@ class NotificationFilterTossTest {
             "extras": {}
         }
         */
-        val notification = MyNotification(511393872)
+        val notification = MyNotification(packageName)
         val actual = subject.predicate(notification)
         Assert.assertEquals(false, actual)
     }
@@ -37,7 +38,7 @@ class NotificationFilterTossTest {
             }
         }
         */
-        val notification = MyNotification(2106096057)
+        val notification = MyNotification(packageName)
         notification.title = "근처에 토스를 켠 사람이 있어요!"
         notification.text = "지금 눌러서 확인하기"
         notification.bigText = "지금 눌러서 확인하기"
@@ -59,7 +60,7 @@ class NotificationFilterTossTest {
             }
         }
         */
-        val notification = MyNotification(300)
+        val notification = MyNotification(packageName)
         notification.title = "846 걸음"
         notification.subText = "만보기"
         val actual = subject.predicate(notification)
@@ -82,7 +83,7 @@ class NotificationFilterTossTest {
             }
         }
          */
-        val notification = MyNotification(-537864431)
+        val notification = MyNotification(packageName)
         notification.title = "50,000원 입금"
         notification.text = "유저 → 내 토스뱅크 통장"
         notification.bigText = "유저 → 내 토스뱅크 통장"

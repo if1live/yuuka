@@ -5,6 +5,7 @@ import org.junit.Test
 
 class NotificationFilterNaverTest {
     private val subject = NotificationFilterNaver()
+    private val packageName =NotificationFilterNaver.packageName
 
     @Test
     fun blank() {
@@ -18,7 +19,7 @@ class NotificationFilterNaverTest {
         }
          */
 
-        val notification = MyNotification(1596032129)
+        val notification = MyNotification(packageName)
         val actual = subject.predicate(notification)
         Assert.assertEquals(false, actual)
     }
@@ -39,7 +40,7 @@ class NotificationFilterNaverTest {
             }
         }
          */
-        val notification = MyNotification(-123456789)
+        val notification = MyNotification(packageName)
         notification.title = "네이버 페이"
         notification.text = "(주)어쩌고마트에서 25,750원 결제되었습니다. (결제수단: 카드 간편결제)"
         notification.bigText= "(주)어쩌고마트에서 25,750원 결제되었습니다. (결제수단: 카드 간편결제)"

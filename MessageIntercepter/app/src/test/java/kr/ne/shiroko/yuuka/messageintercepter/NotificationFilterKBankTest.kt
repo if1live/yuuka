@@ -5,6 +5,7 @@ import org.junit.Test
 
 class NotificationFilterKBankTest {
     private val subject = NotificationFilterKBank()
+    private val packageName = NotificationFilterKBank.packageName
 
     @Test
     fun real() {
@@ -21,7 +22,7 @@ class NotificationFilterKBankTest {
             }
         }
          */
-        val notification = MyNotification(1303914982)
+        val notification = MyNotification(packageName)
         val actual = subject.predicate(notification)
         Assert.assertEquals(true, actual)
     }

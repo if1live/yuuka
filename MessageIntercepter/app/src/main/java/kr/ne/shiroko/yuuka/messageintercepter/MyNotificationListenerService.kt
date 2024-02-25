@@ -21,35 +21,7 @@ class MyNotificationListenerService : NotificationListenerService() {
     private val url = "https://9skmgzitgk.execute-api.ap-northeast-1.amazonaws.com/messages/"
     private val sender = MessageSender(url)
 
-    // TODO: 어떤 패키지의 메세지가 관심있는지 확신이 생기기전까지는 denyList로 관리
-    // 받아볼 목적이 정해지면 allowList로 바꾼다.
-    val denyList = hashSetOf<String>(
-        "android",
-        // email같은 시스템 알림
-        "com.google.android.gm",
-        "com.google.android.googlequicksearchbox",
-        "com.kakao.talk",
-        // 무선 충전
-        "com.android.systemui",
-        "com.sec.android.app.shealth",
-        "com.sec.android.daemonapp",
-        "com.discord",
-        "com.teamblind.blind",
-        "com.twitter.android",
-        "com.samsung.android.app.tips",
-        "hotspotshield.android.vpn",
-        "kr.co.burgerkinghybrid",
-        "kr.pe.designerj.airbudspopup.free",
-        "com.heavenburnsred",
-        "com.microsoft.office.outlook",
-    )
-
-    private val packageNameMap = mapOf(
-        NotificationFilterNaver.packageName to NotificationFilterNaver(),
-        NotificationFilterSamsungPay.packageName to NotificationFilterSamsungPay(),
-        NotificationFilterToss.packageName to NotificationFilterToss(),
-        NotificationFilterKBank.packageName to NotificationFilterKBank(),
-    )
+    private val packageFilter = NotificationFilterRoot()
 
     override fun onListenerConnected() {
         super.onListenerConnected()
@@ -64,39 +36,14 @@ class MyNotificationListenerService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
 
-        val packageName: String = sbn?.packageName ?: "Null"
-        val key: String = sbn?.key ?: "Null"
-        val id: Int = sbn?.id ?: -1
-        val postTime: Long = sbn?.postTime ?: -1;
-        val extras = sbn?.notification?.extras
-
-        if (denyList.contains(packageName)) {
-            // Log.d(TAG, "onNotificationPosted: $packageName in denyList")
+        if (sbn == null) {
             return
         }
 
-        if (extras == null) {
-            return
-        }
+        val data = MyNotification(sbn.packageName)
+        data.fill(sbn)
 
-        // https://developer.android.com/reference/android/app/Notification 필요하면 뒤져서 더 뜯기
-        val extraTitle = extras.getString(Notification.EXTRA_TITLE)
-        val extraText = extras.getString(Notification.EXTRA_TEXT)
-        val extraBigText = extras.getString(Notification.EXTRA_BIG_TEXT)
-        val extraInfoText = extras.getString(Notification.EXTRA_INFO_TEXT)
-        val extraSubText = extras.getString(Notification.EXTRA_SUB_TEXT)
-        val extraSummaryText = extras.getString(Notification.EXTRA_SUMMARY_TEXT)
-
-        val data = MyNotification(id)
-        data.title = extraTitle
-        data.text = extraText
-        data.bigText = extraBigText
-        data.infoText = extraInfoText
-        data.subText = extraSubText
-        data.summaryText = extraSummaryText
-
-        val packageFilter = packageNameMap[packageName]
-        val required = packageFilter?.predicate(data) ?: true
+        val required = packageFilter.predicate(data)
         if (!required) {
             return
         }
@@ -117,25 +64,7 @@ class MyNotificationListenerService : NotificationListenerService() {
             notificationKeyList.removeFirst()
          */
 
-        // TODO: 관심있는 패키지에서 발생한 항목만 전달해야한다.
-        val json = JSONObject()
-        // StatusBarNotification
-        json.put("id", id)
-        json.put("key", key)
-        json.put("postTime", postTime)
-        json.put("packageName", packageName)
-
-        // extras
-        val jsonExtra = JSONObject()
-        jsonExtra.put("title", extraTitle)
-        jsonExtra.put("text", extraText)
-        jsonExtra.put("bigText", extraBigText)
-        jsonExtra.put("infoText", extraInfoText)
-        jsonExtra.put("subText", extraSubText)
-        jsonExtra.put("summaryText", extraSummaryText)
-
-        json.put("extras", jsonExtra)
-
+        val json = data.toJson()
         val jsonText = json.toString(2)
         Log.d(TAG, "onNotificationPosted:\n$jsonText")
 

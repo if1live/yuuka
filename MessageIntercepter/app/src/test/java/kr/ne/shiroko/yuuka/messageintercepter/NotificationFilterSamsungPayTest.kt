@@ -5,6 +5,7 @@ import org.junit.Test
 
 class NotificationFilterSamsungPayTest {
     private val subject = NotificationFilterSamsungPay()
+    private val packageName = NotificationFilterSamsungPay.packageName
 
     @Test
     fun droidX() {
@@ -20,7 +21,8 @@ class NotificationFilterSamsungPayTest {
             }
         }
          */
-        val notification = MyNotification(9999)
+        val notification = MyNotification(packageName)
+        notification.id = 9999
         val actual = subject.predicate(notification)
         Assert.assertEquals(false, actual)
     }
@@ -36,7 +38,8 @@ class NotificationFilterSamsungPayTest {
             "extras": {}
         }
          */
-        val notification = MyNotification(0)
+        val notification = MyNotification(packageName)
+        notification.id = 0
         val actual = subject.predicate(notification)
         Assert.assertEquals(false, actual)
     }
@@ -56,10 +59,11 @@ class NotificationFilterSamsungPayTest {
             }
         }
          */
-        val notification = MyNotification(1471071348)
+        val notification = MyNotification(packageName)
+        notification.id = 1471071348
         notification.title = "이디야커피(행신역점) ₩8,200"
-        notification.text =  "결제 내역 확인"
-        notification.bigText =  "결제 내역 확인"
+        notification.text = "결제 내역 확인"
+        notification.bigText = "결제 내역 확인"
         val actual = subject.predicate(notification)
         Assert.assertEquals(true, actual)
     }
