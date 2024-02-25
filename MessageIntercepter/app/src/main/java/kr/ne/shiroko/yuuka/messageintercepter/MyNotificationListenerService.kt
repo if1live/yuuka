@@ -18,15 +18,18 @@ class MyNotificationListenerService : NotificationListenerService() {
 
     // TODO: 주소 수정
     // private val url = "http://192.168.0.103:3000/messages/"
-    private val url = "https://9skmgzitgk.execute-api.ap-northeast-1.amazonaws.com/"
+    private val url = "https://9skmgzitgk.execute-api.ap-northeast-1.amazonaws.com/messages/"
     private val sender = MessageSender(url)
 
     // 어떤 패키지의 메세지가 관심있는지 확신이 denyList로 관리
     val denyList = hashSetOf<String>(
+        // email같은 시스템 알림
         "com.google.android.gm",
-        "kr.co.burgerkinghybrid",
+        // 무선 충전
+        "com.android.systemui",
         "com.discord",
         "com.samsung.android.app.tips",
+        "kr.co.burgerkinghybrid",
     )
     val allowList = hashSetOf<String>()
 
