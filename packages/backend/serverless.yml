@@ -13,7 +13,7 @@ provider:
   memorySize: 512
   architecture: arm64
 
-  logRetentionInDays: 1
+  logRetentionInDays: 90
   versionFunctions: false
   timeout: 5
 
