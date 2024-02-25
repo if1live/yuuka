@@ -1,5 +1,7 @@
 service: yuuka
 
+useDotenv: true
+
 plugins:
   - serverless-scriptable-plugin
 
@@ -28,6 +30,8 @@ provider:
 
     STAGE: ${self:provider.stage}
     NODE_ENV: production
+
+    GOOGLE_SHEET_URL: ${env:GOOGLE_SHEET_URL}
 
 package:
   individually: true
