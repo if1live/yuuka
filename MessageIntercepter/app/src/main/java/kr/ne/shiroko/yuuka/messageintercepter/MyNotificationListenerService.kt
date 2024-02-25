@@ -8,10 +8,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.util.concurrent.CopyOnWriteArrayList
 
 // https://devjaewoo.tistory.com/54
 class MyNotificationListenerService : NotificationListenerService() {
     private val TAG = "MyNotificationListenerService"
+
+    private val notificationKeyList = CopyOnWriteArrayList<String>()
 
     // TODO: 주소 수정
     private var url = "http://192.168.0.103:3000/messages/"
@@ -31,6 +34,22 @@ class MyNotificationListenerService : NotificationListenerService() {
         super.onNotificationPosted(sbn)
 
         val packageName: String = sbn?.packageName ?: "Null"
+        val key: String = sbn?.key ?: "Null"
+        val id: Int = sbn?.id ?: -1
+        val postTime: Long = sbn?.postTime ?: -1;
+
+        // 똑같은 메세지로 onNotificationPosted가 2번 호출되는 경우가 있다.
+        // "A unique instance key for this notification record."인 key를 사용해서 중복 제거
+        val found = notificationKeyList.indexOf(key);
+        if(found >= 0) {
+            Log.d(TAG, "onNotificationPosted: $key is duplicated notification")
+            return
+        }
+
+        notificationKeyList.add(key)
+        if(notificationKeyList.count() > 10)
+            notificationKeyList.removeFirst()
+
         val extras = sbn?.notification?.extras
 
         // https://developer.android.com/reference/android/app/Notification 필요하면 뒤져서 더 뜯기
@@ -41,26 +60,27 @@ class MyNotificationListenerService : NotificationListenerService() {
         val extraSubText = extras?.getString(Notification.EXTRA_SUB_TEXT)
         val extraSummaryText = extras?.getString(Notification.EXTRA_SUMMARY_TEXT)
 
-        Log.d(
-            TAG, "onNotificationPosted:\n" +
-                "PackageName: $packageName" +
-                "Title: $extraTitle\n" +
-                "Text: $extraText\n" +
-                "BigText: $extraBigText\n" +
-                "InfoText: $extraInfoText\n" +
-                "SubText: $extraSubText\n" +
-                "SummaryText: $extraSummaryText\n"
-        )
-
         // TODO: 관심있는 패키지에서 발생한 항목만 전달해야한다.
         val json = JSONObject()
+        // StatusBarNotification
+        json.put("id", id)
+        json.put("key", key)
+        json.put("postTime", postTime)
         json.put("packageName", packageName)
-        json.put("title", extraTitle)
-        json.put("text", extraText)
-        json.put("bigText", extraBigText)
-        json.put("infoText", extraInfoText)
-        json.put("subText", extraSubText)
-        json.put("summaryText", extraSummaryText)
+
+        // extras
+        val jsonExtra = JSONObject()
+        jsonExtra.put("title", extraTitle)
+        jsonExtra.put("text", extraText)
+        jsonExtra.put("bigText", extraBigText)
+        jsonExtra.put("infoText", extraInfoText)
+        jsonExtra.put("subText", extraSubText)
+        jsonExtra.put("summaryText", extraSummaryText)
+
+        json.put("extras", jsonExtra)
+
+        val jsonText = json.toString(2)
+        Log.d(TAG, "onNotificationPosted:\n$jsonText")
 
         // kotlin 비동기 어떻게 쓰는거지?
         val myScope = CoroutineScope(Dispatchers.Default)
