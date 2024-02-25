@@ -21,7 +21,8 @@ class MyNotificationListenerService : NotificationListenerService() {
     private val url = "https://9skmgzitgk.execute-api.ap-northeast-1.amazonaws.com/messages/"
     private val sender = MessageSender(url)
 
-    // 어떤 패키지의 메세지가 관심있는지 확신이 denyList로 관리
+    // TODO: 어떤 패키지의 메세지가 관심있는지 확신이 생기기전까지는 denyList로 관리
+    // 받아볼 목적이 정해지면 allowList로 바꾼다.
     val denyList = hashSetOf<String>(
         // email같은 시스템 알림
         "com.google.android.gm",
@@ -29,6 +30,7 @@ class MyNotificationListenerService : NotificationListenerService() {
         "com.android.systemui",
         "com.discord",
         "com.samsung.android.app.tips",
+        "hotspotshield.android.vpn",
         "kr.co.burgerkinghybrid",
     )
     val allowList = hashSetOf<String>()
