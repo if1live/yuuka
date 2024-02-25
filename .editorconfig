@@ -10,9 +10,6 @@ charset = utf-8
 insert_final_newline = true
 trim_trailing_whitespace =  true
 
-indent_size = 2
-indent_style = space
-
 [*.json]
 indent_size = 2
 indent_style = space
@@ -23,4 +20,8 @@ indent_style = space
 
 [*.{ts,tsx,js,jsx,mjs}]
 indent_size = 2
+indent_style = space
+
+[*.kt]
+indent_size = 4
 indent_style = space
