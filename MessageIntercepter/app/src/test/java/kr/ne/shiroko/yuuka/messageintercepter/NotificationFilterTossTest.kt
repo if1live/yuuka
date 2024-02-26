@@ -68,6 +68,16 @@ class NotificationFilterTossTest {
     }
 
     @Test
+    fun disappear() {
+        val notification  = MyNotification( packageName)
+        notification.title = "강*해님 발견!"
+        notification.text = "사라지기 전에 토스를 켜보세요."
+        notification.bigText = "사라지기 전에 토스를 켜보세요."
+        val actual = subject.predicate(notification)
+        Assert.assertEquals(false, actual)
+    }
+
+    @Test
     fun real() {
         /*
         {

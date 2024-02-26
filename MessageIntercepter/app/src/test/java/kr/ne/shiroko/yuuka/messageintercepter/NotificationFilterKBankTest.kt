@@ -26,4 +26,12 @@ class NotificationFilterKBankTest {
         val actual = subject.predicate(notification)
         Assert.assertEquals(true, actual)
     }
+
+    @Test
+    fun cashback() {
+        val notification = MyNotification(packageName)
+        notification.title = "구독료 돌려받기 이벤트 알림"
+        val actual = subject.predicate(notification)
+        Assert.assertEquals(false, actual)
+    }
 }

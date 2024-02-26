@@ -5,6 +5,7 @@ class NotificationFilterRoot : NotificationFilter {
         NotificationFilterNaver.packageName to NotificationFilterNaver(),
         NotificationFilterSamsungPay.packageName to NotificationFilterSamsungPay(),
         NotificationFilterToss.packageName to NotificationFilterToss(),
+        NotificationFilterKookminBank.packageName to NotificationFilterKookminBank(),
         NotificationFilterKBank.packageName to NotificationFilterKBank(),
     )
 
@@ -14,7 +15,10 @@ class NotificationFilterRoot : NotificationFilter {
         "android",
         // email같은 시스템 알림
         "com.google.android.gm",
+        "com.google.android.gms",
         "com.google.android.googlequicksearchbox",
+        "com.google.android.calendar",
+        "com.google.android.youtube",
         "com.kakao.talk",
         // 무선 충전
         "com.android.systemui",
@@ -30,6 +34,19 @@ class NotificationFilterRoot : NotificationFilter {
         "com.heavenburnsred",
         "com.microsoft.office.outlook",
         "com.nhn.android.webtoon",
+        "com.samsung.android.themestore",
+        "com.Slack",
+        "com.android.chrome",
+        "com.kt.olleh.storefront",
+        "com.sec.android.app.clockpackage",
+        "com.samsung.android.app.cocktailbarservice",
+        "com.samsung.android.voc",
+        "com.samsung.android.themestore",
+        "com.samsung.android.oneconnect",
+        "com.samsung.android.messaging",
+        "com.samsung.android.app.cocktailbarservice",
+        "com.soundcloud.android",
+        "gogolook.callgogolook2",
     )
 
     override fun predicate(data: MyNotification): Boolean {
@@ -38,6 +55,9 @@ class NotificationFilterRoot : NotificationFilter {
         if (denyList.contains(packageName)) {
             return false
         }
+
+        if (data.title == null) return false
+        if (data.title == "") return false
 
         val packageFilter = packageNameMap[packageName]
         return packageFilter?.predicate(data) ?: true
