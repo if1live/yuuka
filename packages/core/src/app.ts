@@ -1,9 +1,11 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { JournalController } from "./controllers/JournalController.js";
 import { ResourceController } from "./controllers/ResourceController.js";
 import { SampleController } from "./controllers/SampleController.js";
 import {
+  journalSpecification,
   resourceSpecification,
   sampleSpecification,
 } from "./specifications/index.js";
@@ -15,3 +17,4 @@ app.use("*", cors());
 
 app.route(sampleSpecification.resource, SampleController.app);
 app.route(resourceSpecification.resource, ResourceController.app);
+app.route(journalSpecification.resource, JournalController.app);

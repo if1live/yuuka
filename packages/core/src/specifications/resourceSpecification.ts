@@ -1,4 +1,4 @@
-import { z } from "zod";
+import type { z } from "zod";
 import type { AccountCode, AccountTag } from "../index.js";
 import {
   HttpEndpoint,
@@ -6,10 +6,9 @@ import {
   HttpRpc,
   InOutSchema,
 } from "../networks/rpc.js";
+import { Empty } from "./types.js";
 
 export const resource = "/api/resource";
-
-const EmptyReq = z.object({});
 
 type MasterDataResp = {
   accountTags: AccountTag[];
@@ -22,13 +21,13 @@ const masterdata_endpoint = HttpEndpoint.define({
 });
 
 const masterdata_inout = HttpInOut.define({
-  _in: {} as z.infer<typeof EmptyReq>,
+  _in: {} as z.infer<typeof Empty>,
   _out: {} as MasterDataResp,
 });
 
 const masterdata_schema = InOutSchema.define({
-  req: EmptyReq,
-  resp: EmptyReq,
+  req: Empty,
+  resp: Empty,
 });
 
 const masterdata = HttpRpc.define({

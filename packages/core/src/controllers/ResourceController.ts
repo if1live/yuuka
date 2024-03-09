@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { MasterData } from "../masterdata/instances.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
 import { resourceSpecification } from "../specifications/index.js";
@@ -8,10 +9,9 @@ const sheet = resourceSpecification.dataSheet;
 type Sheet = typeof sheet;
 
 const masterdata: AsControllerFn<Sheet["masterdata"]> = async (req) => {
-  // TODO:
   return new MyResponse({
-    accountCodes: [],
-    accountTags: [],
+    accountTags: MasterData.accountTags,
+    accountCodes: MasterData.accountCodes,
   });
 };
 

@@ -1,30 +1,5 @@
-import path from "node:path";
 import { serve } from "@hono/node-server";
-import * as R from "remeda";
 import { app } from "./app.js";
-import { JournalEntry } from "./journals/JournalEntry.js";
-import { JournalEntryLoader } from "./journals/JournalEntryLoader.js";
-import { AccountCodeLoader } from "./masterdata/AccountCodeLoader.js";
-import { settings } from "./settings.js";
-
-const financialReportsDir = "personal-financial-statements";
-const financialReportsPath = path.resolve(
-  settings.rootPath,
-  "..",
-  financialReportsDir,
-);
-
-const sheetPath = path.join(financialReportsPath, "sheets");
-const masterdata_account = R.pipe(
-  await AccountCodeLoader.read(sheetPath),
-  (x) => AccountCodeLoader.convert(x),
-);
-
-const journalPath = path.join(financialReportsPath, "journals");
-const journalContext = R.pipe(
-  await JournalEntryLoader.read(journalPath, "journal_2024_03.csv"),
-  (x) => JournalEntryLoader.convert(x),
-);
 
 /*
 console.log(`report: ${journalContext.ymd.year}-${journalContext.ymd.month}`);
