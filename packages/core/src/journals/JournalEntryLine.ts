@@ -72,6 +72,19 @@ const validate = (line: JournalEntryLine) => {
   }
 };
 
+const compare = (a: JournalEntryLine, b: JournalEntryLine): number => {
+  // 같은 계열에서는 코드 기준
+  if (a._tag && b._tag && a._tag === b._tag) {
+    return a.code - b.code;
+  }
+
+  // debit -> credit
+  if (a._tag === "debit" && b._tag === "credit") return -1;
+  if (a._tag === "credit" && b._tag === "debit") return 1;
+  return 0;
+};
+
 export const JournalEntryLine = {
   validate,
+  compare,
 };

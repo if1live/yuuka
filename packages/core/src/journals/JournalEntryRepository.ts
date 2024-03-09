@@ -27,7 +27,9 @@ const findById = async (
   const [first, _drop] = rows;
   assert.ok(first);
 
-  const lines = rows.map((x) => JournalEntryLine.validate(x));
+  const lines = rows
+    .map(JournalEntryLine.validate)
+    .sort(JournalEntryLine.compare);
 
   return {
     id: first.id,
@@ -63,9 +65,11 @@ const findByDateRange = async (
 
   const entries = tuples.map(([key, values]): JournalEntry => {
     const first = values[0];
-
-    const lines = values.map((x) => JournalEntryLine.validate(x));
     assert.ok(first);
+
+    const lines = values
+      .map(JournalEntryLine.validate)
+      .sort(JournalEntryLine.compare);
 
     return {
       id: key,
