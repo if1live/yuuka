@@ -1,6 +1,6 @@
-export type {
-  AccountCategory,
+export {
   AccountCode,
+  AccountCategory,
   AccountTag,
 } from "./masterdata/types.js";
 

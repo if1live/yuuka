@@ -1,3 +1,4 @@
+import { AccountCategory, AccountCode } from "@yuuka/core";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { MasterDataContext } from "../contexts/MasterDataContext";
@@ -12,13 +13,24 @@ export const CurrencyDisplay = (props: {
 export const AccountCodeLink = (props: {
   code: number;
 }) => {
-  const { accountCodes } = useContext(MasterDataContext);
-
+  const { accountCodes, accountTags } = useContext(MasterDataContext);
   const { code } = props;
 
-  const url = "/TODO";
+  const account = accountCodes.find((x) => x.code === code);
 
-  return <Link to={url}>{code}</Link>;
+  const tagCode = AccountCode.toTag(code);
+  const tag = accountTags.find((x) => x.code === tagCode);
+
+  const url = `/ledger/account/${code}`;
+
+  const major = tag ? AccountCategory.toKorean(tag.major) : "unknown";
+  const minor = tag?.minor ?? "unknown";
+
+  return (
+    <Link to={url}>
+      [{code}] {major} {">"} {minor} {">"} {account?.name}
+    </Link>
+  );
 };
 
 export const JournalEntryLink = (props: {

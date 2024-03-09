@@ -4,7 +4,7 @@ import path from "node:path";
 import { parse } from "csv-parse/sync";
 import * as R from "remeda";
 import { z } from "zod";
-import type { AccountCategory, AccountCode, AccountTag } from "./types.js";
+import { AccountCategory, AccountCode, type AccountTag } from "./types.js";
 
 /**
  * csv -> typescript record
@@ -52,31 +52,12 @@ const parseAccountCodeSheet: ParseFn<AccountCodeRecord> = (input) => {
   return results;
 };
 
-// masterdata
-
-/**
- * CSV에 기록되는건 가급적 한글 용어로 쓰고싶다.
- * 하지만 코드에서는 영어만 쓰고싶다.
- */
-const convertHangulMajorToAccountCategory = (
-  x: AccountTagRecord["major"],
-): AccountCategory => {
-  const table: Record<AccountTagRecord["major"], AccountCategory> = {
-    자산: "asset",
-    부채: "liability",
-    자본: "equity",
-    수익: "revenue",
-    비용: "expense",
-  };
-  return table[x];
-};
-
 const convertAccountTags = (
   accountTagRecords: AccountTagRecord[],
 ): AccountTag[] => {
   return accountTagRecords.map((x): AccountTag => {
     return {
-      major: convertHangulMajorToAccountCategory(x.major),
+      major: AccountCategory.fromKorean(x.major),
       minor: x.minor,
       code: x.code,
       name: x.name,
@@ -107,7 +88,7 @@ const convertAccountCodes = (args: {
   });
 
   const accountCodes_custom = accountCodeRecords.map((x): AccountCode => {
-    const tagCode = Math.floor(x.code / 1000);
+    const tagCode = AccountCode.toTag(x.code);
     const tag = accountTagMap.get(tagCode);
     assert.ok(tag, `tag not found for code ${x.code}`);
 
