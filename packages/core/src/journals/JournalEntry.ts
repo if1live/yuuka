@@ -3,8 +3,8 @@ import * as R from "remeda";
 import { JournalEntryLine } from "./JournalEntryLine.js";
 
 export interface JournalEntry {
+  id: string;
   date: string;
-  txid: string;
   brief: string;
   lines: JournalEntryLine[];
 }

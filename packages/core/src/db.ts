@@ -29,22 +29,15 @@ const parepare_accountCode: PrepareFn = async (db) => {
   await db.schema
     .createTable("accountCode")
     .addColumn("code", "integer", (c) => c.primaryKey())
-    .addColumn("tag", "integer")
     .addColumn("name", "varchar(255)")
     .addColumn("description", "varchar(255)")
-    .execute();
-
-  await db.schema
-    .createIndex("idx_accountCode_tag")
-    .on("accountCode")
-    .columns(["tag"])
     .execute();
 };
 
 const parepare_journalEntry: PrepareFn = async (db) => {
   await db.schema
     .createTable("journalEntry")
-    .addColumn("txid", "varchar(255)", (c) => c.primaryKey())
+    .addColumn("id", "varchar(255)", (c) => c.primaryKey())
     .addColumn("date", "varchar(255)")
     .addColumn("brief", "varchar(255)")
     .execute();
@@ -53,16 +46,17 @@ const parepare_journalEntry: PrepareFn = async (db) => {
 const parepare_journalEntryLine: PrepareFn = async (db) => {
   await db.schema
     .createTable("journalEntryLine")
-    .addColumn("txid", "varchar(255)")
+    .addColumn("entry_id", "varchar(255)")
     .addColumn("code", "integer")
     .addColumn("debit", "integer")
     .addColumn("credit", "integer")
     .execute();
 
   await db.schema
-    .createIndex("idx_journalEntryLine_txid")
+    .createIndex("idx_journalEntryLine_entry")
     .on("journalEntryLine")
-    .columns(["txid"])
+    .columns(["entry_id", "code"])
+    .unique()
     .execute();
 };
 
@@ -79,7 +73,6 @@ const insertBulk_accountCode = async (db: Kysely<Database>) => {
     (x): Insertable<AccountCodeTable> => {
       return {
         code: x.code,
-        tag: Math.floor(x.code / 1000),
         name: x.name,
         description: x.description,
       };
@@ -93,7 +86,7 @@ const insertBulk_journalEntry = async (db: Kysely<Database>) => {
   const items = journalContext.entries.map(
     (journal): Insertable<JournalEntryTable> => {
       return {
-        txid: journal.txid,
+        id: journal.id,
         date: journal.date,
         brief: journal.brief,
       };
@@ -110,8 +103,8 @@ const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
         const credit = line._tag === "credit" ? line.credit : 0;
 
         return {
+          entry_id: journal.id,
           code: line.code,
-          txid: journal.txid,
           debit,
           credit,
         };

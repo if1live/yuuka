@@ -26,7 +26,7 @@ describe("JournalEntryLoader", () => {
     assert.ok(actaul);
 
     assert.equal(actaul.date, skel.date);
-    assert.equal(actaul.txid, skel.txid);
+    assert.equal(actaul.id, skel.txid);
     assert.equal(actaul.brief, skel.brief);
     assert.equal(actaul.lines.length, 3);
 

@@ -116,7 +116,7 @@ const convert = (records: [JournalItemRecord, ...JournalItemRecord[]]) => {
 
   const entry: JournalEntry = {
     date: first.date,
-    txid: first.txid,
+    id: first.txid,
     brief: first.brief,
     lines,
   };

@@ -1,11 +1,11 @@
 export interface JournalEntryTable {
-  txid: string;
+  id: string;
   date: string;
   brief: string;
 }
 
 export interface JournalEntryLineTable {
-  txid: string;
+  entry_id: string;
   code: number;
   debit: number;
   credit: number;
@@ -13,7 +13,6 @@ export interface JournalEntryLineTable {
 
 export interface AccountCodeTable {
   code: number;
-  tag: number;
   name: string;
   description: string;
 }
