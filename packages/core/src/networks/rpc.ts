@@ -41,18 +41,18 @@ export const HttpInOut = {
 
 export interface InOutSchema<IZ extends z.ZodType, OZ extends z.ZodType> {
   req: IZ;
-  res: OZ;
+  resp: OZ;
   _in: z.infer<IZ>;
   _out: z.infer<OZ>;
 }
 
 const define_schema = <IZ extends z.ZodType, OZ extends z.ZodType>(args: {
   req: IZ;
-  res: OZ;
+  resp: OZ;
 }): InOutSchema<IZ, OZ> => {
   return {
     req: args.req,
-    res: args.res,
+    resp: args.resp,
     _in: {} as z.infer<IZ>,
     _out: {} as z.infer<OZ>,
   };

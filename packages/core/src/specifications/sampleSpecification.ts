@@ -6,6 +6,8 @@ import {
   InOutSchema,
 } from "../networks/rpc.js";
 
+export const resource = "/api/sample";
+
 const AddReq = z.object({
   a: z.coerce.number().optional().default(0),
   b: z.coerce.number().optional().default(0),
@@ -17,7 +19,7 @@ const AddRes = z.object({
 
 const add_endpoint = HttpEndpoint.define({
   method: "get",
-  path: "/api/add",
+  path: "/add",
 });
 
 const add_inout = HttpInOut.define({
@@ -27,7 +29,7 @@ const add_inout = HttpInOut.define({
 
 const add_schema = InOutSchema.define({
   req: AddReq,
-  res: AddRes,
+  resp: AddRes,
 });
 
 const add = HttpRpc.define({
