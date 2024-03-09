@@ -1,7 +1,7 @@
 {
   "name": "@yuuka/frontend",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
@@ -16,8 +16,10 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
+    "remeda": "^1.47.0",
     "semantic-ui-css": "^2.5.0",
-    "semantic-ui-react": "3.0.0-beta.2"
+    "semantic-ui-react": "3.0.0-beta.2",
+    "swr": "^2.2.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",

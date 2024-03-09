@@ -10,4 +10,9 @@ export { JournalEntryLine } from "./journals/JournalEntryLine.js";
 export type { HttpEndpoint, HttpMethod } from "./networks/index.js";
 export { MyRequest, MyResponse } from "./networks/index.js";
 
-export { sampleSpecification } from "./specifications/index.js";
+export {
+  sampleSpecification,
+  ledgerSpecification,
+  journalSpecification,
+  resourceSpecification,
+} from "./specifications/index.js";
