@@ -28,15 +28,19 @@ describe("JournalEntryLoader", () => {
     assert.equal(actaul.lines.length, 3);
 
     const line1 = actaul.lines[0];
-    assert.ok(line1);
-    assert.equal(line1.code, 853000);
-    assert.equal(line1.debit, 7740);
-    assert.equal(line1.credit, null);
+    if (line1?._tag === "debit") {
+      assert.equal(line1.code, 853000);
+      assert.equal(line1.debit, 7740);
+    } else {
+      assert.fail("line1._tag is not debit");
+    }
 
     const line3 = actaul.lines[2];
-    assert.ok(line3);
-    assert.equal(line3.code, 102101);
-    assert.equal(line3.debit, null);
-    assert.equal(line3.credit, 15480);
+    if (line3?._tag === "credit") {
+      assert.equal(line3.code, 102101);
+      assert.equal(line3.credit, 15480);
+    } else {
+      assert.fail("line3._tag is not credit");
+    }
   });
 });

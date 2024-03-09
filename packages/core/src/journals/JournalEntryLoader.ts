@@ -1,11 +1,11 @@
-import assert from "node:assert";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { parse } from "csv-parse/sync";
 import * as R from "remeda";
 import { z } from "zod";
+import type { JournalEntry } from "./JournalEntry.js";
+import type { JournalEntryLine } from "./JournalEntryLine.js";
 import { parseJournalFileName } from "./helpers.js";
-import type { JournalEntry, JournalEntryLine } from "./types.js";
 
 const journalItemSchema = z.object({
   date: z.string(),
@@ -91,6 +91,22 @@ const convert = (records: [JournalItemRecord, ...JournalItemRecord[]]) => {
   const [first, ...rest] = records;
 
   const lines = records.map((record): JournalEntryLine => {
+    if (record.debit) {
+      return {
+        _tag: "debit",
+        code: record.code,
+        debit: record.debit,
+      };
+    }
+
+    if (record.credit) {
+      return {
+        _tag: "credit",
+        code: record.code,
+        credit: record.credit,
+      };
+    }
+
     return {
       code: record.code,
       debit: record.debit,
