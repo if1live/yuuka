@@ -47,7 +47,6 @@ describe("AccountCodeLoader", () => {
     const actual = accountCodes.find((x) => x.code === 102_000);
     assert.ok(actual);
 
-    assert.equal(actual.tag.code, 102);
     assert.equal(actual.code, 102_000);
     assert.equal(actual.name, "현금");
     assert.equal(actual.description, "");
@@ -57,7 +56,6 @@ describe("AccountCodeLoader", () => {
     const actual = accountCodes.find((x) => x.code === 102_002);
     assert.ok(actual);
 
-    assert.equal(actual.tag.code, 102);
     assert.equal(actual.code, 102_002);
     assert.equal(actual.name, "국민 월급");
     assert.equal(actual.description, "");

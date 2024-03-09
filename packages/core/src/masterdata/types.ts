@@ -14,7 +14,6 @@ export interface AccountTag {
 }
 
 export interface AccountCode {
-  tag: AccountTag;
   code: number;
   name: string;
   description: string;

@@ -97,10 +97,9 @@ const convertAccountCodes = (args: {
 
   const accountCodes_parent = accountTags.map((x): AccountCode => {
     const tag = accountTagMap.get(x.code);
-    assert(tag, `tag not found for code ${x.code}`);
+    assert.ok(tag, `tag not found for code ${x.code}`);
 
     return {
-      tag,
       code: x.code * 1000,
       name: x.name,
       description: x.description,
@@ -110,10 +109,9 @@ const convertAccountCodes = (args: {
   const accountCodes_custom = accountCodeRecords.map((x): AccountCode => {
     const tagCode = Math.floor(x.code / 1000);
     const tag = accountTagMap.get(tagCode);
-    assert(tag, `tag not found for code ${x.code}`);
+    assert.ok(tag, `tag not found for code ${x.code}`);
 
     return {
-      tag,
       code: x.code,
       name: x.name,
       description: x.description,
