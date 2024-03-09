@@ -7,6 +7,12 @@ import { SamplePage } from "./features/SamplePage";
 function App() {
   const [count, setCount] = useState(0);
 
+  /*
+  /journal/list/2024-03
+  /journal/entry/1 <- TODO:
+  /ledger/123 <- 모아보기 3자리
+  /ledger/123123 <- 상세보기 6자리
+  */
   return (
     <>
       <div>
