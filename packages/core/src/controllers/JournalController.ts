@@ -9,6 +9,7 @@ const sheet = journalSpecification.dataSheet;
 type Sheet = typeof sheet;
 
 const list: AsControllerFn<Sheet["list"]> = async (req) => {
+  // TODO: db 기반으로 바꾸기
   const data = journalContext;
 
   const mm = data.ymd.month.toString().padStart(2, "0");
