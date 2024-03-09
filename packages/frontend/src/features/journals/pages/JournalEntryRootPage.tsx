@@ -1,5 +1,4 @@
-import { journalSpecification } from "@yuuka/core";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as R from "remeda";
 import {
   Table,
@@ -9,9 +8,6 @@ import {
   TableHeaderCell,
   TableRow,
 } from "semantic-ui-react";
-import useSWRImmutable from "swr/immutable";
-import { fetcher } from "../../fetchers";
-import { JournalEntryList } from "./JournalEntryList";
 
 export const JournalEntryRootPage = () => {
   type Range = {
@@ -63,44 +59,4 @@ export const JournalEntryRootPage = () => {
       </Table>
     </>
   );
-};
-
-export const JournalEntryListPage = () => {
-  const sheet = journalSpecification.dataSheet;
-  const spec = sheet.list;
-
-  const params = useParams();
-  const req = spec.schema.req.parse(params);
-  const qs = new URLSearchParams(req);
-
-  const host = "http://localhost:3000";
-  const endpoint = `${journalSpecification.resource}${spec.endpoint.path}`;
-
-  const url = `${host}${endpoint}?${qs}`;
-  const { data, error, isLoading } = useSWRImmutable(url, fetcher);
-  const resp = data as (typeof spec)["inout"]["_out"];
-
-  if (error) {
-    return <div>failed to load</div>;
-  }
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
-
-  const entries = resp.entries;
-  const { startDate, endDate } = req;
-
-  return (
-    <>
-      <h1>Journal Entries</h1>
-      <h2>
-        {startDate} ~ {endDate}
-      </h2>
-      <JournalEntryList entries={entries} />
-    </>
-  );
-};
-
-export const JournalEntryReadPage = () => {
-  return <div>read</div>;
 };

@@ -7,7 +7,7 @@ export type {
 export { JournalEntry } from "./journals/JournalEntry.js";
 export { JournalEntryLine } from "./journals/JournalEntryLine.js";
 
-export type { HttpEndpoint, HttpMethod } from "./networks/index.js";
+export type { HttpEndpoint, HttpMethod, HttpInOut } from "./networks/rpc.js";
 export { MyRequest, MyResponse } from "./networks/index.js";
 
 export {

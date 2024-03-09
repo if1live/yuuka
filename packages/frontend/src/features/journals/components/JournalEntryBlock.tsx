@@ -4,7 +4,7 @@ import {
   AccountCodeLink,
   CurrencyDisplay,
   JournalEntryLink,
-} from "../../components";
+} from "../../../components";
 
 export const JournalEntryBlock = (props: {
   entry: JournalEntry;

@@ -39,5 +39,5 @@ const validate = (journal: JournalEntry): JournalEntry => {
 
 export const JournalEntry = {
   validate,
-  safeValidate: Result.fromThrowable(validate),
+  safeValidate: Result.fromThrowable(validate, (e) => e as Error),
 };

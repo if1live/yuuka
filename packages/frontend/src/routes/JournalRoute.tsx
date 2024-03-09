@@ -1,9 +1,7 @@
 import { Route, Routes } from "react-router-dom";
-import {
-  JournalEntryListPage,
-  JournalEntryReadPage,
-  JournalEntryRootPage,
-} from "../features/journals/pages";
+import { JournalEntryListPage } from "../features/journals/pages/JournalEntryListPage";
+import { JournalEntryReadPage } from "../features/journals/pages/JournalEntryReadPage";
+import { JournalEntryRootPage } from "../features/journals/pages/JournalEntryRootPage";
 
 export const JournalRouter = () => (
   <Routes>
