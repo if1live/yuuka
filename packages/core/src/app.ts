@@ -1,11 +1,13 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { logger } from "hono/logger";
 import { MyRequest, MyResponse } from "./networks/index.js";
 import type { AsControllerFn } from "./networks/rpc.js";
 import { sampleSpecification } from "./specifications/index.js";
 
 export const app = new Hono();
 
+app.use("*", logger());
 app.use("*", cors());
 
 app.get("/", (c) => c.text("Hono meets Node.js"));
