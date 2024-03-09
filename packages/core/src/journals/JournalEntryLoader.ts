@@ -15,7 +15,7 @@ const journalItemSchema = z.object({
   debit: z.coerce.number().nullable(),
   credit: z.coerce.number().nullable(),
 });
-type JournalItemRecord = z.infer<typeof journalItemSchema>;
+export type JournalItemRecord = z.infer<typeof journalItemSchema>;
 
 const parseJournalSheet = (
   input: string,

@@ -21,7 +21,7 @@ const accountTagSchema = z.object({
   name: z.string(),
   description: z.string(),
 });
-type AccountTagRecord = z.infer<typeof accountTagSchema>;
+export type AccountTagRecord = z.infer<typeof accountTagSchema>;
 
 const parseAccountTagSheet: ParseFn<AccountTagRecord> = (input) => {
   const records = parse(input, {
@@ -40,7 +40,7 @@ const accountCodeSchema = z.object({
   unit: z.string(),
   description: z.string(),
 });
-type AccountCodeRecord = z.infer<typeof accountCodeSchema>;
+export type AccountCodeRecord = z.infer<typeof accountCodeSchema>;
 
 const parseAccountCodeSheet: ParseFn<AccountCodeRecord> = (input) => {
   const records = parse(input, {
