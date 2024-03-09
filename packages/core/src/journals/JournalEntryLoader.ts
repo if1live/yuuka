@@ -4,8 +4,8 @@ import path from "node:path";
 import { parse } from "csv-parse/sync";
 import * as R from "remeda";
 import { z } from "zod";
-import type { JournalEntry, JournalEntryLine } from "../types.js";
 import { parseJournalFileName } from "./helpers.js";
+import type { JournalEntry, JournalEntryLine } from "./types.js";
 
 const journalItemSchema = z.object({
   date: z.string(),
