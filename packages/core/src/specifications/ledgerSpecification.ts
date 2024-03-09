@@ -9,15 +9,15 @@ import { Empty } from "./types.js";
 
 export const resource = "/api/ledger";
 
+// TODO: 원장에도 기간을 붙여야할듯
 const LedgerReq = z.object({
-  ymd: z.string(),
   code: z.coerce.number(),
 });
 
 type LedgerResp = {
   code: number;
   ledgers: Array<{
-    txid: string;
+    id: string;
     date: string;
     brief: string;
 

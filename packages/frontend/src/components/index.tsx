@@ -14,7 +14,7 @@ export const AccountCodeLink = (props: {
   code: number;
 }) => {
   const { accountCodes, accountTags } = useContext(MasterDataContext);
-  const { code } = props;
+  const code = props.code < 1000 ? props.code * 1000 : props.code;
 
   const account = accountCodes.find((x) => x.code === code);
 

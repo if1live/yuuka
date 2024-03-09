@@ -22,8 +22,8 @@ const LedgerRootView = () => {
         <Table.Row>
           <Table.HeaderCell>대분류</Table.HeaderCell>
           <Table.HeaderCell>소분류</Table.HeaderCell>
-          <Table.HeaderCell>코드</Table.HeaderCell>
-          <Table.HeaderCell>이름</Table.HeaderCell>
+          <Table.HeaderCell>계정코드</Table.HeaderCell>
+          <Table.HeaderCell>계정과목</Table.HeaderCell>
         </Table.Row>
       </TableHeader>
 

@@ -29,13 +29,14 @@ export const JournalEntryBlock = (props: {
 
     return (
       <TableRow key={key} error={result.isErr()}>
-        <TableCell>
-          {isFirstRow ? entry.date : null}
-          {isSecondRow ? <JournalEntryLink id={entry.id} /> : null}
-        </TableCell>
+        <TableCell>{isFirstRow ? entry.date : null}</TableCell>
 
         <TableCell>
-          {isFirstRow ? entry.brief : null}
+          {isFirstRow ? (
+            <>
+              {entry.brief} | <JournalEntryLink id={entry.id} />
+            </>
+          ) : null}
           {isSecondRow && error ? error.message : null}
         </TableCell>
 
