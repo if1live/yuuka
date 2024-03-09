@@ -1,5 +1,6 @@
 import path from "node:path";
 import * as R from "remeda";
+import { JournalEntryLoader } from "./journals/JournalEntryLoader.js";
 import { AccountCodeLoader } from "./masterdata/AccountCodeLoader.js";
 import { settings } from "./settings.js";
 
@@ -10,11 +11,17 @@ const financialReportsPath = path.resolve(
   financialReportsDir,
 );
 
-const sheetPath = path.join(financialReportsPath, "sheets");
-const journalPath = path.join(financialReportsPath, "journals");
+// TODO: masterdata
+// const sheetPath = path.join(financialReportsPath, "sheets");
+// const masterdata_account = R.pipe(
+//   await AccountCodeLoader.read(sheetPath),
+//   (x) => AccountCodeLoader.convert(x),
+// );
+// console.log(masterdata_account.accountCodes);
 
-const masterdata_account = R.pipe(
-  await AccountCodeLoader.read(sheetPath),
-  (x) => AccountCodeLoader.convert(x),
+const journalPath = path.join(financialReportsPath, "journals");
+const journalEntries = R.pipe(
+  await JournalEntryLoader.read(journalPath, "journal_2024_03.csv"),
+  (x) => JournalEntryLoader.convert(x),
 );
-console.log(masterdata_account.accountCodes);
+console.log(JSON.stringify(journalEntries, null, 2));
