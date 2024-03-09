@@ -18,8 +18,11 @@ describe("JournalEntryLoader", () => {
       { ...skel, code: 854000, debit: 7740, credit: null },
       { ...skel, code: 102101, debit: null, credit: 15480 },
     ];
-    const results = JournalEntryLoader.convert({ records });
-    const actaul = results[0];
+    const results = JournalEntryLoader.convert({
+      ymd: { year: 2024, month: 3 },
+      records,
+    });
+    const actaul = results.entries[0];
     assert.ok(actaul);
 
     assert.equal(actaul.date, skel.date);
