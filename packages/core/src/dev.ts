@@ -1,5 +1,7 @@
 import path from "node:path";
+import { serve } from "@hono/node-server";
 import * as R from "remeda";
+import { app } from "./app.js";
 import { JournalEntry } from "./journals/JournalEntry.js";
 import { JournalEntryLoader } from "./journals/JournalEntryLoader.js";
 import { AccountCodeLoader } from "./masterdata/AccountCodeLoader.js";
@@ -24,6 +26,7 @@ const journalContext = R.pipe(
   (x) => JournalEntryLoader.convert(x),
 );
 
+/*
 console.log(`report: ${journalContext.ymd.year}-${journalContext.ymd.month}`);
 for (const entry of journalContext.entries) {
   const result = JournalEntry.safeValidate(entry);
@@ -35,4 +38,8 @@ for (const entry of journalContext.entries) {
     console.error(`fail: ${entry.txid}, ${err.message}`);
   }
 }
+*/
 
+serve(app, (info) => {
+  console.log(`Listening on http://localhost:${info.port}`);
+});
