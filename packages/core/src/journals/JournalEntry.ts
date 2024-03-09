@@ -1,3 +1,4 @@
+import { Result } from "neverthrow";
 import * as R from "remeda";
 import { JournalEntryLine } from "./JournalEntryLine.js";
 
@@ -38,4 +39,5 @@ const validate = (journal: JournalEntry): JournalEntry => {
 
 export const JournalEntry = {
   validate,
+  safeValidate: Result.fromThrowable(validate),
 };

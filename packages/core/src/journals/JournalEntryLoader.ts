@@ -124,14 +124,18 @@ const convert = (records: [JournalItemRecord, ...JournalItemRecord[]]) => {
 };
 
 type RecordContext = {
+  ymd: { year: number; month: number };
   records: JournalItemRecord[];
 };
 
-const convertRoot = (context: RecordContext): JournalEntry[] => {
+const convertRoot = (context: RecordContext) => {
   const { records } = context;
   const groups = group(records);
   const entries = R.map(Object.values(groups), convert);
-  return entries;
+  return {
+    ymd: context.ymd,
+    entries,
+  };
 };
 
 const readRoot = async (
@@ -142,7 +146,7 @@ const readRoot = async (
   const fp = path.join(rootPath, filename);
   const text = await fs.readFile(fp, "utf8");
   const records = parseJournalSheet(text, ymd.year, ymd.month);
-  return { records };
+  return { ymd, records };
 };
 
 export const JournalEntryLoader = {

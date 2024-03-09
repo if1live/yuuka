@@ -9,7 +9,10 @@
   "main": "index.js",
   "module": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
-  "files": ["dist", "!dist/test"],
+  "files": [
+    "dist",
+    "!dist/test"
+  ],
   "scripts": {
     "build": "tsc",
     "check:watch": "tsc --watch --noEmit",
@@ -22,6 +25,7 @@
   "dependencies": {
     "csv-parse": "^5.5.5",
     "hono": "^3.12.12",
+    "neverthrow": "^6.1.0",
     "remeda": "^1.47.0",
     "zod": "^3.22.4"
   },

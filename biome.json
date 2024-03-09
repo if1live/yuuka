@@ -9,7 +9,10 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["biome.json"]
+    "ignore": [
+      "biome.json",
+      "package.json"
+    ]
   },
   "linter": {
     "enabled": true,
