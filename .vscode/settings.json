@@ -1,0 +1,19 @@
+{
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[fsharp]": {
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.inlayHints.enabled": "offUnlessPressed"
+  },
+  "typescript.preferences.importModuleSpecifier": "project-relative"
+}

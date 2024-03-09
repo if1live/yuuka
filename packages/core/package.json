@@ -1,0 +1,33 @@
+{
+  "name": "@yuuka/core",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "",
+  "sideEffects": false,
+  "type": "module",
+  "main": "index.js",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "files": ["dist", "!dist/test"],
+  "scripts": {
+    "build": "tsc",
+    "check:watch": "tsc --watch --noEmit",
+    "clean": "rimraf dist artifact",
+    "dev": "tsx watch ./src/dev.ts",
+    "fix": "biome check --apply-unsafe .",
+    "lint": "biome check .",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "hono": "^3.12.12",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@hono/node-server": "^1.8.2",
+    "@types/node": "^20.11.25",
+    "tsx": "^4.7.1",
+    "typescript": "^5.4.2",
+    "vitest": "^1.3.1"
+  }
+}
