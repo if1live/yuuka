@@ -35,3 +35,4 @@ for (const entry of journalContext.entries) {
     console.error(`fail: ${entry.txid}, ${err.message}`);
   }
 }
+
