@@ -1,6 +1,6 @@
 import SQLite from "better-sqlite3";
 import { Kysely, SqliteDialect } from "kysely";
-import type { Insertable } from "kysely";
+import type { Dialect, Insertable } from "kysely";
 import { journalContext } from "./instances.js";
 import { MasterData } from "./masterdata/instances.js";
 import type {
@@ -16,11 +16,14 @@ export const createDialect = (filename: string) => {
   });
 };
 
-const dialect = createDialect(":memory:");
+export const createKysely = (dialect: Dialect) => {
+  return new Kysely<Database>({
+    dialect,
+  });
+};
 
-export const db = new Kysely<Database>({
-  dialect,
-});
+const dialect = createDialect(":memory:");
+export const db = createKysely(dialect);
 
 // TODO: 테이블 규격 관리 어디서 하지?
 type PrepareFn = (db: Kysely<Database>) => Promise<void>;

@@ -38,13 +38,12 @@ const validate_any = (line: JournalEntryLine_Any): JournalEntryLine => {
   if (line.debit === null && line.credit === null) {
     throw new Error("debit and credit are null");
   }
-  if (line.debit !== null && line.credit !== null) {
+  if (line.debit && line.credit) {
     throw new Error("debit and credit exists");
   }
 
   if (line.debit) {
     return validate_debit({
-      ...line,
       _tag: "debit",
       code: line.code,
       debit: line.debit,
@@ -53,7 +52,6 @@ const validate_any = (line: JournalEntryLine_Any): JournalEntryLine => {
 
   if (line.credit) {
     return validate_credit({
-      ...line,
       _tag: "credit",
       code: line.code,
       credit: line.credit,
