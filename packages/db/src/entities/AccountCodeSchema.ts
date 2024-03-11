@@ -50,7 +50,7 @@ export type Row = Selectable<Table>;
 export type NewRow = Insertable<Table>;
 export type RowUpdate = Updateable<Table>;
 
-export const entityOptions: MyEntitySchemaOptions = {
+export const options: MyEntitySchemaOptions = {
   name: {
     kysely: kyselyName,
     native: nativeName,

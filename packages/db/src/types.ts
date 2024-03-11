@@ -10,8 +10,8 @@ export type MyEntitySchemaColumnOptions = Omit<
   };
 };
 
-export type MyEntitySchemaOptions = Omit<
-  EntitySchemaOptions<unknown>,
+export type MyEntitySchemaOptions<T = unknown> = Omit<
+  EntitySchemaOptions<T>,
   "name" | "tableName"
 > & {
   name: {
