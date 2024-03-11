@@ -1,3 +1,4 @@
+import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
@@ -16,6 +17,20 @@ export const app = new Hono();
 
 app.use("*", logger());
 app.use("*", cors());
+
+const robotsTxt = `
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Disallow: /
+`.trimStart();
+
+app.get("/robots.txt", async (c) => {
+  return c.text(robotsTxt);
+});
+
+app.use("/static/*", serveStatic({ root: "./" }));
 
 app.route(sampleSpecification.resource, SampleController.app);
 app.route(resourceSpecification.resource, ResourceController.app);

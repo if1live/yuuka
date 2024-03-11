@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import { serve } from "@hono/node-server";
 import { Kysely } from "kysely";
 import { app } from "./app.js";
-import { createSqliteDialect, db, insertBulk, prepareSchema } from "./db.js";
+import { db, insertBulk, prepareSchema } from "./db.js";
 import type { Database } from "./tables.js";
 
 /*
@@ -19,11 +19,12 @@ for (const entry of journalContext.entries) {
 }
 */
 
-// in-memory DB 초기화
-await prepareSchema(db);
-await insertBulk(db);
+// TODO: in-memory DB 초기화. sqlite에서만 쓸것
+// await prepareSchema(db);
+// await insertBulk(db);
 
 // 파일기반 sqlite에도 쓰면 내부를 볼수 있을듯?
+/*
 const writeDatabaseFile = async () => {
   const fp = "db.sqlite";
   try {
@@ -41,6 +42,7 @@ const writeDatabaseFile = async () => {
   await db.destroy();
 };
 await writeDatabaseFile();
+*/
 
 serve(app, (info) => {
   console.log(`Listening on http://localhost:${info.port}`);
