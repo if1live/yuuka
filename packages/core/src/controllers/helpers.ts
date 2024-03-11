@@ -37,9 +37,35 @@ export const registerHandler = <
       return c.json(data, 400);
     }
 
-    const data = data_result.data;
-    const req = new MyRequest(data);
-    const res = await handler(req);
-    return c.json(res.body as unknown);
+    try {
+      const data = data_result.data;
+      const req = new MyRequest(data);
+      const res = await handler(req);
+      return c.json(res.body as unknown);
+    } catch (e) {
+      const err = e as ErrorLike;
+      const status = err.status ?? 500;
+
+      if (e instanceof Error) {
+        // 좀 멍청하지만 개발하는동안에는 보이는게 나을듯
+        const lines = (e.stack ?? "").split("\n").map((x) => x.trim());
+        const output = {
+          name: e.name,
+          message: e.message,
+          stack: lines,
+        };
+        return c.json(output, status);
+      }
+
+      // else...
+      const output = {
+        message: "Unknown error",
+      };
+      return c.json(output, status);
+    }
   });
 };
+
+interface ErrorLike {
+  status?: number;
+}

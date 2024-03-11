@@ -16,5 +16,6 @@ const app = new Hono();
 registerHandler(app, sheet.add, add);
 
 export const SampleController = {
+  path: sampleSpecification.resource,
   app,
 };

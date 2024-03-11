@@ -30,5 +30,6 @@ registerHandler(app, sheet.list, list);
 registerHandler(app, sheet.get, get);
 
 export const JournalController = {
+  path: journalSpecification.resource,
   app,
 };

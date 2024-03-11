@@ -6,12 +6,7 @@ import { JournalController } from "./controllers/JournalController.js";
 import { LedgerController } from "./controllers/LedgerController.js";
 import { ResourceController } from "./controllers/ResourceController.js";
 import { SampleController } from "./controllers/SampleController.js";
-import {
-  journalSpecification,
-  ledgerSpecification,
-  resourceSpecification,
-  sampleSpecification,
-} from "./specifications/index.js";
+import { StatusController } from "./controllers/StatusController.js";
 
 export const app = new Hono();
 
@@ -32,7 +27,12 @@ app.get("/robots.txt", async (c) => {
 
 app.use("/static/*", serveStatic({ root: "./" }));
 
-app.route(sampleSpecification.resource, SampleController.app);
-app.route(resourceSpecification.resource, ResourceController.app);
-app.route(journalSpecification.resource, JournalController.app);
-app.route(ledgerSpecification.resource, LedgerController.app);
+app.get("/", async (c) => {
+  return c.json({ name: "yuuka" });
+});
+
+app.route(StatusController.path, StatusController.app);
+app.route(SampleController.path, SampleController.app);
+app.route(ResourceController.path, ResourceController.app);
+app.route(JournalController.path, JournalController.app);
+app.route(LedgerController.path, LedgerController.app);

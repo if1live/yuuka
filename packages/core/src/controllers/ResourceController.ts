@@ -19,5 +19,6 @@ const app = new Hono();
 registerHandler(app, sheet.masterdata, masterdata);
 
 export const ResourceController = {
+  path: resourceSpecification.resource,
   app,
 };

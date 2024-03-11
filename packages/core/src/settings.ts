@@ -1,7 +1,8 @@
 import path from "node:path";
 import url from "node:url";
 
-const defaultDatabaseUrl = "postgres://postgres:postgres@localhost/shiroko_dev";
+const defaultDatabaseUrl =
+  "postgres://localhost_dev:localhost_dev@localhost/localhost_dev";
 const databaseUrl = process.env.DATABASE_URL || defaultDatabaseUrl;
 
 // https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/

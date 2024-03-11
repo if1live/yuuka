@@ -69,5 +69,6 @@ const app = new Hono();
 registerHandler(app, sheet.list, list);
 
 export const LedgerController = {
+  path: ledgerSpecification.resource,
   app,
 };
