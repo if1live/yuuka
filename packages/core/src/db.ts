@@ -1,6 +1,6 @@
 import { Kysely, PostgresDialect, SqliteDialect, sql } from "kysely";
 import type { Dialect, Insertable } from "kysely";
-import { Pool } from "pg";
+import { default as Postgres } from "pg";
 import { journalContext } from "./instances.js";
 import { MasterData } from "./masterdata/instances.js";
 import { settings } from "./settings.js";
@@ -26,7 +26,7 @@ const createSqliteDialect = async (filename: string) => {
 };
 
 const createPostgresDialect = (databaseUrl: string) => {
-  const pool = new Pool({
+  const pool = new Postgres.Pool({
     connectionString: databaseUrl,
   });
 
@@ -39,7 +39,6 @@ const createPostgresDialect = (databaseUrl: string) => {
     pool,
   };
 };
-
 
 // TODO: 로컬에서 in-memory sqlite 사용하는게 없어져야 교체할 수 있음
 const createDialect = async (url: string): Promise<{ dialect: Dialect }> => {
