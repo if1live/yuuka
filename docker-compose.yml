@@ -7,8 +7,8 @@ services:
       - 5432:5432
     environment:
       POSTGRES_DB: localhost_dev
-      POSTGRES_USER: localhost
-      POSTGRES_PASSWORD: localhost
+      POSTGRES_USER: localhost_dev
+      POSTGRES_PASSWORD: localhost_dev
 
   adminer:
     image: adminer:latest
