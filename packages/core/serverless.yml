@@ -46,6 +46,9 @@ functions:
     package:
       patterns:
         - artifact/http_main.mjs*
+        - static/**/*
+        - views/**/*
+        - priv/**/*
     events:
       - httpApi:
           method: ANY
