@@ -7,4 +7,9 @@ describe("settings", () => {
     const packagePath = path.join(settings.rootPath, "packages/core");
     assert.strictEqual(packagePath, settings.packagePath);
   });
+
+  it("database url", () => {
+    const expected = ":memory:";
+    assert.strictEqual(settings.databaseUrl, expected);
+  });
 });

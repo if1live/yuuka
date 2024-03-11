@@ -1,48 +1,49 @@
-import { CamelCasePlugin, Kysely } from "kysely";
-import { DataSource } from "typeorm";
+import { default as SQLite } from "better-sqlite3";
+import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
 import { assert, afterAll, beforeAll, describe, it } from "vitest";
-import { TestDatabase, entitySchemaList } from "../internal/index.js";
+import { TestDatabase } from "../internal/index.js";
 import type { Database } from "../src/index.js";
 import { AccountCodeSchema } from "../src/index.js";
 
-describe("typeorm#better-sqlite3", () => {
-  const dataSource = new DataSource({
-    type: "better-sqlite3",
-    database: ":memory:",
-    entities: entitySchemaList,
-    synchronize: true,
+const createKysely = () => {
+  const database = new SQLite(":memory:");
+  const dialect = new SqliteDialect({ database: database });
+  const db = new Kysely<Database>({
+    dialect,
+    plugins: [new CamelCasePlugin()],
   });
+  return db;
+};
 
-  let db: Kysely<Database>;
-
-  beforeAll(async () => {
-    await dataSource.initialize();
-    // typeorm 초기화 이후에 접근해야 제대로 나온다
-    db = new Kysely<Database>({
-      dialect: TestDatabase.dialect(dataSource),
-      plugins: [new CamelCasePlugin()],
-    });
-  });
-
-  afterAll(async () => {
-    await dataSource.destroy();
-  });
-
+async function assert_scenario(db: Kysely<Database>) {
   const input: AccountCodeSchema.NewRow = {
     code: 1,
     name: "foo",
     description: "bar",
   };
 
-  it("insert", async () => {
-    await db.insertInto(AccountCodeSchema.name).values(input).execute();
+  await db.insertInto(AccountCodeSchema.name).values(input).execute();
+
+  const found = await db
+    .selectFrom(AccountCodeSchema.name)
+    .selectAll()
+    .executeTakeFirstOrThrow();
+  assert.deepStrictEqual(found, input);
+}
+
+describe("typeorm#better-sqlite3", () => {
+  describe("first", () => {
+    const db = createKysely();
+    beforeAll(async () => TestDatabase.synchronize(db));
+    afterAll(async () => db.destroy());
+    it("scenario", async () => assert_scenario(db));
   });
 
-  it("select", async () => {
-    const found = await db
-      .selectFrom(AccountCodeSchema.name)
-      .selectAll()
-      .executeTakeFirstOrThrow();
-    assert.deepStrictEqual(found, input);
+  // 연속으로 사용할떄 문제 없어야한다
+  describe("second", () => {
+    const db = createKysely();
+    beforeAll(async () => TestDatabase.synchronize(db));
+    afterAll(async () => db.destroy());
+    it("scenario", async () => assert_scenario(db));
   });
 });

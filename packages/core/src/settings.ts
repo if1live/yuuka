@@ -3,7 +3,12 @@ import url from "node:url";
 
 const defaultDatabaseUrl =
   "postgres://localhost_dev:localhost_dev@localhost/localhost_dev";
-const databaseUrl = process.env.DATABASE_URL || defaultDatabaseUrl;
+const testDatabaseUrl = ":memory:";
+
+const databaseUrl =
+  process.env.NODE_ENV !== "test"
+    ? process.env.DATABASE_URL || defaultDatabaseUrl
+    : testDatabaseUrl;
 
 // https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
 const filename = url.fileURLToPath(import.meta.url);
