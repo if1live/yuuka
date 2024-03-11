@@ -1,8 +1,9 @@
-import SQLite from "better-sqlite3";
-import { Kysely, SqliteDialect } from "kysely";
+import { Kysely, PostgresDialect, SqliteDialect, sql } from "kysely";
 import type { Dialect, Insertable } from "kysely";
+import { Pool } from "pg";
 import { journalContext } from "./instances.js";
 import { MasterData } from "./masterdata/instances.js";
+import { settings } from "./settings.js";
 import type {
   AccountCodeTable,
   Database,
@@ -10,10 +11,43 @@ import type {
   JournalEntryTable,
 } from "./tables.js";
 
-export const createDialect = (filename: string) => {
-  return new SqliteDialect({
-    database: new SQLite(filename),
+const createSqliteDialect = async (filename: string) => {
+  const { default: SQLite } = await import("better-sqlite3");
+  const database = new SQLite(filename);
+  const dialect = new SqliteDialect({
+    database: database,
   });
+  return {
+    dialect,
+    // 타입 정보가 붙은 상태로 리턴하면 컴파일 에러가 나서 우회
+    // 어차피 sqlite 원본을 직접 쓸 일은 자주 없을테니까
+    database: database as unknown,
+  };
+};
+
+const createPostgresDialect = (databaseUrl: string) => {
+  const pool = new Pool({
+    connectionString: databaseUrl,
+  });
+
+  const dialect = new PostgresDialect({
+    pool,
+  });
+
+  return {
+    dialect,
+    pool,
+  };
+};
+
+
+// TODO: 로컬에서 in-memory sqlite 사용하는게 없어져야 교체할 수 있음
+const createDialect = async (url: string): Promise<{ dialect: Dialect }> => {
+  if (url.startsWith("postgres://")) {
+    return createPostgresDialect(url);
+  }
+
+  return await createSqliteDialect(url);
 };
 
 export const createKysely = (dialect: Dialect) => {
@@ -22,7 +56,7 @@ export const createKysely = (dialect: Dialect) => {
   });
 };
 
-const dialect = createDialect(":memory:");
+const { dialect } = await createDialect(settings.databaseUrl);
 export const db = createKysely(dialect);
 
 // TODO: 테이블 규격 관리 어디서 하지?

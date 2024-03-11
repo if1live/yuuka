@@ -1,16 +1,20 @@
 import { faker } from "@faker-js/faker";
 import type { Insertable } from "kysely";
 import { assert, afterAll, beforeAll, describe, expect, it } from "vitest";
-import { createDialect, createKysely, prepareSchema } from "../../src/db.js";
+import {
+  createKysely,
+  createSqliteDialect,
+  prepareSchema,
+} from "../../src/db.js";
 import { JournalEntryRepository } from "../../src/journals/JournalEntryRepository.js";
 import type {
   JournalEntryLineTable,
   JournalEntryTable,
 } from "../../src/tables.js";
+import { createTestingKysely } from "../testings.js";
 
 describe("JournalEntryRepository", () => {
-  const dialect = createDialect(":memory:");
-  const db = createKysely(dialect);
+  const db = createTestingKysely();
 
   const id = faker.string.alphanumeric(8);
 

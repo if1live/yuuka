@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import { serve } from "@hono/node-server";
 import { Kysely } from "kysely";
 import { app } from "./app.js";
-import { createDialect, db, insertBulk, prepareSchema } from "./db.js";
+import { createSqliteDialect, db, insertBulk, prepareSchema } from "./db.js";
 import type { Database } from "./tables.js";
 
 /*
@@ -32,7 +32,7 @@ const writeDatabaseFile = async () => {
     // ignore
   }
 
-  const dialect = createDialect(fp);
+  const { dialect } = await createSqliteDialect(fp);
   const db = new Kysely<Database>({ dialect });
 
   await prepareSchema(db);
