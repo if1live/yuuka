@@ -1,15 +1,20 @@
-import { Kysely, PostgresDialect, SqliteDialect, sql } from "kysely";
-import type { Dialect, Insertable } from "kysely";
+import {
+  AccountCodeSchema,
+  JournalEntryLineSchema,
+  JournalEntrySchema,
+} from "@yuuka/db";
+import type { Database } from "@yuuka/db";
+import {
+  CamelCasePlugin,
+  Kysely,
+  PostgresDialect,
+  SqliteDialect,
+} from "kysely";
+import type { Dialect } from "kysely";
 import { default as Postgres } from "pg";
 import { journalContext } from "./instances.js";
 import { MasterData } from "./masterdata/instances.js";
 import { settings } from "./settings.js";
-import type {
-  AccountCodeTable,
-  Database,
-  JournalEntryLineTable,
-  JournalEntryTable,
-} from "./tables.js";
 
 const createSqliteDialect = async (filename: string) => {
   const { default: SQLite } = await import("better-sqlite3");
@@ -52,6 +57,7 @@ const createDialect = async (url: string): Promise<{ dialect: Dialect }> => {
 export const createKysely = (dialect: Dialect) => {
   return new Kysely<Database>({
     dialect,
+    plugins: [new CamelCasePlugin()],
   });
 };
 
@@ -63,7 +69,7 @@ type PrepareFn = (db: Kysely<Database>) => Promise<void>;
 
 const parepare_accountCode: PrepareFn = async (db) => {
   await db.schema
-    .createTable("accountCode")
+    .createTable(AccountCodeSchema.name)
     .addColumn("code", "integer", (c) => c.primaryKey())
     .addColumn("name", "varchar(255)")
     .addColumn("description", "varchar(255)")
@@ -72,7 +78,7 @@ const parepare_accountCode: PrepareFn = async (db) => {
 
 const parepare_journalEntry: PrepareFn = async (db) => {
   await db.schema
-    .createTable("journalEntry")
+    .createTable(JournalEntrySchema.name)
     .addColumn("id", "varchar(255)", (c) => c.primaryKey())
     .addColumn("date", "varchar(255)")
     .addColumn("brief", "varchar(255)")
@@ -81,7 +87,7 @@ const parepare_journalEntry: PrepareFn = async (db) => {
 
 const parepare_journalEntryLine: PrepareFn = async (db) => {
   await db.schema
-    .createTable("journalEntryLine")
+    .createTable(JournalEntryLineSchema.name)
     .addColumn("entry_id", "varchar(255)")
     .addColumn("code", "integer")
     .addColumn("debit", "integer")
@@ -105,22 +111,20 @@ export const prepareSchema = async (db: Kysely<Database>) => {
 
 // 데이터를 다양한 방식으로 뒤지려면 db에 채워놓는게 나을듯
 const insertBulk_accountCode = async (db: Kysely<Database>) => {
-  const items = MasterData.accountCodes.map(
-    (x): Insertable<AccountCodeTable> => {
-      return {
-        code: x.code,
-        name: x.name,
-        description: x.description,
-      };
-    },
-  );
+  const items = MasterData.accountCodes.map((x): AccountCodeSchema.NewRow => {
+    return {
+      code: x.code,
+      name: x.name,
+      description: x.description,
+    };
+  });
 
-  await db.insertInto("accountCode").values(items).execute();
+  await db.insertInto(AccountCodeSchema.name).values(items).execute();
 };
 
 const insertBulk_journalEntry = async (db: Kysely<Database>) => {
   const items = journalContext.entries.map(
-    (journal): Insertable<JournalEntryTable> => {
+    (journal): JournalEntrySchema.NewRow => {
       return {
         id: journal.id,
         date: journal.date,
@@ -128,28 +132,26 @@ const insertBulk_journalEntry = async (db: Kysely<Database>) => {
       };
     },
   );
-  await db.insertInto("journalEntry").values(items).execute();
+  await db.insertInto(JournalEntrySchema.name).values(items).execute();
 };
 
 const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
   const items = journalContext.entries.flatMap((journal) => {
-    const lines = journal.lines.map(
-      (line): Insertable<JournalEntryLineTable> => {
-        const debit = line._tag === "debit" ? line.debit : 0;
-        const credit = line._tag === "credit" ? line.credit : 0;
+    const lines = journal.lines.map((line): JournalEntryLineSchema.NewRow => {
+      const debit = line._tag === "debit" ? line.debit : 0;
+      const credit = line._tag === "credit" ? line.credit : 0;
 
-        return {
-          entry_id: journal.id,
-          code: line.code,
-          debit,
-          credit,
-        };
-      },
-    );
+      return {
+        entryId: journal.id,
+        code: line.code,
+        debit,
+        credit,
+      };
+    });
     return lines;
   });
 
-  await db.insertInto("journalEntryLine").values(items).execute();
+  await db.insertInto(JournalEntryLineSchema.name).values(items).execute();
 };
 
 export const insertBulk = async (db: Kysely<Database>) => {

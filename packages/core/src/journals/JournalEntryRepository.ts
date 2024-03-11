@@ -1,7 +1,8 @@
 import assert from "node:assert";
+import { JournalEntrySchema } from "@yuuka/db";
+import type { Database } from "@yuuka/db";
 import type { Kysely } from "kysely";
 import * as R from "remeda";
-import type { Database } from "../tables.js";
 import type { JournalEntry } from "./JournalEntry.js";
 import { JournalEntryLine } from "./JournalEntryLine.js";
 
@@ -10,14 +11,14 @@ const findById = async (
   id: string,
 ): Promise<JournalEntry> => {
   const rows = await db
-    .selectFrom("journalEntry")
+    .selectFrom(JournalEntrySchema.name)
     .innerJoin(
       "journalEntryLine",
-      "journalEntryLine.entry_id",
+      "journalEntryLine.entryId",
       "journalEntry.id",
     )
     .selectAll()
-    .where("journalEntry.id", "=", id)
+    .where("id", "=", id)
     .execute();
 
   if (rows.length <= 0) {
@@ -45,10 +46,10 @@ const findByDateRange = async (
   endDate: string,
 ): Promise<JournalEntry[]> => {
   const rows = await db
-    .selectFrom("journalEntry")
+    .selectFrom(JournalEntrySchema.name)
     .innerJoin(
       "journalEntryLine",
-      "journalEntryLine.entry_id",
+      "journalEntryLine.entryId",
       "journalEntry.id",
     )
     .selectAll()
@@ -60,7 +61,7 @@ const findByDateRange = async (
     return [];
   }
 
-  const group = R.groupBy(rows, (x) => x.entry_id);
+  const group = R.groupBy(rows, (x) => x.entryId);
   const tuples = Object.entries(group);
 
   const entries = tuples.map(([key, values]): JournalEntry => {

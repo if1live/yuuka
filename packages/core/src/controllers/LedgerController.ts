@@ -1,3 +1,4 @@
+import { JournalEntryLineSchema, JournalEntrySchema } from "@yuuka/db";
 import { Hono } from "hono";
 import { db } from "../db.js";
 import { AccountCode } from "../index.js";
@@ -19,7 +20,7 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
 
   const load_plain = async () => {
     return await db
-      .selectFrom("journalEntryLine")
+      .selectFrom(JournalEntryLineSchema.name)
       .selectAll()
       .where("code", "=", code)
       .execute();
@@ -27,7 +28,7 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
 
   const load_group = async () => {
     return await db
-      .selectFrom("journalEntryLine")
+      .selectFrom(JournalEntryLineSchema.name)
       .selectAll()
       .where("code", ">=", tagCode * 1000)
       .where("code", "<", (tagCode + 1) * 1000)
@@ -42,9 +43,9 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
     });
   }
 
-  const ids = lines.map((line) => line.entry_id);
+  const ids = lines.map((line) => line.entryId);
   const rows = await db
-    .selectFrom("journalEntry")
+    .selectFrom(JournalEntrySchema.name)
     .selectAll()
     .where("id", "in", ids)
     .execute();
@@ -53,9 +54,9 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
   return new MyResponse({
     code,
     ledgers: lines.map((line) => {
-      const entry = entryMap.get(line.entry_id);
+      const entry = entryMap.get(line.entryId);
       return {
-        id: line.entry_id,
+        id: line.entryId,
         brief: entry?.brief ?? "<unknwon>",
         date: entry?.date ?? "1970-01-01",
         debit: line.debit,

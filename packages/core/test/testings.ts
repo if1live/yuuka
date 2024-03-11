@@ -1,6 +1,6 @@
+import type { Database } from "@yuuka/db";
 import SQLite from "better-sqlite3";
-import { Kysely, SqliteDialect } from "kysely";
-import type { Database } from "../src/tables.js";
+import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
 
 export const createTestingKysely = () => {
   const database = new SQLite(":memory:");
@@ -9,6 +9,7 @@ export const createTestingKysely = () => {
   });
   const db = new Kysely<Database>({
     dialect,
+    plugins: [new CamelCasePlugin()],
   });
   return db;
 };

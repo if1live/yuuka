@@ -1,16 +1,9 @@
 import { faker } from "@faker-js/faker";
+import { JournalEntryLineSchema, JournalEntrySchema } from "@yuuka/db";
 import type { Insertable } from "kysely";
 import { assert, afterAll, beforeAll, describe, expect, it } from "vitest";
-import {
-  createKysely,
-  createSqliteDialect,
-  prepareSchema,
-} from "../../src/db.js";
+import { createKysely, prepareSchema } from "../../src/db.js";
 import { JournalEntryRepository } from "../../src/journals/JournalEntryRepository.js";
-import type {
-  JournalEntryLineTable,
-  JournalEntryTable,
-} from "../../src/tables.js";
 import { createTestingKysely } from "../testings.js";
 
 describe("JournalEntryRepository", () => {
@@ -21,18 +14,18 @@ describe("JournalEntryRepository", () => {
   beforeAll(async () => {
     await prepareSchema(db);
 
-    const entry: Insertable<JournalEntryTable> = {
+    const entry: JournalEntrySchema.NewRow = {
       id,
       date: "2024-03-01",
       brief: faker.lorem.sentence(),
     };
-    await db.insertInto("journalEntry").values(entry).execute();
+    await db.insertInto(JournalEntrySchema.name).values(entry).execute();
 
-    const lines: Insertable<JournalEntryLineTable>[] = [
-      { entry_id: id, code: 102, debit: 100, credit: 0 },
-      { entry_id: id, code: 103, debit: 0, credit: 100 },
+    const lines: JournalEntryLineSchema.NewRow[] = [
+      { entryId: id, code: 102, debit: 100, credit: 0 },
+      { entryId: id, code: 103, debit: 0, credit: 100 },
     ];
-    await db.insertInto("journalEntryLine").values(lines).execute();
+    await db.insertInto(JournalEntryLineSchema.name).values(lines).execute();
   });
 
   afterAll(async () => {

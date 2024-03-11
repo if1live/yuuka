@@ -24,6 +24,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@yuuka/db": "workspace:*",
     "better-sqlite3": "^9.4.3",
     "csv-parse": "^5.5.5",
     "hono": "^3.12.12",
