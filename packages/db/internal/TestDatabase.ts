@@ -13,8 +13,8 @@ const prepare_sqlite = async () => {
   await dataSource.initialize();
 
   const builder = dataSource.driver.createSchemaBuilder();
-  const log = await builder.log();
-  const queries = log.upQueries.map((x) => x.query);
+  const sqlInMemory = await builder.log();
+  const queries = sqlInMemory.upQueries.map((x) => x.query);
 
   await dataSource.destroy();
   return queries;
