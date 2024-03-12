@@ -110,7 +110,34 @@ const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
 };
 
 export const insertBulk = async (db: Kysely<Database>) => {
-  await insertBulk_accountCode(db);
-  await insertBulk_journalEntry(db);
-  await insertBulk_journalEntryLine(db);
+  // 첫행이 존재하면 테이블이 비어있지 않은거로 해석
+  {
+    const found = await db
+      .selectFrom(AccountCodeSchema.name)
+      .selectAll()
+      .executeTakeFirst();
+    if (!found) {
+      await insertBulk_accountCode(db);
+    }
+  }
+
+  {
+    const found = await db
+      .selectFrom(JournalEntrySchema.name)
+      .selectAll()
+      .executeTakeFirst();
+    if (!found) {
+      await insertBulk_journalEntry(db);
+    }
+  }
+
+  {
+    const found = await db
+      .selectFrom(JournalEntryLineSchema.name)
+      .selectAll()
+      .executeTakeFirst();
+    if (!found) {
+      await insertBulk_journalEntryLine(db);
+    }
+  }
 };

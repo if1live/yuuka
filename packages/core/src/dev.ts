@@ -3,6 +3,7 @@ import { serve } from "@hono/node-server";
 import type { Database } from "@yuuka/db";
 import { Kysely } from "kysely";
 import { app } from "./app.js";
+import { db, insertBulk } from "./db.js";
 
 /*
 console.log(`report: ${journalContext.ymd.year}-${journalContext.ymd.month}`);
@@ -18,9 +19,8 @@ for (const entry of journalContext.entries) {
 }
 */
 
-// TODO: in-memory DB 초기화. sqlite에서만 쓸것
-// await prepareSchema(db);
-// await insertBulk(db);
+// TODO: 데이터 동기화 기법을 정해야한다. 무엇이 원본이지?
+await insertBulk(db);
 
 // 파일기반 sqlite에도 쓰면 내부를 볼수 있을듯?
 /*
