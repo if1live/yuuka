@@ -16,6 +16,7 @@
   "scripts": {
     "build": "tsc",
     "check:watch": "tsc --watch --noEmit",
+    "clean": "rimraf dist artifact",
     "fix": "biome check --apply-unsafe .",
     "lint": "biome check .",
     "test": "vitest"

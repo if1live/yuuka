@@ -1,13 +1,36 @@
-import { describe, it, assert, beforeAll, afterAll } from "vitest";
-import { db } from "../src/db.js";
-import { after } from "node:test";
+import type { Database } from "@yuuka/db";
+import { PreferenceSchema } from "@yuuka/db";
+import type { Kysely } from "kysely";
+import { assert, afterAll, beforeAll, describe, it } from "vitest";
+import { TestDatabase } from "./mod.js";
+
+async function assert_scenario(db: Kysely<Database>) {
+  const input: PreferenceSchema.NewRow = {
+    key: "foo",
+    value: "bar",
+  };
+
+  await db.insertInto(PreferenceSchema.name).values(input).execute();
+
+  const found = await db
+    .selectFrom(PreferenceSchema.name)
+    .selectAll()
+    .executeTakeFirstOrThrow();
+  assert.deepStrictEqual(found, input);
+}
 
 describe("db", () => {
-  beforeAll(async () => {
-    await db.initialize();
+  describe("first", () => {
+    const db = TestDatabase.create();
+    beforeAll(async () => TestDatabase.synchronize(db));
+    afterAll(async () => db.destroy());
+    it("ok", async () => assert_scenario(db));
   });
 
-  afterAll(async () => {
-    await db.destroy();
+  describe("second", () => {
+    const db = TestDatabase.create();
+    beforeAll(async () => TestDatabase.synchronize(db));
+    afterAll(async () => db.destroy());
+    it("ok", async () => assert_scenario(db));
   });
 });

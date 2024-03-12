@@ -3,6 +3,7 @@ import {
   AccountCodeSchema,
   JournalEntryLineSchema,
   JournalEntrySchema,
+  PreferenceSchema,
 } from "../src/entities/index.js";
 import type { MyEntitySchemaOptions } from "../src/types.js";
 
@@ -23,9 +24,11 @@ const f = <T>(schema: { options: MyEntitySchemaOptions<T> }) => {
 export const AccountCodeSchemaEntity = f(AccountCodeSchema);
 export const JournalEntryLineSchemaEntity = f(JournalEntryLineSchema);
 export const JournalEntrySchemaEntity = f(JournalEntrySchema);
+export const PreferenceSchemaEntity = f(PreferenceSchema);
 
 export const entitySchemaList: EntitySchema[] = [
   AccountCodeSchemaEntity,
   JournalEntryLineSchemaEntity,
   JournalEntrySchemaEntity,
+  PreferenceSchemaEntity,
 ];
