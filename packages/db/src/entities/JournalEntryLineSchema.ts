@@ -27,18 +27,19 @@ const createColumnList = () => {
 
   // TODO: decimal을 int로 바꿀 가능성 있음
   // KRW만 쓰면 소수점 없어도 되는데 USD도 지원하고 싶다.
+  // decimal 쓰면 pg에서는 '11500.00' 같이 문자열로 전달되는걸 처리해야한다.
+  // decimal 정밀도는 node에서 다루는게 되나? 그냥 int로 취급하는게 간단할지도?
   const debit = defineColumn({
     name: { native: "debit", kysely: "debit" },
-    type: "decimal",
-    precision: 10,
-    scale: 2,
+    // type: "decimal",
+    // precision: 10,
+    // scale: 2,
+    type: "int",
   });
 
   const credit = defineColumn({
     name: { native: "credit", kysely: "credit" },
-    type: "decimal",
-    precision: 10,
-    scale: 2,
+    type: "int",
   });
 
   return [entryId, code, debit, credit];
