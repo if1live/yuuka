@@ -1,18 +1,16 @@
 import { faker } from "@faker-js/faker";
 import { JournalEntryLineSchema, JournalEntrySchema } from "@yuuka/db";
-import type { Insertable } from "kysely";
 import { assert, afterAll, beforeAll, describe, expect, it } from "vitest";
-import { createKysely, prepareSchema } from "../../src/db.js";
 import { JournalEntryRepository } from "../../src/journals/JournalEntryRepository.js";
-import { createTestingKysely } from "../testings.js";
+import { TestDatabase } from "../mod.js";
 
 describe("JournalEntryRepository", () => {
-  const db = createTestingKysely();
+  const db = TestDatabase.create();
 
   const id = faker.string.alphanumeric(8);
 
   beforeAll(async () => {
-    await prepareSchema(db);
+    await TestDatabase.synchronize(db);
 
     const entry: JournalEntrySchema.NewRow = {
       id,

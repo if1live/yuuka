@@ -21,6 +21,7 @@ const createColumnList = () => {
 
   const code = defineColumn({
     name: { native: "code", kysely: "code" },
+    primary: true,
     type: "int",
   });
 
@@ -69,4 +70,10 @@ export const options: MyEntitySchemaOptions = {
     typeorm: typeormName,
   },
   columns: Object.fromEntries(columns.map(convertTypeormSchemaColumnOptions)),
+  uniques: [
+    {
+      name: "journal_entry_line_idx_uniq_entryId_code",
+      columns: ["entry_id", "code"],
+    },
+  ],
 };

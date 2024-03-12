@@ -64,51 +64,6 @@ export const createKysely = (dialect: Dialect) => {
 const { dialect } = await createDialect(settings.databaseUrl);
 export const db = createKysely(dialect);
 
-// TODO: 테이블 규격 관리 어디서 하지?
-type PrepareFn = (db: Kysely<Database>) => Promise<void>;
-
-const parepare_accountCode: PrepareFn = async (db) => {
-  await db.schema
-    .createTable(AccountCodeSchema.name)
-    .addColumn("code", "integer", (c) => c.primaryKey())
-    .addColumn("name", "varchar(255)")
-    .addColumn("description", "varchar(255)")
-    .execute();
-};
-
-const parepare_journalEntry: PrepareFn = async (db) => {
-  await db.schema
-    .createTable(JournalEntrySchema.name)
-    .addColumn("id", "varchar(255)", (c) => c.primaryKey())
-    .addColumn("date", "varchar(255)")
-    .addColumn("brief", "varchar(255)")
-    .execute();
-};
-
-const parepare_journalEntryLine: PrepareFn = async (db) => {
-  await db.schema
-    .createTable(JournalEntryLineSchema.name)
-    .addColumn("entry_id", "varchar(255)")
-    .addColumn("code", "integer")
-    .addColumn("debit", "integer")
-    .addColumn("credit", "integer")
-    .execute();
-
-  await db.schema
-    .createIndex("idx_journalEntryLine_entry")
-    .on("journalEntryLine")
-    .columns(["entry_id", "code"])
-    .unique()
-    .execute();
-};
-
-// 스키마 구성은 유닛테스트 같은 목적으로도 쓸수 있을듯?
-export const prepareSchema = async (db: Kysely<Database>) => {
-  await parepare_accountCode(db);
-  await parepare_journalEntry(db);
-  await parepare_journalEntryLine(db);
-};
-
 // 데이터를 다양한 방식으로 뒤지려면 db에 채워놓는게 나을듯
 const insertBulk_accountCode = async (db: Kysely<Database>) => {
   const items = MasterData.accountCodes.map((x): AccountCodeSchema.NewRow => {

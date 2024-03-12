@@ -3,7 +3,6 @@ import { serve } from "@hono/node-server";
 import type { Database } from "@yuuka/db";
 import { Kysely } from "kysely";
 import { app } from "./app.js";
-import { db, insertBulk, prepareSchema } from "./db.js";
 
 /*
 console.log(`report: ${journalContext.ymd.year}-${journalContext.ymd.month}`);

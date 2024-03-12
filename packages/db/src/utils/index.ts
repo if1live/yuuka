@@ -11,7 +11,10 @@ export const convertTypeormSchemaColumnOptions = (
   input: MyEntitySchemaColumnOptions,
 ) => {
   const { name, ...rest } = input;
-  const opts: EntitySchemaColumnOptions = { ...rest, name: name.kysely };
+  const opts: EntitySchemaColumnOptions = {
+    ...rest,
+    name: name.native,
+  };
   return [name.native, opts] as const;
 };
 export interface AccountCodeTable {

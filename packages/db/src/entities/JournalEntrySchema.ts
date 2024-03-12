@@ -19,12 +19,20 @@ const createColumnList = () => {
     length: 191,
   });
 
+  // TODO: date를 문자열로 관리하는건 좀 멍청하지만
+  // 2024-01-02 로 당장은 충분함
+  const date = defineColumn({
+    name: { native: "date", kysely: "date" },
+    type: String,
+    length: 15,
+  });
+
   const brief = defineColumn({
     name: { native: "brief", kysely: "brief" },
     type: "text",
   });
 
-  return [id, brief];
+  return [id, date, brief];
 };
 
 const columns = createColumnList();
