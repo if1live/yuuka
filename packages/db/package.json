@@ -17,19 +17,21 @@
     "build": "tsc",
     "check:watch": "tsc --watch --noEmit",
     "clean": "rimraf dist artifact",
+    "cli": "typeorm-ts-node-esm",
     "fix": "biome check --apply-unsafe .",
     "lint": "biome check .",
-    "test": "vitest"
-  },
-  "dependencies": {
-    "kysely": "^0.27.3",
-    "remeda": "^1.47.0",
-    "type-fest": "^4.12.0",
-    "typeorm": "^0.3.20"
+    "test": "vitest",
+    "typeorm": "typeorm-ts-node-esm -d data-source.ts"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.9",
     "better-sqlite3": "^9.4.3",
+    "kysely": "^0.27.3",
+    "reflect-metadata": "^0.2.1",
+    "remeda": "^1.47.0",
+    "ts-node": "^10.9.2",
+    "type-fest": "^4.12.0",
+    "typeorm": "^0.3.20",
     "vitest": "^1.3.1"
   }
 }
