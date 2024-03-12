@@ -8,9 +8,10 @@ import {
 
 export const JournalEntryBlock = (props: {
   entry: JournalEntry;
+  prev: JournalEntry | undefined;
   order: number;
 }) => {
-  const { entry } = props;
+  const { entry, prev } = props;
 
   return entry.lines.map((line, idx) => {
     const key = `${entry.id}-${line.code}`;
@@ -23,13 +24,15 @@ export const JournalEntryBlock = (props: {
     const debit = line._tag === "debit" ? line.debit : null;
     const credit = line._tag === "credit" ? line.credit : null;
 
+    const displayDate = isFirstRow && prev?.date !== entry.date;
+
     // 검증 상세 정보
     const result = JournalEntry.safeValidate(entry);
     const error = result.isErr() ? (result.error as Error) : null;
 
     return (
       <TableRow key={key} error={result.isErr()}>
-        <TableCell>{isFirstRow ? entry.date : null}</TableCell>
+        <TableCell>{displayDate ? entry.date : null}</TableCell>
 
         <TableCell>
           {isFirstRow ? (

@@ -27,9 +27,17 @@ export const JournalEntryList = (props: {
         </TableHeader>
 
         <TableBody>
-          {entries.map((entry, order) => (
-            <JournalEntryBlock key={entry.id} entry={entry} order={order} />
-          ))}
+          {entries.map((entry, order) => {
+            const prev = entries[order - 1];
+            return (
+              <JournalEntryBlock
+                key={entry.id}
+                prev={prev}
+                entry={entry}
+                order={order}
+              />
+            );
+          })}
         </TableBody>
       </Table>
     </>

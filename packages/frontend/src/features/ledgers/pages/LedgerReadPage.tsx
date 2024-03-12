@@ -65,14 +65,21 @@ const LedgerReadView = (props: {
   }
 
   // 장부에서는 차변, 대변을 한쌍을 맞춰서 그리고 싶다
-  type Row = [Ledger | undefined, Ledger | undefined];
+  type Row = {
+    debit: Ledger | undefined;
+    credit: Ledger | undefined;
+  };
+
   const rows: Row[] = [];
 
   const loopcount = Math.max(ledgers_debit.length, ledgers_credit.length);
   for (let i = 0; i < loopcount; i++) {
     const ledger_debit = ledgers_debit[i];
     const ledger_credit = ledgers_credit[i];
-    rows.push([ledger_debit, ledger_credit]);
+    rows.push({
+      debit: ledger_debit,
+      credit: ledger_credit,
+    });
   }
 
   return (
@@ -94,13 +101,15 @@ const LedgerReadView = (props: {
         </TableHeader>
 
         {rows.map((row, i) => {
-          const [debit, credit] = row;
+          const { debit, credit } = row;
+
+          const prev = rows[i - 1];
           const key = [debit?.id, credit?.id].join("-");
 
           return (
             <TableRow key={key}>
-              <LedgerBlock ledger={debit} />
-              <LedgerBlock ledger={credit} />
+              <LedgerBlock ledger={debit} prev={prev?.debit} />
+              <LedgerBlock ledger={credit} prev={prev?.credit} />
             </TableRow>
           );
         })}
@@ -109,9 +118,16 @@ const LedgerReadView = (props: {
   );
 };
 
-const LedgerBlock = (props: { ledger: Ledger | undefined }) => {
-  const { ledger } = props;
-  return ledger ? <LedgerBlock_Exists ledger={ledger} /> : <LedgerBlock_None />;
+const LedgerBlock = (props: {
+  ledger: Ledger | undefined;
+  prev: Ledger | undefined;
+}) => {
+  const { ledger, prev } = props;
+  return ledger ? (
+    <LedgerBlock_Exists ledger={ledger} prev={prev} />
+  ) : (
+    <LedgerBlock_None />
+  );
 };
 
 const LedgerBlock_None = () => {
@@ -125,13 +141,17 @@ const LedgerBlock_None = () => {
 };
 
 // TODO: compound entry는 어떻게 표현하지?
-const LedgerBlock_Exists = (props: { ledger: Ledger }) => {
-  const { ledger } = props;
+const LedgerBlock_Exists = (props: {
+  ledger: Ledger;
+  prev: Ledger | undefined;
+}) => {
+  const { ledger, prev } = props;
 
   const amount = ledger.credit > 0 ? ledger.credit : ledger.debit;
+  const displayDate = ledger.date !== prev?.date;
   return (
     <>
-      <Table.Cell>{ledger.date}</Table.Cell>
+      <Table.Cell>{displayDate ? ledger.date : null}</Table.Cell>
       <Table.Cell>
         {ledger.brief} | <JournalEntryLink id={ledger.id} />
       </Table.Cell>
