@@ -7,7 +7,11 @@ import {
   TableRow,
 } from "semantic-ui-react";
 import useSWRImmutable from "swr/immutable";
-import { AccountCodeLink, JournalEntryLink } from "../../../components";
+import {
+  AccountCodeLink,
+  CurrencyDisplay,
+  JournalEntryLink,
+} from "../../../components";
 import { fetcher } from "../../../fetchers";
 
 export const LedgerReadPage = () => {
@@ -155,7 +159,9 @@ const LedgerBlock_Exists = (props: {
       <Table.Cell>
         {ledger.brief} | <JournalEntryLink id={ledger.id} />
       </Table.Cell>
-      <Table.Cell textAlign="right">{amount}</Table.Cell>
+      <Table.Cell textAlign="right">
+        <CurrencyDisplay amount={amount} />
+      </Table.Cell>
     </>
   );
 };

@@ -7,7 +7,11 @@ export const CurrencyDisplay = (props: {
   amount: number;
 }) => {
   const { amount } = props;
-  return <span>{amount}</span>;
+  const formatter = new Intl.NumberFormat("ko-KR", {
+    style: "currency",
+    currency: "KRW",
+  });
+  return <span>{formatter.format(amount)}</span>;
 };
 
 export const AccountCodeLink = (props: {
