@@ -1,17 +1,35 @@
 import type { JournalEntry } from "@yuuka/core";
+import * as R from "remeda";
 import {
+  Icon,
   Table,
   TableBody,
+  TableFooter,
   TableHeader,
   TableHeaderCell,
   TableRow,
 } from "semantic-ui-react";
+import { CurrencyDisplay } from "../../../components";
 import { JournalEntryBlock } from "./JournalEntryBlock";
 
 export const JournalEntryList = (props: {
   entries: JournalEntry[];
 }) => {
   const { entries } = props;
+
+  const sum_debit = R.pipe(
+    entries,
+    R.flatMap((x) => x.lines),
+    R.map((x) => (x._tag === "debit" ? x.debit : 0)),
+    R.sumBy((x) => x),
+  );
+
+  const sum_credit = R.pipe(
+    entries,
+    R.flatMap((x) => x.lines),
+    R.map((x) => (x._tag === "credit" ? x.credit : 0)),
+    R.sumBy((x) => x),
+  );
 
   return (
     <>
@@ -39,6 +57,22 @@ export const JournalEntryList = (props: {
             );
           })}
         </TableBody>
+
+        <TableFooter>
+          <TableRow negative>
+            <TableHeaderCell> </TableHeaderCell>
+            <TableHeaderCell> </TableHeaderCell>
+            <TableHeaderCell>
+              {sum_debit !== sum_credit ? "unbalanced!" : null}
+            </TableHeaderCell>
+            <TableHeaderCell textAlign="right">
+              <CurrencyDisplay amount={sum_debit} />
+            </TableHeaderCell>
+            <TableHeaderCell textAlign="right">
+              <CurrencyDisplay amount={sum_credit} />
+            </TableHeaderCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </>
   );

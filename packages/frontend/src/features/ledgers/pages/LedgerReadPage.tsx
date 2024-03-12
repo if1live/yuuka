@@ -1,7 +1,9 @@
 import { ledgerSpecification } from "@yuuka/core";
 import { useParams } from "react-router-dom";
+import * as R from "remeda";
 import {
   Table,
+  TableFooter,
   TableHeader,
   TableHeaderCell,
   TableRow,
@@ -86,6 +88,9 @@ const LedgerReadView = (props: {
     });
   }
 
+  const sum_debit = R.sumBy(ledgers_debit, (x) => x.debit);
+  const sum_credit = R.sumBy(ledgers_credit, (x) => x.credit);
+
   return (
     <>
       <h1>
@@ -117,6 +122,21 @@ const LedgerReadView = (props: {
             </TableRow>
           );
         })}
+
+        <TableFooter>
+          <TableRow>
+            <TableHeaderCell> </TableHeaderCell>
+            <TableHeaderCell> </TableHeaderCell>
+            <TableHeaderCell textAlign="right">
+              <CurrencyDisplay amount={sum_debit} />
+            </TableHeaderCell>
+            <TableHeaderCell> </TableHeaderCell>
+            <TableHeaderCell> </TableHeaderCell>
+            <TableHeaderCell textAlign="right">
+              <CurrencyDisplay amount={sum_credit} />
+            </TableHeaderCell>
+          </TableRow>
+        </TableFooter>
       </Table>
     </>
   );
