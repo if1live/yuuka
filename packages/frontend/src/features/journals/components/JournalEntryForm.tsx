@@ -1,21 +1,21 @@
+import { ErrorMessage } from "@hookform/error-message";
 import { JournalEntry } from "@yuuka/core";
-import * as R from "remeda";
 import { JournalEntryLine } from "@yuuka/core";
 import { useContext } from "react";
-import { MasterDataContext } from "../../../contexts/MasterDataContext";
 import { useForm } from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message";
+import * as R from "remeda";
 import {
+  Button,
   Form,
   FormField,
   Table,
-  TableHeader,
-  TableRow,
-  TableHeaderCell,
   TableBody,
   TableCell,
-  Button,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
 } from "semantic-ui-react";
+import { MasterDataContext } from "../../../contexts/MasterDataContext";
 import { JournalEntryList } from "./JournalEntryList";
 
 export const JournalEntryForm = (props: {
@@ -82,12 +82,30 @@ export const JournalEntryForm = (props: {
     setValue("lines", lines);
   };
 
+  const displayCSV = (entry: JournalEntry) => {
+    const mat = JournalEntry.toCSV(entry);
+    return mat.map((x) => x.join(",")).join("\n");
+  };
+
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormField>
           <label>date</label>
-          <input type="date" {...register("date")} />
+          <input
+            type="date"
+            {...register("date", {
+              onChange: (e) => {
+                const value = e.target.value as string;
+                const tokens = value.split("-");
+                const y = Number.parseInt(tokens[0] as string, 10) - 2000;
+                const m = tokens[1];
+                const d = tokens[2];
+                const id = `${y}${m}${d}_000000`;
+                setValue("id", id);
+              },
+            })}
+          />
         </FormField>
 
         <FormField>
@@ -219,6 +237,9 @@ export const JournalEntryForm = (props: {
       </Form>
 
       <JournalEntryList entries={[values]} />
+
+      {/* 좀 무식한데 csv 접근을 열어둠 */}
+      {valid ? <pre>{displayCSV(values)}</pre> : null}
     </>
   );
 };

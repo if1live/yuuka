@@ -1,9 +1,9 @@
 import { Route, Routes } from "react-router-dom";
+import { JournalEntryCreatePage } from "../features/journals/pages/JournalEntryCreatePage";
+import { JournalEntryEditPage } from "../features/journals/pages/JournalEntryEditPage";
 import { JournalEntryListPage } from "../features/journals/pages/JournalEntryListPage";
 import { JournalEntryReadPage } from "../features/journals/pages/JournalEntryReadPage";
 import { JournalEntryRootPage } from "../features/journals/pages/JournalEntryRootPage";
-import { JournalEntryEditPage } from "../features/journals/pages/JournalEntryEditPage";
-import { JournalEntryCreatePage } from "../features/journals/pages/JournalEntryCreatePage";
 
 export const JournalRouter = () => (
   <Routes>

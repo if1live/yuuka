@@ -37,7 +37,31 @@ const validate = (journal: JournalEntry): JournalEntry => {
   };
 };
 
+const toCSV = (entry: JournalEntry): unknown[][] => {
+  // month,day,txid,brief,code,debit,credit
+  const datetime = entry.date.split("-");
+  const month = Number.parseInt(datetime[1] ?? "0");
+  const day = Number.parseInt(datetime[2] ?? "0");
+
+  const cells_metadata = [month, day, entry.id, entry.brief];
+  const cells_padding = Array(cells_metadata.length).fill("");
+
+  const rows = entry.lines.map((line, idx) => {
+    const next = JournalEntryLine.cast(line);
+    const cells_amount =
+      next._tag === "debit"
+        ? [line.code, next.debit, 0]
+        : [line.code, 0, next.credit];
+
+    return idx === 0
+      ? [...cells_metadata, ...cells_amount]
+      : [...cells_padding, ...cells_amount];
+  });
+  return rows;
+};
+
 export const JournalEntry = {
   validate,
   safeValidate: Result.fromThrowable(validate, (e) => e as Error),
+  toCSV,
 };
