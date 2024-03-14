@@ -1,8 +1,9 @@
 import { JournalEntry, journalSpecification } from "@yuuka/core";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import useSWRImmutable from "swr/immutable";
 import { fetcher } from "../../../fetchers";
 import { JournalEntryList } from "../components/JournalEntryList";
+import { Button } from "semantic-ui-react";
 
 export const JournalEntryReadPage = () => {
   const sheet = journalSpecification.dataSheet;
@@ -44,6 +45,10 @@ const JournalEntryReadView = (props: {
 
       {result.isErr() ? <h2>error: {result.error.message}</h2> : null}
       <JournalEntryList entries={[entry]} />
+
+      <Button as={Link} to={`/journal/entry/${id}/edit`}>
+        edit
+      </Button>
     </>
   );
 };

@@ -22,6 +22,38 @@ export type JournalEntryLine =
   | JournalEntryLine_Credit
   | JournalEntryLine_Any;
 
+const cast_any = (
+  line: JournalEntryLine_Any,
+): JournalEntryLine_Debit | JournalEntryLine_Credit => {
+  if (line.debit) {
+    return {
+      _tag: "debit",
+      code: line.code,
+      debit: line.debit,
+    };
+  }
+
+  if (line.credit) {
+    return {
+      _tag: "credit",
+      code: line.code,
+      credit: line.credit,
+    };
+  }
+
+  throw new Error("unreachable");
+};
+
+const cast = (line: JournalEntryLine) => {
+  switch (line._tag) {
+    case "debit":
+    case "credit":
+      return line;
+    default:
+      return cast_any(line);
+  }
+};
+
 const validate_debit = (line: JournalEntryLine_Debit): JournalEntryLine => {
   if (line.debit <= 0) throw new Error("debit is not positive");
 
@@ -42,23 +74,13 @@ const validate_any = (line: JournalEntryLine_Any): JournalEntryLine => {
     throw new Error("debit and credit exists");
   }
 
-  if (line.debit) {
-    return validate_debit({
-      _tag: "debit",
-      code: line.code,
-      debit: line.debit,
-    });
+  const next = cast_any(line);
+  switch (next._tag) {
+    case "debit":
+      return validate_debit(next);
+    case "credit":
+      return validate_credit(next);
   }
-
-  if (line.credit) {
-    return validate_credit({
-      _tag: "credit",
-      code: line.code,
-      credit: line.credit,
-    });
-  }
-
-  throw new Error("unreachable");
 };
 
 const validate = (line: JournalEntryLine) => {
@@ -84,7 +106,34 @@ const compare = (a: JournalEntryLine, b: JournalEntryLine): number => {
   return 0;
 };
 
+const filter_debit = (lines: JournalEntryLine[]): JournalEntryLine_Debit[] => {
+  const results = [];
+  for (const line of lines) {
+    const next = cast(line);
+    if (next._tag === "debit") {
+      results.push(next);
+    }
+  }
+  return results;
+};
+
+const filter_credit = (
+  lines: JournalEntryLine[],
+): JournalEntryLine_Credit[] => {
+  const results = [];
+  for (const line of lines) {
+    const next = cast(line);
+    if (next._tag === "credit") {
+      results.push(next);
+    }
+  }
+  return results;
+};
+
 export const JournalEntryLine = {
+  cast,
   validate,
   compare,
+  filter_debit,
+  filter_credit,
 };

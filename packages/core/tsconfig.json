@@ -14,6 +14,7 @@
       "ES2020",
       "DOM",
       "WebWorker"
+
     ] /* Specify a set of bundled library declaration files that describe the target runtime environment. */,
     "jsx": "react-jsx" /* Specify what JSX code is generated. */,
     // "experimentalDecorators": true,                   /* Enable experimental support for legacy experimental decorators. */
@@ -108,3 +109,4 @@
     "etc/**/*.ts"
   ]
 }
+

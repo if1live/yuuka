@@ -69,9 +69,53 @@ const get = HttpRpc.define({
   schema: get_schema,
 });
 
+const create_endpoint = HttpEndpoint.define({
+  method: "post",
+  path: "/create",
+});
+
+const create_inout = HttpInOut.define({
+  _in: {} as JournalEntry,
+  _out: {} as JournalEntry,
+});
+
+const create_schema = InOutSchema.define({
+  req: Empty,
+  resp: Empty,
+});
+
+const create = HttpRpc.define({
+  endpoint: create_endpoint,
+  inout: create_inout,
+  schema: create_schema,
+});
+
+const edit_endpoint = HttpEndpoint.define({
+  method: "post",
+  path: "/edit",
+});
+
+const edit_inout = HttpInOut.define({
+  _in: {} as JournalEntry,
+  _out: {} as JournalEntry,
+});
+
+const edit_schema = InOutSchema.define({
+  req: Empty,
+  resp: Empty,
+});
+
+const edit = HttpRpc.define({
+  endpoint: edit_endpoint,
+  inout: edit_inout,
+  schema: edit_schema,
+});
+
 export const dataSheet = {
   list,
   get,
+  create,
+  edit,
 };
 
 export type DataSheet = typeof dataSheet;

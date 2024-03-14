@@ -25,9 +25,23 @@ const get: AsControllerFn<Sheet["get"]> = async (req) => {
   return new MyResponse(found);
 };
 
+const create: AsControllerFn<Sheet["create"]> = async (req) => {
+  const body = req.body;
+  console.log(JSON.stringify(body, null, 2));
+  return new MyResponse(body);
+};
+
+const edit: AsControllerFn<Sheet["edit"]> = async (req) => {
+  const body = req.body;
+  console.log(JSON.stringify(body, null, 2));
+  return new MyResponse(body);
+};
+
 const app = new Hono();
 registerHandler(app, sheet.list, list);
 registerHandler(app, sheet.get, get);
+registerHandler(app, sheet.create, create);
+registerHandler(app, sheet.edit, edit);
 
 export const JournalController = {
   path: journalSpecification.resource,

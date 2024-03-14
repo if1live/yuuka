@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import * as R from "remeda";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -29,6 +30,11 @@ export const JournalEntryRootPage = () => {
   return (
     <>
       <h1>Journal</h1>
+
+      <Button as={Link} to="/journal/action/create">
+        create
+      </Button>
+
       <Table selectable celled compact="very">
         <TableHeader>
           <TableRow>

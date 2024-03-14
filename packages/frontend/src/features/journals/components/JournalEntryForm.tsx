@@ -1,0 +1,224 @@
+import { JournalEntry } from "@yuuka/core";
+import * as R from "remeda";
+import { JournalEntryLine } from "@yuuka/core";
+import { useContext } from "react";
+import { MasterDataContext } from "../../../contexts/MasterDataContext";
+import { useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
+import {
+  Form,
+  FormField,
+  Table,
+  TableHeader,
+  TableRow,
+  TableHeaderCell,
+  TableBody,
+  TableCell,
+  Button,
+} from "semantic-ui-react";
+import { JournalEntryList } from "./JournalEntryList";
+
+export const JournalEntryForm = (props: {
+  defaultValue: JournalEntry;
+  onSubmit: (entry: JournalEntry) => Promise<void>;
+}) => {
+  const { onSubmit } = props;
+
+  const masterdata = useContext(MasterDataContext);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<JournalEntry>({
+    defaultValues: props.defaultValue,
+  });
+
+  const values = watch();
+  const result = JournalEntry.safeValidate(values);
+  const valid = result.isOk() && R.isEmpty(errors);
+
+  // TODO: form이 바뀐걸 상위로 전달할 더 좋은 방법?
+
+  const findUnusedCode = (): number => {
+    const list_used = values.lines.map((x) => x.code);
+    const list_full = masterdata.accountCodes.map((x) => x.code);
+    const list_candidate = R.difference(list_full, list_used);
+    return list_candidate[0] ?? 101_000;
+  };
+
+  const addLine_debit = () => {
+    const lines_debit = JournalEntryLine.filter_debit(values.lines);
+    const lines_credit = JournalEntryLine.filter_credit(values.lines);
+
+    const next: JournalEntryLine = {
+      _tag: "debit",
+      code: findUnusedCode(),
+      debit: 0,
+    };
+
+    const lines = [...lines_debit, next, ...lines_credit];
+    setValue("lines", lines);
+  };
+
+  const addLine_credit = () => {
+    const lines_debit = JournalEntryLine.filter_debit(values.lines);
+    const lines_credit = JournalEntryLine.filter_credit(values.lines);
+
+    const next: JournalEntryLine = {
+      _tag: "credit",
+      code: findUnusedCode(),
+      credit: 0,
+    };
+
+    const lines = [...lines_debit, ...lines_credit, next];
+    setValue("lines", lines);
+  };
+
+  const removeLine = (code: number) => {
+    const lines = values.lines.filter((x) => x.code !== code);
+    setValue("lines", lines);
+  };
+
+  return (
+    <>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <FormField>
+          <label>date</label>
+          <input type="date" {...register("date")} />
+        </FormField>
+
+        <FormField>
+          <label>id</label>
+          <input
+            {...register("id", {
+              required: "id is required",
+            })}
+          />
+          <ErrorMessage
+            errors={errors}
+            name="id"
+            render={({ message }) => <p>{message}</p>}
+          />
+        </FormField>
+
+        <FormField>
+          <label>brief</label>
+          <input
+            {...register("brief", {
+              required: "brief is required",
+            })}
+          />
+          <ErrorMessage
+            errors={errors}
+            name="brief"
+            render={({ message }) => <p>{message}</p>}
+          />
+        </FormField>
+
+        <Table basic="very" compact="very">
+          <TableHeader>
+            <TableRow>
+              <TableHeaderCell>code</TableHeaderCell>
+              <TableHeaderCell>debit</TableHeaderCell>
+              <TableHeaderCell>credit</TableHeaderCell>
+              <TableHeaderCell>actions</TableHeaderCell>
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            {values.lines.map((line, idx) => {
+              const key = `line-${idx}`;
+
+              const isDebit = line._tag === "debit";
+              const isCredit = line._tag === "credit";
+
+              // code는 겹치면 안된다. 자신은 포함되어야한다
+              const codes_used = values.lines.map((x) => x.code);
+              const accounts = masterdata.accountCodes.filter((x) => {
+                if (x.code === line.code) {
+                  return true;
+                }
+                if (codes_used.includes(x.code)) {
+                  return false;
+                }
+                return true;
+              });
+
+              return (
+                <TableRow key={key}>
+                  <TableCell>
+                    <select
+                      {...register(`lines.${idx}.code`, {
+                        valueAsNumber: true,
+                      })}
+                    >
+                      {accounts.map((x) => (
+                        <option key={x.code} value={x.code}>
+                          [{x.code}] {x.name}
+                        </option>
+                      ))}
+                    </select>
+                  </TableCell>
+                  <TableCell>
+                    {isDebit && (
+                      <input
+                        type="number"
+                        {...register(`lines.${idx}.debit`, {
+                          valueAsNumber: true,
+                        })}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {isCredit && (
+                      <input
+                        type="number"
+                        {...register(`lines.${idx}.credit`, {
+                          valueAsNumber: true,
+                        })}
+                      />
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      type="button"
+                      size="mini"
+                      onClick={() => removeLine(line.code)}
+                    >
+                      del
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+            <TableRow>
+              <TableCell> </TableCell>
+              <TableCell>
+                <Button type="button" size="mini" onClick={addLine_debit}>
+                  debit
+                </Button>
+              </TableCell>
+              <TableCell>
+                <Button type="button" size="mini" onClick={addLine_credit}>
+                  credit
+                </Button>
+              </TableCell>
+              <TableCell> </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+
+        <FormField>
+          <Button type="submit" disabled={!valid}>
+            submit
+          </Button>
+        </FormField>
+      </Form>
+
+      <JournalEntryList entries={[values]} />
+    </>
+  );
+};
