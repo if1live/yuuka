@@ -1,5 +1,5 @@
 import { default as SQLite } from "better-sqlite3";
-import { Kysely } from "kysely";
+import { Kysely, type KyselyConfig } from "kysely";
 import { CamelCasePlugin, SqliteAdapter, SqliteDialect, sql } from "kysely";
 import { DataSource } from "typeorm";
 import type { EntitySchema } from "typeorm";
@@ -50,10 +50,11 @@ const synchronize = async <T>(db: Kysely<T>) => {
  * 그래서 유닛테스트 돌릴떄마다 새로운 객체를 준비한다.
  * 플러그인을 수동으로 동기화는건 좀 멍청하지만 자주 안바꾸니까 괜찮을듯.
  */
-const create = () => {
+const create = (opts?: Omit<KyselyConfig, "dialect">) => {
   const database = new SQLite(":memory:");
   const dialect = new SqliteDialect({ database });
   const db = new Kysely<Database>({
+    ...opts,
     dialect,
     plugins: [new CamelCasePlugin()],
   });
