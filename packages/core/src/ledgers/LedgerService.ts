@@ -4,6 +4,8 @@ import {
   JournalEntrySchema,
 } from "@yuuka/db";
 import type { Kysely } from "kysely";
+import * as R from "remeda";
+import { JournalEntryLine } from "../index.js";
 import { AccountCode } from "../masterdata/types.js";
 
 const load = async (
@@ -52,12 +54,18 @@ const load = async (
 
   const ledgers = lines.map((line) => {
     const entry = entryMap.get(line.entryId);
+    const entryLine = R.pipe(
+      line,
+      JournalEntryLine.fromRow,
+      JournalEntryLine.cast,
+    );
+
     return {
       id: line.entryId,
       brief: entry?.brief ?? "<unknwon>",
       date: entry?.date ?? "1970-01-01",
-      debit: line.debit,
-      credit: line.credit,
+      debit: entryLine._tag === "debit" ? entryLine.debit : 0,
+      credit: entryLine._tag === "credit" ? entryLine.credit : 0,
     };
   });
   return ledgers;

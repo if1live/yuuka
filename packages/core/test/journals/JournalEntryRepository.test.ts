@@ -22,9 +22,11 @@ describe("JournalEntryRepository", () => {
     };
     await db.insertInto(JournalEntrySchema.name).values(entry).execute();
 
+    const skel = { userId, entryId };
+    const { debitTag, creditTag } = JournalEntryLineSchema;
     const lines: JournalEntryLineSchema.NewRow[] = [
-      { userId, entryId, code: 102, debit: 100, credit: 0 },
-      { userId, entryId, code: 103, debit: 0, credit: 100 },
+      { ...skel, code: 102, tag: debitTag, amount: 100 },
+      { ...skel, code: 103, tag: creditTag, amount: 100 },
     ];
     await db.insertInto(JournalEntryLineSchema.name).values(lines).execute();
   });

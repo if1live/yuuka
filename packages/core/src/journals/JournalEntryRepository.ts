@@ -19,8 +19,8 @@ const findById = async (
       "journalEntry.entryId",
     )
     .selectAll()
-    .where("userId", "=", permission.userId)
-    .where("entryId", "=", entryId)
+    .where("journalEntry.userId", "=", permission.userId)
+    .where("journalEntry.entryId", "=", entryId)
     .execute();
 
   if (rows.length <= 0) {
@@ -31,6 +31,7 @@ const findById = async (
   assert.ok(first);
 
   const lines = rows
+    .map(JournalEntryLine.fromRow)
     .map(JournalEntryLine.validate)
     .sort(JournalEntryLine.compare);
 
@@ -55,9 +56,9 @@ const findByDateRange = async (
       "journalEntry.entryId",
     )
     .selectAll()
-    .where("userId", "=", permission.userId)
-    .where("date", ">=", range.start)
-    .where("date", "<", range.end)
+    .where("journalEntry.userId", "=", permission.userId)
+    .where("journalEntry.date", ">=", range.start)
+    .where("journalEntry.date", "<", range.end)
     .execute();
 
   if (rows.length === 0) {
@@ -72,6 +73,7 @@ const findByDateRange = async (
     assert.ok(first);
 
     const lines = values
+      .map(JournalEntryLine.fromRow)
       .map(JournalEntryLine.validate)
       .sort(JournalEntryLine.compare);
 

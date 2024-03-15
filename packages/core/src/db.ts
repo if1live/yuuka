@@ -97,16 +97,29 @@ const insertBulk_journalEntry = async (db: Kysely<Database>) => {
 const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
   const items = journalContext.entries.flatMap((journal) => {
     const lines = journal.lines.map((line): JournalEntryLineSchema.NewRow => {
-      const debit = line._tag === "debit" ? line.debit : 0;
-      const credit = line._tag === "credit" ? line.credit : 0;
-
-      return {
+      const skel = {
         userId: rootUserId,
         entryId: journal.id,
         code: line.code,
-        debit,
-        credit,
       };
+
+      if (line._tag === "debit") {
+        return {
+          ...skel,
+          tag: JournalEntryLineSchema.debitTag,
+          amount: line.debit,
+        };
+      }
+
+      if (line._tag === "credit") {
+        return {
+          ...skel,
+          tag: JournalEntryLineSchema.creditTag,
+          amount: line.credit,
+        };
+      }
+
+      throw new Error("unreachable");
     });
     return lines;
   });

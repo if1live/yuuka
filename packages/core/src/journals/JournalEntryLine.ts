@@ -1,3 +1,5 @@
+import { JournalEntryLineSchema } from "@yuuka/db";
+
 type JournalEntryLine_Debit = {
   _tag: "debit";
   code: number;
@@ -130,10 +132,20 @@ const filter_credit = (
   return results;
 };
 
+const fromRow = (x: JournalEntryLineSchema.Row): JournalEntryLine => {
+  switch (x.tag) {
+    case JournalEntryLineSchema.debitTag:
+      return { _tag: "debit", code: x.code, debit: x.amount };
+    case JournalEntryLineSchema.creditTag:
+      return { _tag: "credit", code: x.code, credit: x.amount };
+  }
+};
+
 export const JournalEntryLine = {
   cast,
   validate,
   compare,
   filter_debit,
   filter_credit,
+  fromRow,
 };

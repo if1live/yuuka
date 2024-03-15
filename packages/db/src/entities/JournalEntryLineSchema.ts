@@ -11,6 +11,14 @@ const nativeName: SnakeCase<typeof kyselyName> = "journal_entry_line";
 const typeormName: PascalCase<typeof kyselyName> = "JournalEntryLine";
 export const name = kyselyName;
 
+// debit, credit을 rdbms enum 없으 타입스크립트 수준에서 구분하고 싶다.
+// 둘을 묶어서 부를 이름은 생각나지 않았다
+export const debitTag = 1;
+export const creditTag = 2;
+
+export type DebitTag = typeof debitTag;
+export type CreditTag = typeof creditTag;
+
 const createColumnList = () => {
   const userId = defineColumn({
     name: { native: "user_id", kysely: "userId" },
@@ -31,24 +39,28 @@ const createColumnList = () => {
     type: "int",
   });
 
+  // debit/credit을 따로 쓰는것도 생각해봤는데
+  // debit, credit 둘중 하나에만 값이 들어간다.
+  // flag로 쓰면 nullable 없이 표현할수 있는 이점이 있다
+  // 테이블과 분개장 규격이 1:1이 아닌건 어쩔수 없지만 이건 다른 기법을 쓰는게 나을듯
+  const tag = defineColumn({
+    name: { native: "tag", kysely: "tag" },
+    type: Number,
+  });
+
   // TODO: decimal을 int로 바꿀 가능성 있음
   // KRW만 쓰면 소수점 없어도 되는데 USD도 지원하고 싶다.
   // decimal 쓰면 pg에서는 '11500.00' 같이 문자열로 전달되는걸 처리해야한다.
   // decimal 정밀도는 node에서 다루는게 되나? 그냥 int로 취급하는게 간단할지도?
-  const debit = defineColumn({
-    name: { native: "debit", kysely: "debit" },
+  const amount = defineColumn({
+    name: { native: "amount", kysely: "amount" },
     // type: "decimal",
     // precision: 10,
     // scale: 2,
     type: "int",
   });
 
-  const credit = defineColumn({
-    name: { native: "credit", kysely: "credit" },
-    type: "int",
-  });
-
-  return [userId, entryId, code, debit, credit];
+  return [userId, entryId, code, tag, amount];
 };
 
 const columns = createColumnList();
@@ -58,8 +70,8 @@ export interface Table {
   userId: number;
   entryId: string;
   code: number;
-  debit: number;
-  credit: number;
+  tag: DebitTag | CreditTag;
+  amount: number;
 }
 
 // TODO: 타입 유도?
