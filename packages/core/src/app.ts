@@ -1,5 +1,6 @@
 import { serveStatic } from "@hono/node-server/serve-static";
 import { Hono } from "hono";
+import { compress } from "hono/compress";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { JournalController } from "./controllers/JournalController.js";
@@ -12,6 +13,7 @@ export const app = new Hono();
 
 app.use("*", logger());
 app.use("*", cors());
+app.use("*", compress());
 
 const robotsTxt = `
 User-agent: *
