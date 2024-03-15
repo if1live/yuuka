@@ -1,5 +1,7 @@
 import { Hono } from "hono";
-import { MasterData } from "../masterdata/instances.js";
+import { db } from "../db.js";
+import { AccountCodeRepository } from "../masterdata/AccountCodeRepository.js";
+import { AccountTagRepository } from "../masterdata/AccountTagRepository.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
 import { resourceSpecification } from "../specifications/index.js";
@@ -9,9 +11,16 @@ const sheet = resourceSpecification.dataSheet;
 type Sheet = typeof sheet;
 
 const masterdata: AsControllerFn<Sheet["masterdata"]> = async (req) => {
+  const permission = { userId: req.userId };
+
+  const [accountTags, accountCodes] = await Promise.all([
+    AccountTagRepository.load(db, permission),
+    AccountCodeRepository.load(db, permission),
+  ]);
+
   return new MyResponse({
-    accountTags: MasterData.accountTags,
-    accountCodes: MasterData.accountCodes,
+    accountTags,
+    accountCodes,
   });
 };
 

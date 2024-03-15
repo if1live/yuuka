@@ -1,3 +1,5 @@
+import type { AccountCodeSchema, AccountTagSchema } from "@yuuka/db";
+
 export type AccountCategory =
   | "asset"
   | "liability"
@@ -45,7 +47,17 @@ export interface AccountTag {
   description: string;
 }
 
-export const AccountTag = {};
+export const AccountTag = {
+  fromRow(row: AccountTagSchema.Row): AccountTag {
+    return {
+      major: AccountCategory.fromKorean(row.major),
+      minor: row.minor,
+      code: row.code,
+      name: row.name,
+      description: row.description,
+    };
+  },
+};
 
 export interface AccountCode {
   code: number;
@@ -56,5 +68,12 @@ export interface AccountCode {
 export const AccountCode = {
   toTag(code: number) {
     return Math.floor(code / 1000);
+  },
+  fromRow(row: AccountCodeSchema.Row): AccountCode {
+    return {
+      code: row.code,
+      name: row.name,
+      description: row.description,
+    };
   },
 };

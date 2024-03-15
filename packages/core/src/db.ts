@@ -1,8 +1,3 @@
-import {
-  AccountCodeSchema,
-  JournalEntryLineSchema,
-  JournalEntrySchema,
-} from "@yuuka/db";
 import type { Database } from "@yuuka/db";
 import {
   CamelCasePlugin,
@@ -12,8 +7,6 @@ import {
 } from "kysely";
 import type { Dialect } from "kysely";
 import { default as Postgres } from "pg";
-import { journalContext } from "./instances.js";
-import { MasterData } from "./masterdata/instances.js";
 import { settings } from "./settings.js";
 
 const createSqliteDialect = async (filename: string) => {
@@ -63,99 +56,3 @@ export const createKysely = (dialect: Dialect) => {
 
 const { dialect } = await createDialect(settings.databaseUrl);
 export const db = createKysely(dialect);
-
-const rootUserId = 1;
-
-// 데이터를 다양한 방식으로 뒤지려면 db에 채워놓는게 나을듯
-const insertBulk_accountCode = async (db: Kysely<Database>) => {
-  const items = MasterData.accountCodes.map((x): AccountCodeSchema.NewRow => {
-    return {
-      userId: rootUserId,
-      code: x.code,
-      name: x.name,
-      description: x.description,
-    };
-  });
-
-  await db.insertInto(AccountCodeSchema.name).values(items).execute();
-};
-
-const insertBulk_journalEntry = async (db: Kysely<Database>) => {
-  const items = journalContext.entries.map(
-    (journal): JournalEntrySchema.NewRow => {
-      return {
-        userId: rootUserId,
-        entryId: journal.id,
-        date: journal.date,
-        brief: journal.brief,
-      };
-    },
-  );
-  await db.insertInto(JournalEntrySchema.name).values(items).execute();
-};
-
-const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
-  const items = journalContext.entries.flatMap((journal) => {
-    const lines = journal.lines.map((line): JournalEntryLineSchema.NewRow => {
-      const skel = {
-        userId: rootUserId,
-        entryId: journal.id,
-        code: line.code,
-      };
-
-      if (line._tag === "debit") {
-        return {
-          ...skel,
-          tag: JournalEntryLineSchema.debitTag,
-          amount: line.debit,
-        };
-      }
-
-      if (line._tag === "credit") {
-        return {
-          ...skel,
-          tag: JournalEntryLineSchema.creditTag,
-          amount: line.credit,
-        };
-      }
-
-      throw new Error("unreachable");
-    });
-    return lines;
-  });
-
-  await db.insertInto(JournalEntryLineSchema.name).values(items).execute();
-};
-
-export const insertBulk = async (db: Kysely<Database>) => {
-  // 첫행이 존재하면 테이블이 비어있지 않은거로 해석
-  {
-    const found = await db
-      .selectFrom(AccountCodeSchema.name)
-      .selectAll()
-      .executeTakeFirst();
-    if (!found) {
-      await insertBulk_accountCode(db);
-    }
-  }
-
-  {
-    const found = await db
-      .selectFrom(JournalEntrySchema.name)
-      .selectAll()
-      .executeTakeFirst();
-    if (!found) {
-      await insertBulk_journalEntry(db);
-    }
-  }
-
-  {
-    const found = await db
-      .selectFrom(JournalEntryLineSchema.name)
-      .selectAll()
-      .executeTakeFirst();
-    if (!found) {
-      await insertBulk_journalEntryLine(db);
-    }
-  }
-};
