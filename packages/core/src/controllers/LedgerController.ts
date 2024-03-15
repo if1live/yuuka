@@ -1,7 +1,6 @@
-import { JournalEntryLineSchema, JournalEntrySchema } from "@yuuka/db";
 import { Hono } from "hono";
 import { db } from "../db.js";
-import { AccountCode } from "../index.js";
+import { LedgerService } from "../ledgers/LedgerService.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
 import { ledgerSpecification } from "../specifications/index.js";
@@ -15,54 +14,18 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
   const body = req.body;
   const code = body.code < 1000 ? body.code * 1000 : body.code;
 
-  const tagCode = AccountCode.toTag(code);
-  const isTag = tagCode * 1000 === code;
+  const startDate = "1970-01-01";
+  const endDate = "9999-12-31";
 
-  const load_plain = async () => {
-    return await db
-      .selectFrom(JournalEntryLineSchema.name)
-      .selectAll()
-      .where("code", "=", code)
-      .execute();
-  };
-
-  const load_group = async () => {
-    return await db
-      .selectFrom(JournalEntryLineSchema.name)
-      .selectAll()
-      .where("code", ">=", tagCode * 1000)
-      .where("code", "<", (tagCode + 1) * 1000)
-      .execute();
-  };
-
-  const lines = isTag ? await load_group() : await load_plain();
-  if (lines.length <= 0) {
-    return new MyResponse({
-      code,
-      ledgers: [],
-    });
-  }
-
-  const ids = lines.map((line) => line.entryId);
-  const rows = await db
-    .selectFrom(JournalEntrySchema.name)
-    .selectAll()
-    .where("id", "in", ids)
-    .execute();
-  const entryMap = new Map(rows.map((row) => [row.id, row]));
+  const permission = { userId: req.userId };
+  const ledgers = await LedgerService.load(db, permission, code, {
+    start: startDate,
+    end: endDate,
+  });
 
   return new MyResponse({
     code,
-    ledgers: lines.map((line) => {
-      const entry = entryMap.get(line.entryId);
-      return {
-        id: line.entryId,
-        brief: entry?.brief ?? "<unknwon>",
-        date: entry?.date ?? "1970-01-01",
-        debit: line.debit,
-        credit: line.credit,
-      };
-    }),
+    ledgers,
   });
 };
 

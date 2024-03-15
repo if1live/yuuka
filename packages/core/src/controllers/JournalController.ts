@@ -11,28 +11,31 @@ type Sheet = typeof sheet;
 
 const list: AsControllerFn<Sheet["list"]> = async (req) => {
   const { startDate, endDate } = req.body;
-  const entries = await JournalEntryRepository.findByDateRange(
-    db,
-    startDate,
-    endDate,
-  );
+  const permission = { userId: req.userId };
+  const entries = await JournalEntryRepository.findByDateRange(db, permission, {
+    start: startDate,
+    end: endDate,
+  });
   return new MyResponse({ entries });
 };
 
 const get: AsControllerFn<Sheet["get"]> = async (req) => {
   const { id } = req.body;
-  const found = await JournalEntryRepository.findById(db, id);
+  const permission = { userId: req.userId };
+  const found = await JournalEntryRepository.findById(db, permission, id);
   return new MyResponse(found);
 };
 
 const create: AsControllerFn<Sheet["create"]> = async (req) => {
   const body = req.body;
+  const permission = { userId: req.userId };
   console.log(JSON.stringify(body, null, 2));
   return new MyResponse(body);
 };
 
 const edit: AsControllerFn<Sheet["edit"]> = async (req) => {
   const body = req.body;
+  const permission = { userId: req.userId };
   console.log(JSON.stringify(body, null, 2));
   return new MyResponse(body);
 };

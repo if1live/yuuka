@@ -12,6 +12,12 @@ const typeormName: PascalCase<typeof kyselyName> = "JournalEntryLine";
 export const name = kyselyName;
 
 const createColumnList = () => {
+  const userId = defineColumn({
+    name: { native: "user_id", kysely: "userId" },
+    primary: true,
+    type: Number,
+  });
+
   const entryId = defineColumn({
     name: { native: "entry_id", kysely: "entryId" },
     primary: true,
@@ -42,13 +48,14 @@ const createColumnList = () => {
     type: "int",
   });
 
-  return [entryId, code, debit, credit];
+  return [userId, entryId, code, debit, credit];
 };
 
 const columns = createColumnList();
 
 // TODO: 타입 유도? columns
 export interface Table {
+  userId: number;
   entryId: string;
   code: number;
   debit: number;
@@ -56,7 +63,7 @@ export interface Table {
 }
 
 // TODO: 타입 유도?
-export const primaryKeyFields = ["entryId", "code"] as const;
+export const primaryKeyFields = ["userId", "entryId", "code"] as const;
 export type PrimaryKey = Pick<Table, (typeof primaryKeyFields)[number]>;
 
 // 자주 쓰는 타입이라서 미리 정의
@@ -71,10 +78,4 @@ export const options: MyEntitySchemaOptions = {
     typeorm: typeormName,
   },
   columns: Object.fromEntries(columns.map(convertTypeormSchemaColumnOptions)),
-  uniques: [
-    {
-      name: "journal_entry_line_idx_uniq_entryId_code",
-      columns: ["entry_id", "code"],
-    },
-  ],
 };

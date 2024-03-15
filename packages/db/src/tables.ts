@@ -3,6 +3,7 @@ import {
   JournalEntryLineSchema,
   JournalEntrySchema,
   PreferenceSchema,
+  UserSchema,
 } from "./entities/index.js";
 
 export interface Database {
@@ -10,4 +11,5 @@ export interface Database {
   [AccountCodeSchema.name]: AccountCodeSchema.Table;
   [JournalEntryLineSchema.name]: JournalEntryLineSchema.Table;
   [PreferenceSchema.name]: PreferenceSchema.Table;
+  [UserSchema.name]: UserSchema.Table;
 }

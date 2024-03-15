@@ -4,6 +4,7 @@ import {
   JournalEntryLineSchema,
   JournalEntrySchema,
   PreferenceSchema,
+  UserSchema,
 } from "../src/entities/index.js";
 import type { MyEntitySchemaOptions } from "../src/types.js";
 
@@ -25,10 +26,12 @@ export const AccountCodeSchemaEntity = f(AccountCodeSchema);
 export const JournalEntryLineSchemaEntity = f(JournalEntryLineSchema);
 export const JournalEntrySchemaEntity = f(JournalEntrySchema);
 export const PreferenceSchemaEntity = f(PreferenceSchema);
+export const UserSchemaEntity = f(UserSchema);
 
 export const entitySchemaList: EntitySchema[] = [
   AccountCodeSchemaEntity,
   JournalEntryLineSchemaEntity,
   JournalEntrySchemaEntity,
   PreferenceSchemaEntity,
+  UserSchemaEntity,
 ];

@@ -6,50 +6,51 @@ import {
   defineColumn,
 } from "../utils/index.js";
 
-const kyselyName = "accountCode";
-const nativeName: SnakeCase<typeof kyselyName> = "account_code";
-const typeormName: PascalCase<typeof kyselyName> = "AccountCode";
+const kyselyName = "user";
+const nativeName: SnakeCase<typeof kyselyName> = "user";
+const typeormName: PascalCase<typeof kyselyName> = "User";
 export const name = kyselyName;
 
 const createColumnList = () => {
-  const userId = defineColumn({
-    name: { native: "user_id", kysely: "userId" },
+  const id = defineColumn({
+    name: { native: "id", kysely: "id" },
     primary: true,
     type: Number,
   });
 
-  const code = defineColumn({
-    name: { native: "code", kysely: "code" },
-    primary: true,
-    type: "int",
-  });
-
-  const name = defineColumn({
-    name: { native: "name", kysely: "name" },
+  const supabase = defineColumn({
+    name: { native: "supabase", kysely: "supabase" },
+    unique: true,
     type: String,
     length: 191,
   });
 
-  const description = defineColumn({
-    name: { native: "description", kysely: "description" },
-    type: "text",
+  const createdAt = defineColumn({
+    name: { native: "created_at", kysely: "createdAt" },
+    type: Date,
+    createDate: true,
   });
 
-  return [userId, code, name, description];
+  const updatedAt = defineColumn({
+    name: { native: "updated_at", kysely: "updatedAt" },
+    type: Date,
+    updateDate: true,
+  });
+
+  return [id, supabase, createdAt, updatedAt];
 };
 
 const columns = createColumnList();
 
-// TODO: 타입 유도? columns
+// TODO: 타입 유도?
 export interface Table {
-  userId: number;
-  code: number;
-  name: string;
-  description: string;
+  id: number;
+  supabase: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-// TODO: 타입 유도?
-export const primaryKeyFields = ["userId", "code"] as const;
+export const primaryKeyFields = ["id"] as const;
 export type PrimaryKey = Pick<Table, (typeof primaryKeyFields)[number]>;
 
 // 자주 쓰는 타입이라서 미리 정의

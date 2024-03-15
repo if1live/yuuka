@@ -8,17 +8,19 @@ import { JournalEntryLine } from "./JournalEntryLine.js";
 
 const findById = async (
   db: Kysely<Database>,
-  id: string,
+  permission: { userId: number },
+  entryId: string,
 ): Promise<JournalEntry> => {
   const rows = await db
     .selectFrom(JournalEntrySchema.name)
     .innerJoin(
       "journalEntryLine",
       "journalEntryLine.entryId",
-      "journalEntry.id",
+      "journalEntry.entryId",
     )
     .selectAll()
-    .where("id", "=", id)
+    .where("userId", "=", permission.userId)
+    .where("entryId", "=", entryId)
     .execute();
 
   if (rows.length <= 0) {
@@ -33,7 +35,7 @@ const findById = async (
     .sort(JournalEntryLine.compare);
 
   return {
-    id: first.id,
+    id: first.entryId,
     brief: first.brief,
     date: first.date,
     lines,
@@ -42,19 +44,20 @@ const findById = async (
 
 const findByDateRange = async (
   db: Kysely<Database>,
-  startDate: string,
-  endDate: string,
+  permission: { userId: number },
+  range: { start: string; end: string },
 ): Promise<JournalEntry[]> => {
   const rows = await db
     .selectFrom(JournalEntrySchema.name)
     .innerJoin(
       "journalEntryLine",
       "journalEntryLine.entryId",
-      "journalEntry.id",
+      "journalEntry.entryId",
     )
     .selectAll()
-    .where("date", ">=", startDate)
-    .where("date", "<", endDate)
+    .where("userId", "=", permission.userId)
+    .where("date", ">=", range.start)
+    .where("date", "<", range.end)
     .execute();
 
   if (rows.length === 0) {

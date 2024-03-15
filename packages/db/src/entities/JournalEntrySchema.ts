@@ -12,8 +12,14 @@ const typeormName: PascalCase<typeof kyselyName> = "JournalEntry";
 export const name = kyselyName;
 
 const createColumnList = () => {
-  const id = defineColumn({
-    name: { native: "id", kysely: "id" },
+  const userId = defineColumn({
+    name: { native: "user_id", kysely: "userId" },
+    primary: true,
+    type: Number,
+  });
+
+  const entryId = defineColumn({
+    name: { native: "entry_id", kysely: "entryId" },
     primary: true,
     type: String,
     length: 191,
@@ -32,20 +38,21 @@ const createColumnList = () => {
     type: "text",
   });
 
-  return [id, date, brief];
+  return [userId, entryId, date, brief];
 };
 
 const columns = createColumnList();
 
 // TODO: 타입 유도? columns
 export interface Table {
-  id: string;
+  userId: number;
+  entryId: string;
   date: string;
   brief: string;
 }
 
 // TODO: 타입 유도?
-export const primaryKeyFields = ["id"] as const;
+export const primaryKeyFields = ["userId", "entryId"] as const;
 export type PrimaryKey = Pick<Table, (typeof primaryKeyFields)[number]>;
 
 // 자주 쓰는 타입이라서 미리 정의

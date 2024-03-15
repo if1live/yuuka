@@ -64,10 +64,13 @@ export const createKysely = (dialect: Dialect) => {
 const { dialect } = await createDialect(settings.databaseUrl);
 export const db = createKysely(dialect);
 
+const rootUserId = 1;
+
 // 데이터를 다양한 방식으로 뒤지려면 db에 채워놓는게 나을듯
 const insertBulk_accountCode = async (db: Kysely<Database>) => {
   const items = MasterData.accountCodes.map((x): AccountCodeSchema.NewRow => {
     return {
+      userId: rootUserId,
       code: x.code,
       name: x.name,
       description: x.description,
@@ -81,7 +84,8 @@ const insertBulk_journalEntry = async (db: Kysely<Database>) => {
   const items = journalContext.entries.map(
     (journal): JournalEntrySchema.NewRow => {
       return {
-        id: journal.id,
+        userId: rootUserId,
+        entryId: journal.id,
         date: journal.date,
         brief: journal.brief,
       };
@@ -97,6 +101,7 @@ const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
       const credit = line._tag === "credit" ? line.credit : 0;
 
       return {
+        userId: rootUserId,
         entryId: journal.id,
         code: line.code,
         debit,

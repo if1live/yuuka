@@ -37,9 +37,13 @@ export const registerHandler = <
       return c.json(data, 400);
     }
 
+    // TODO: 인증정보를 헤더에서 얻어야한다.
+    // 인증이 필요한 API와 필요없는 API는 뭐로 구분하지?
+    const userId = undefined;
+
     try {
       const data = data_result.data;
-      const req = new MyRequest(data);
+      const req = new MyRequest({ body: data, userId });
       const res = await handler(req);
       return c.json(res.body as unknown);
     } catch (e) {
