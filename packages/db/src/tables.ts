@@ -1,5 +1,6 @@
 import {
   AccountCodeSchema,
+  AccountTagSchema,
   JournalEntryLineSchema,
   JournalEntrySchema,
   PreferenceSchema,
@@ -8,6 +9,7 @@ import {
 
 export interface Database {
   [JournalEntrySchema.name]: JournalEntrySchema.Table;
+  [AccountTagSchema.name]: AccountTagSchema.Table;
   [AccountCodeSchema.name]: AccountCodeSchema.Table;
   [JournalEntryLineSchema.name]: JournalEntryLineSchema.Table;
   [PreferenceSchema.name]: PreferenceSchema.Table;

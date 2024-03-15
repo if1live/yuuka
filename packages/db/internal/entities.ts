@@ -1,6 +1,7 @@
 import { EntitySchema } from "typeorm";
 import {
   AccountCodeSchema,
+  AccountTagSchema,
   JournalEntryLineSchema,
   JournalEntrySchema,
   PreferenceSchema,
@@ -27,8 +28,10 @@ export const JournalEntryLineSchemaEntity = f(JournalEntryLineSchema);
 export const JournalEntrySchemaEntity = f(JournalEntrySchema);
 export const PreferenceSchemaEntity = f(PreferenceSchema);
 export const UserSchemaEntity = f(UserSchema);
+export const AccountTagSchemaEntity = f(AccountTagSchema);
 
 export const entitySchemaList: EntitySchema[] = [
+  AccountTagSchemaEntity,
   AccountCodeSchemaEntity,
   JournalEntryLineSchemaEntity,
   JournalEntrySchemaEntity,

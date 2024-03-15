@@ -1,4 +1,5 @@
 export {
+  AccountTagSchema,
   PreferenceSchema,
   JournalEntrySchema,
   AccountCodeSchema,
