@@ -64,6 +64,9 @@ const prepare_journalEntryLine = async (db: Kysely<Database>) => {
     .addPrimaryKeyConstraint("primary_key", ["user_id", "entry_id", "code"])
     .execute();
 
+  /*
+    TODO: sql__js.js?v=5b382feb:469 Uncaught (in promise) Error: near "(": syntax error
+    ???
   await db.schema
     .createIndex("journal_entry_line_userId_code_date")
     .columns(["user_id", "code", "date"])
@@ -73,6 +76,7 @@ const prepare_journalEntryLine = async (db: Kysely<Database>) => {
     .createIndex("journal_entry_line_userId_date")
     .columns(["user_id", "date"])
     .execute();
+    */
 };
 
 const prepare_user = async (db: Kysely<Database>) => {
