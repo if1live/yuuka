@@ -7,10 +7,32 @@ settings:
 importers:
 
   .:
+    dependencies:
+      hono:
+        specifier: ^4.1.0
+        version: 4.1.0
+      kysely:
+        specifier: ^0.27.3
+        version: 0.27.3
+      neverthrow:
+        specifier: ^6.1.0
+        version: 6.1.0
+      remeda:
+        specifier: ^1.50.1
+        version: 1.50.1
+      type-fest:
+        specifier: ^4.12.0
+        version: 4.12.0
+      zod:
+        specifier: ^3.22.4
+        version: 3.22.4
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.6.0
         version: 1.6.0
+      '@faker-js/faker':
+        specifier: ^8.4.1
+        version: 8.4.1
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
@@ -32,34 +54,13 @@ importers:
       fast-jwt:
         specifier: ^4.0.0
         version: 4.0.0
-      hono:
-        specifier: ^3.12.12
-        version: 3.12.12
-      kysely:
-        specifier: ^0.27.3
-        version: 0.27.3
       liquidjs:
         specifier: ^10.10.1
         version: 10.10.1
-      neverthrow:
-        specifier: ^6.1.0
-        version: 6.1.0
       pg:
         specifier: ^8.11.3
         version: 8.11.3
-      remeda:
-        specifier: ^1.47.0
-        version: 1.47.0
-      type-fest:
-        specifier: ^4.12.0
-        version: 4.12.0
-      zod:
-        specifier: ^3.22.4
-        version: 3.22.4
     devDependencies:
-      '@faker-js/faker':
-        specifier: ^8.4.1
-        version: 8.4.1
       '@hono/node-server':
         specifier: ^1.8.2
         version: 1.8.2
@@ -108,9 +109,6 @@ importers:
       better-sqlite3:
         specifier: ^9.4.3
         version: 9.4.3
-      kysely:
-        specifier: ^0.27.3
-        version: 0.27.3
       reflect-metadata:
         specifier: ^0.2.1
         version: 0.2.1
@@ -120,9 +118,6 @@ importers:
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@20.11.25)(typescript@5.4.2)
-      type-fest:
-        specifier: ^4.12.0
-        version: 4.12.0
       typeorm:
         specifier: ^0.3.20
         version: 0.3.20(better-sqlite3@9.4.3)(ts-node@10.9.2)
@@ -150,9 +145,6 @@ importers:
       react-router-dom:
         specifier: ^6.22.3
         version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
-      remeda:
-        specifier: ^1.47.0
-        version: 1.47.0
       semantic-ui-css:
         specifier: ^2.5.0
         version: 2.5.0
@@ -4730,8 +4722,8 @@ packages:
     resolution: {integrity: sha512-tzcUFauisWKNHaRkN4Wjl/ZA07gENAjFl3J/c480dprkGTg5EQstgaNFqBfUqCq54kZRIEcreTsAgF/m2quD7A==}
     dev: true
 
-  /hono@3.12.12:
-    resolution: {integrity: sha512-5IAMJOXfpA5nT+K0MNjClchzz0IhBHs2Szl7WFAhrFOsbtQsYmNynFyJRg/a3IPsmCfxcrf8txUGiNShXpK5Rg==}
+  /hono@4.1.0:
+    resolution: {integrity: sha512-9no6DCHb4ijB1tWdFXU6JnrnFgzwVZ1cnIcS1BjAFnMcjbtBTOMsQrDrPH3GXbkNEEEkj8kWqcYBy8Qc0bBkJQ==}
     engines: {node: '>=16.0.0'}
     dev: false
 
@@ -5087,6 +5079,7 @@ packages:
   /kysely@0.27.3:
     resolution: {integrity: sha512-lG03Ru+XyOJFsjH3OMY6R/9U38IjDPfnOfDgO3ynhbDr+Dz8fak+X6L62vqu3iybQnj+lG84OttBuU9KY3L9kA==}
     engines: {node: '>=14.0.0'}
+    dev: false
 
   /lazystream@1.0.1:
     resolution: {integrity: sha512-b94GiNHQNy6JNTrt5w6zNyffMrNkXZb3KTkCZJb2V1xaEGCk093vkZ2jk3tpaeP33/OiXC+WvK9AxUebnf5nbw==}
@@ -6209,6 +6202,10 @@ packages:
 
   /remeda@1.47.0:
     resolution: {integrity: sha512-NhB81y1itYfqF4AYnZW5nq/ukkVtuWrEmmowkkF6MSjSdjiQpYo0khK/h4mNSWjZX50WZHOU5sX80Bd2mw2RRQ==}
+    dev: true
+
+  /remeda@1.50.1:
+    resolution: {integrity: sha512-FmzxjJ3uD/N3ZF9HLpQDwe7OK9nC1XqrxKnKOlv131dEOfKouyIVJ7/DfXWy0TpKEUWKeCoOLJyoxFCIIQievA==}
 
   /require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
@@ -6413,7 +6410,7 @@ packages:
       debug: 4.3.4(supports-color@8.1.1)
       http-terminator: 3.2.0
       mqtt: 5.3.6
-      remeda: 1.47.0
+      remeda: 1.50.1
       ws: 8.16.0
     transitivePeerDependencies:
       - aws-crt
@@ -6999,6 +6996,7 @@ packages:
   /type-fest@4.12.0:
     resolution: {integrity: sha512-5Y2/pp2wtJk8o08G0CMkuFPCO354FGwk/vbidxrdhRGZfd0tFnb4Qb8anp9XxXriwBgVPjdWbKpGl4J9lJY2jQ==}
     engines: {node: '>=16'}
+    dev: false
 
   /type@2.7.2:
     resolution: {integrity: sha512-dzlvlNlt6AXU7EBSfpAscydQ7gXB+pPGsPnfJnZpiNJBDj7IaJzQlBZYGdEi4R9HmPdBv2XmWJ6YUtoTa7lmCw==}

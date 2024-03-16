@@ -1,4 +1,5 @@
 import type { Hono } from "hono";
+import type { StatusCode } from "hono/utils/http-status";
 import { ResultAsync } from "neverthrow";
 import type { z } from "zod";
 import { MyRequest } from "../networks/index.js";
@@ -81,5 +82,5 @@ export const registerHandler = <
 };
 
 interface ErrorLike {
-  status?: number;
+  status?: StatusCode;
 }

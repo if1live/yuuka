@@ -15,7 +15,16 @@
     "fix": "pnpm -r fix",
     "lint": "pnpm -r lint"
   },
+  "dependencies": {
+    "kysely": "^0.27.3",
+    "remeda": "^1.50.1",
+    "hono": "^4.1.0",
+    "neverthrow": "^6.1.0",
+    "zod": "^3.22.4",
+    "type-fest": "^4.12.0"
+  },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@biomejs/biome": "^1.6.0",
     "rimraf": "^5.0.5",
     "typescript": "^5.4.2"
