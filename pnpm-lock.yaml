@@ -133,6 +133,15 @@ importers:
       '@yuuka/core':
         specifier: workspace:*
         version: link:../core
+      '@yuuka/db':
+        specifier: workspace:*
+        version: link:../db
+      kysely:
+        specifier: ^0.27.3
+        version: 0.27.3
+      kysely-wasm:
+        specifier: ^0.5.7
+        version: 0.5.7(kysely@0.27.3)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -151,6 +160,9 @@ importers:
       semantic-ui-react:
         specifier: 3.0.0-beta.2
         version: 3.0.0-beta.2(react-dom@18.2.0)(react@18.2.0)
+      sql.js:
+        specifier: ^1.10.2
+        version: 1.10.2
       swr:
         specifier: ^2.2.5
         version: 2.2.5(react@18.2.0)
@@ -164,6 +176,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.21
         version: 18.2.21
+      '@types/sql.js':
+        specifier: ^1.4.9
+        version: 1.4.9
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.2.1(vite@5.1.5)
@@ -2891,6 +2906,10 @@ packages:
       '@types/responselike': 1.0.3
     dev: true
 
+  /@types/emscripten@1.39.10:
+    resolution: {integrity: sha512-TB/6hBkYQJxsZHSqyeuO1Jt0AB/bW6G7rHt9g7lML7SOF6lbgcHvw/Lr+69iqN0qxgXLhWKScAon73JNnptuDw==}
+    dev: true
+
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
     dev: true
@@ -2960,6 +2979,13 @@ packages:
 
   /@types/scheduler@0.16.8:
     resolution: {integrity: sha512-WZLiwShhwLRmeV6zH+GkbOFT6Z6VklCItrDioxUnv+u4Ll+8vKeFySoFyK/0ctcRpOmwAicELfmys1sDc/Rw+A==}
+    dev: true
+
+  /@types/sql.js@1.4.9:
+    resolution: {integrity: sha512-ep8b36RKHlgWPqjNG9ToUrPiwkhwh0AEzy883mO5Xnd+cL6VBH1EvSjBAAuxLUFF2Vn/moE3Me6v9E1Lo+48GQ==}
+    dependencies:
+      '@types/emscripten': 1.39.10
+      '@types/node': 20.11.25
     dev: true
 
   /@types/ws@8.5.10:
@@ -5076,6 +5102,14 @@ packages:
       json-buffer: 3.0.1
     dev: true
 
+  /kysely-wasm@0.5.7(kysely@0.27.3):
+    resolution: {integrity: sha512-Y2pY56RwC4ysYjeZgAO32Wk+O8wH8JcGiTBVCdl4b5QjFjNNBEdmxEpNjiM07gSMGJQO6mwjKWdIwQM719NzFA==}
+    peerDependencies:
+      kysely: '>=0.26'
+    dependencies:
+      kysely: 0.27.3
+    dev: false
+
   /kysely@0.27.3:
     resolution: {integrity: sha512-lG03Ru+XyOJFsjH3OMY6R/9U38IjDPfnOfDgO3ynhbDr+Dz8fak+X6L62vqu3iybQnj+lG84OttBuU9KY3L9kA==}
     engines: {node: '>=14.0.0'}
@@ -6628,6 +6662,10 @@ packages:
     dependencies:
       es5-ext: 0.10.64
     dev: true
+
+  /sql.js@1.10.2:
+    resolution: {integrity: sha512-jnKFtdHxuVUNgu1vHwFoTjjwfTuVDVqzGpw7H05Zq3YMNMDOpLFyFGvpgTRIQGd/mqcYntuMy7iygYCytD62jQ==}
+    dev: false
 
   /stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}

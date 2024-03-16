@@ -14,18 +14,23 @@
   "dependencies": {
     "@hookform/error-message": "^2.0.1",
     "@yuuka/core": "workspace:*",
+    "@yuuka/db": "workspace:*",
+    "kysely": "^0.27.3",
+    "kysely-wasm": "^0.5.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.0",
     "react-router-dom": "^6.22.3",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "3.0.0-beta.2",
+    "sql.js": "^1.10.2",
     "swr": "^2.2.5",
     "use-query-params": "^2.2.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
+    "@types/sql.js": "^1.4.9",
     "@vitejs/plugin-react": "^4.2.1",
     "typescript": "^5.4.2",
     "vite": "^5.1.5",
