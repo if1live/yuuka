@@ -38,9 +38,11 @@ export const AccountCodeLink = (props: {
 };
 
 export const JournalEntryLink = (props: {
+  label?: string;
   id: string;
 }) => {
-  const { id } = props;
+  const { id, label } = props;
+  const text = label ?? id;
   const url = `/journal/entry/${id}`;
-  return <Link to={url}>{id}</Link>;
+  return <Link to={url}>{text}</Link>;
 };

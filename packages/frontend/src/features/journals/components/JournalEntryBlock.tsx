@@ -44,9 +44,7 @@ export const JournalEntryBlock = (props: {
 
         <TableCell className={cellClassName} style={style}>
           {isFirstRow ? (
-            <>
-              {entry.brief} | <JournalEntryLink id={entry.id} />
-            </>
+            <JournalEntryLink id={entry.id} label={entry.brief} />
           ) : null}
           {isSecondRow && error ? error.message : null}
         </TableCell>

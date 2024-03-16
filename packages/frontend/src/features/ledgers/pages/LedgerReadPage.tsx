@@ -179,7 +179,7 @@ const LedgerBlock_Exists = (props: {
     <>
       <Table.Cell>{displayDate ? ledger.date : null}</Table.Cell>
       <Table.Cell>
-        {ledger.brief} | <JournalEntryLink id={ledger.id} />
+        <JournalEntryLink id={ledger.id} label={ledger.brief} />
       </Table.Cell>
       <Table.Cell textAlign="right">
         <CurrencyDisplay amount={amount} />
