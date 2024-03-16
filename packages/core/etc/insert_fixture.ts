@@ -145,17 +145,11 @@ const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
 };
 
 export const insertBulk = async (db: Kysely<Database>) => {
-  const queries = [
-    sql`TRUNCATE "account_tag"`,
-    sql`TRUNCATE "account_code"`,
-    sql`TRUNCATE "journal_entry"`,
-    sql`TRUNCATE "journal_entry_line"`,
-    sql`TRUNCATE "user"`,
-  ];
-  for (const query of queries) {
-    const compiledQuery = query.compile(db);
-    await db.executeQuery(compiledQuery);
-  }
+  await db.deleteFrom(AccountTagSchema.name).execute();
+  await db.deleteFrom(AccountCodeSchema.name).execute();
+  await db.deleteFrom(JournalEntrySchema.name).execute();
+  await db.deleteFrom(JournalEntryLineSchema.name).execute();
+  await db.deleteFrom(UserSchema.name).execute();
 
   R.pipe(await insertBulk_accountTag(db), (x) =>
     console.log(`account tags: ${x.numInsertedOrUpdatedRows}`),

@@ -4,6 +4,7 @@ import {
   Kysely,
   PostgresDialect,
   SqliteDialect,
+  WithSchemaPlugin,
 } from "kysely";
 import type { Dialect } from "kysely";
 import { default as Postgres } from "pg";
@@ -50,7 +51,7 @@ const createDialect = async (url: string): Promise<{ dialect: Dialect }> => {
 export const createKysely = (dialect: Dialect) => {
   return new Kysely<Database>({
     dialect,
-    plugins: [new CamelCasePlugin()],
+    plugins: [new WithSchemaPlugin("yuuka"), new CamelCasePlugin()],
   });
 };
 

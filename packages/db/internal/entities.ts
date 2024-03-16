@@ -12,6 +12,7 @@ import type { MyEntitySchemaOptions } from "../src/types.js";
 const build = <T>(options: MyEntitySchemaOptions<T>) => {
   const { name, ...rest } = options;
   return new EntitySchema({
+    schema: "yuuka",
     name: name.typeorm,
     tableName: name.native,
     ...rest,
