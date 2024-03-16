@@ -4,7 +4,11 @@ import path from "node:path";
 import { parse } from "csv-parse/sync";
 import * as R from "remeda";
 import { z } from "zod";
-import { AccountCategory, AccountCode, type AccountTag } from "../masterdata/types.js";
+import {
+  AccountCategory,
+  AccountCode,
+  type AccountTag,
+} from "../masterdata/types.js";
 
 /**
  * csv -> typescript record

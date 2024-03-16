@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { compress } from "hono/compress";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import { AuthController } from "./controllers/AuthController.js";
 import { JournalController } from "./controllers/JournalController.js";
 import { LedgerController } from "./controllers/LedgerController.js";
 import { ResourceController } from "./controllers/ResourceController.js";
@@ -35,6 +36,9 @@ app.get("/", async (c) => {
 
 app.route(StatusController.path, StatusController.app);
 app.route(SampleController.path, SampleController.app);
+
+app.route(AuthController.path, AuthController.app);
+
 app.route(ResourceController.path, ResourceController.app);
 app.route(JournalController.path, JournalController.app);
 app.route(LedgerController.path, LedgerController.app);

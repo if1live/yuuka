@@ -9,8 +9,8 @@ import {
 import type { Kysely } from "kysely";
 import * as R from "remeda";
 import { db } from "../src/db.js";
-import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
+import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";
 import { settings } from "../src/settings.js";
 
 const financialReportsDir = "personal-financial-statements";
