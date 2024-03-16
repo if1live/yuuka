@@ -92,14 +92,14 @@ export const options: MyEntitySchemaOptions = {
   columns: Object.fromEntries(columns.map(convertTypeormSchemaColumnOptions)),
   indices: [
     // 원장 ledger 에서의 유저+계정코드+날짜 조회
-    {
-      name: `${nativeName}_userId_code_date`,
-      columns: ["userId", "code", "date"],
-    },
-    // 분개장 journalEntry 에서의 유저+날짜 조회
-    {
-      name: `${nativeName}_userId_date`,
-      columns: ["userId", "date"],
-    },
+    // {
+    //   name: `${nativeName}_userId_code_date`,
+    //   columns: ["user_id", "code", "date"],
+    // },
+    // // 분개장 journalEntry 에서의 유저+날짜 조회
+    // {
+    //   name: `${nativeName}_userId_date`,
+    //   columns: ["user_id", "date"],
+    // },
   ],
 };
