@@ -1,4 +1,5 @@
 import type { Hono } from "hono";
+import { ResultAsync } from "neverthrow";
 import type { z } from "zod";
 import { MyRequest } from "../networks/index.js";
 import type {
@@ -27,12 +28,14 @@ export const registerHandler = <
     // TODO: form-data
     // console.log('formData', await c.req.formData())
 
-    // TODO: json 아닐떄 c.req.json 그냥 써도 되나?
-    const json = await c.req.json();
+    const jsonResult = await ResultAsync.fromPromise(
+      c.req.json(),
+      (e) => e as Error,
+    );
 
     const data_raw = {
       ...c.req.query(),
-      ...json,
+      ...jsonResult.unwrapOr({}),
     };
     const data_result = spec.schema.req.safeParse(data_raw);
     if (!data_result.success) {
