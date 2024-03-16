@@ -10,7 +10,8 @@
     "src/**/*.ts",
     "test/**/*.ts",
     "internal/**/*.ts",
-    "data-source.ts"
+    "data-source-pg.ts",
+    "data-source-sqlite.ts"
   ],
   "exclude": [
     "src/migrations/*.ts"

@@ -21,7 +21,8 @@
     "fix": "biome check --apply-unsafe .",
     "lint": "biome check .",
     "test": "vitest",
-    "typeorm": "typeorm-ts-node-esm -d data-source.ts"
+    "typeorm": "typeorm-ts-node-esm -d data-source-pg.ts",
+    "typeorm:sqlite": "typeorm-ts-node-esm -d data-source-sqlite.ts"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.9",
