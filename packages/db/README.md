@@ -18,3 +18,12 @@ pnpm typeorm schema:sync
 # 다른 옵션은 선택적으로 써도 될거같은데 pretty는 사실상 필수
 pnpm typeorm migration:generate -p migrations/{name}
 ```
+
+
+## note
+
+기본 스키마 바꾸기. 세션동안 유지됨.
+
+```sql
+SET search_path TO yuuka, public;
+```

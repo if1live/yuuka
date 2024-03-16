@@ -18,7 +18,7 @@ const AuthenticateResp = z.object({
 });
 
 const authenticate_endpoint = HttpEndpoint.define({
-  method: "post",
+  method: "get",
   path: "/authenticate",
 });
 
