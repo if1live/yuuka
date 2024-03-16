@@ -63,6 +63,16 @@ const prepare_journalEntryLine = async (db: Kysely<Database>) => {
     .addColumn("amount", "integer")
     .addPrimaryKeyConstraint("primary_key", ["user_id", "entry_id", "code"])
     .execute();
+
+  await db.schema
+    .createIndex("journal_entry_line_userId_code_date")
+    .columns(["user_id", "code", "date"])
+    .execute();
+
+  await db.schema
+    .createIndex("journal_entry_line_userId_date")
+    .columns(["user_id", "date"])
+    .execute();
 };
 
 const prepare_user = async (db: Kysely<Database>) => {
