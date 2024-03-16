@@ -1,13 +1,14 @@
 import path from "node:path";
+import * as R from "remeda";
 import {
   AccountCodeSchema,
   AccountTagSchema,
   type Database,
   JournalEntryLineSchema,
   JournalEntrySchema,
+  UserSchema,
 } from "@yuuka/db";
-import type { Kysely } from "kysely";
-import * as R from "remeda";
+import { sql, type Kysely } from "kysely";
 import { db } from "../src/db.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
 import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";
@@ -44,6 +45,17 @@ const MasterData = Object.freeze({
 
 const rootUserId = 1;
 
+const insertBulk_user = async (db: Kysely<Database>) => {
+  const item: UserSchema.NewRow = {
+    id: rootUserId,
+    supabase: "root",
+  };
+  return await db
+    .insertInto(UserSchema.name)
+    .values(item)
+    .executeTakeFirstOrThrow();
+};
+
 // 데이터를 다양한 방식으로 뒤지려면 db에 채워놓는게 나을듯
 const insertBulk_accountTag = async (db: Kysely<Database>) => {
   const items = MasterData.accountTags.map((x): AccountTagSchema.NewRow => {
@@ -57,7 +69,10 @@ const insertBulk_accountTag = async (db: Kysely<Database>) => {
     };
   });
 
-  await db.insertInto(AccountTagSchema.name).values(items).execute();
+  return await db
+    .insertInto(AccountTagSchema.name)
+    .values(items)
+    .executeTakeFirstOrThrow();
 };
 
 const insertBulk_accountCode = async (db: Kysely<Database>) => {
@@ -70,7 +85,10 @@ const insertBulk_accountCode = async (db: Kysely<Database>) => {
     };
   });
 
-  await db.insertInto(AccountCodeSchema.name).values(items).execute();
+  return await db
+    .insertInto(AccountCodeSchema.name)
+    .values(items)
+    .executeTakeFirstOrThrow();
 };
 
 const insertBulk_journalEntry = async (db: Kysely<Database>) => {
@@ -84,7 +102,10 @@ const insertBulk_journalEntry = async (db: Kysely<Database>) => {
       };
     },
   );
-  await db.insertInto(JournalEntrySchema.name).values(items).execute();
+  return await db
+    .insertInto(JournalEntrySchema.name)
+    .values(items)
+    .executeTakeFirstOrThrow();
 };
 
 const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
@@ -117,50 +138,42 @@ const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
     return lines;
   });
 
-  await db.insertInto(JournalEntryLineSchema.name).values(items).execute();
+  return await db
+    .insertInto(JournalEntryLineSchema.name)
+    .values(items)
+    .executeTakeFirstOrThrow();
 };
 
 export const insertBulk = async (db: Kysely<Database>) => {
-  // 첫행이 존재하면 테이블이 비어있지 않은거로 해석
-  {
-    const found = await db
-      .selectFrom(AccountTagSchema.name)
-      .selectAll()
-      .executeTakeFirst();
-    if (!found) {
-      await insertBulk_accountTag(db);
-    }
+  const queries = [
+    sql`TRUNCATE "account_tag"`,
+    sql`TRUNCATE "account_code"`,
+    sql`TRUNCATE "journal_entry"`,
+    sql`TRUNCATE "journal_entry_line"`,
+    sql`TRUNCATE "user"`,
+  ];
+  for (const query of queries) {
+    const compiledQuery = query.compile(db);
+    await db.executeQuery(compiledQuery);
   }
 
-  {
-    const found = await db
-      .selectFrom(AccountCodeSchema.name)
-      .selectAll()
-      .executeTakeFirst();
-    if (!found) {
-      await insertBulk_accountCode(db);
-    }
-  }
+  R.pipe(await insertBulk_accountTag(db), (x) =>
+    console.log(`account tags: ${x.numInsertedOrUpdatedRows}`),
+  );
+  R.pipe(await insertBulk_accountCode(db), (x) =>
+    console.log(`account codes: ${x.numInsertedOrUpdatedRows}`),
+  );
+  R.pipe(await insertBulk_journalEntry(db), (x) =>
+    console.log(`journal entries: ${x.numInsertedOrUpdatedRows}`),
+  );
+  R.pipe(await insertBulk_journalEntryLine(db), (x) =>
+    console.log(`journal entry lines: ${x.numInsertedOrUpdatedRows}`),
+  );
+  R.pipe(await insertBulk_user(db), (x) =>
+    console.log(`users: ${x.numInsertedOrUpdatedRows}`),
+  );
 
-  {
-    const found = await db
-      .selectFrom(JournalEntrySchema.name)
-      .selectAll()
-      .executeTakeFirst();
-    if (!found) {
-      await insertBulk_journalEntry(db);
-    }
-  }
-
-  {
-    const found = await db
-      .selectFrom(JournalEntryLineSchema.name)
-      .selectAll()
-      .executeTakeFirst();
-    if (!found) {
-      await insertBulk_journalEntryLine(db);
-    }
-  }
+  await db.destroy();
 };
 
 await insertBulk(db);
