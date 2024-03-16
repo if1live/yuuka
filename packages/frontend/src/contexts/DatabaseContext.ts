@@ -8,9 +8,12 @@ import initSqlJs from "sql.js";
 // https://sql.js.org/#/?id=usage
 // https://stackoverflow.com/a/75806317
 // TODO: 더 멀쩡한 방법 찾아서 교체하기
-const sqlJs = await initSqlJs({
-  locateFile: (file) => `https://sql.js.org/dist/${file}`,
-});
+const prepareSqlJs = async () => {
+  const sqlJs = await initSqlJs({
+    locateFile: (file) => `https://sql.js.org/dist/${file}`,
+  });
+  return sqlJs;
+};
 
 export interface DatabaseValue {
   db: Kysely<Database>;
@@ -30,12 +33,14 @@ const defaultValue: DatabaseValue = {
 export const DatabaseContext = createContext(defaultValue);
 
 const createDialect_arrayBuffer = async (buffer: ArrayBuffer) => {
+  const sqlJs = await prepareSqlJs();
   const database = new sqlJs.Database(new Uint8Array(buffer));
   const dialect = new SqlJsDialect({ database });
   return dialect;
 };
 
 const createDialect_blank = async () => {
+  const sqlJs = await prepareSqlJs();
   const database = new sqlJs.Database();
   const dialect = new SqlJsDialect({ database });
   return dialect;
