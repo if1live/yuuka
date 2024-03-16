@@ -10,6 +10,7 @@ import { ResourceController } from "./controllers/ResourceController.js";
 import { SampleController } from "./controllers/SampleController.js";
 import { StatusController } from "./controllers/StatusController.js";
 import { UserController } from "./controllers/UserController.js";
+import { db } from "./db.js";
 import { settings } from "./settings.js";
 
 export const app = new Hono();
@@ -38,11 +39,11 @@ app.get("/", async (c) => {
   return c.json({ name: "yuuka" });
 });
 
-app.route(StatusController.path, StatusController.app);
-app.route(SampleController.path, SampleController.app);
+app.route(StatusController.path, StatusController.createApp(db));
+app.route(SampleController.path, SampleController.createApp(db));
 
-app.route(UserController.path, UserController.app);
+app.route(UserController.path, UserController.createApp(db));
 
-app.route(ResourceController.path, ResourceController.app);
-app.route(JournalController.path, JournalController.app);
-app.route(LedgerController.path, LedgerController.app);
+app.route(ResourceController.path, ResourceController.createApp(db));
+app.route(JournalController.path, JournalController.createApp(db));
+app.route(LedgerController.path, LedgerController.createApp(db));

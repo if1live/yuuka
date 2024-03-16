@@ -1,4 +1,3 @@
-import assert from "node:assert";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { parse } from "csv-parse/sync";
@@ -82,7 +81,9 @@ const convertAccountCodes = (args: {
 
   const accountCodes_parent = accountTags.map((x): AccountCode => {
     const tag = accountTagMap.get(x.code);
-    assert.ok(tag, `tag not found for code ${x.code}`);
+    if (!tag) {
+      throw new Error(`tag not found for code ${x.code}`);
+    }
 
     return {
       code: x.code * 1000,
@@ -94,7 +95,9 @@ const convertAccountCodes = (args: {
   const accountCodes_custom = accountCodeRecords.map((x): AccountCode => {
     const tagCode = AccountCode.toTag(x.code);
     const tag = accountTagMap.get(tagCode);
-    assert.ok(tag, `tag not found for code ${x.code}`);
+    if (!tag) {
+      throw new Error(`tag not found for code ${x.code}`);
+    }
 
     return {
       code: x.code,

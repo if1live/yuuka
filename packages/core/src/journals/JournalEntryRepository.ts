@@ -1,4 +1,3 @@
-import assert from "node:assert";
 import { JournalEntrySchema } from "@yuuka/db";
 import type { Database } from "@yuuka/db";
 import type { Kysely } from "kysely";
@@ -28,7 +27,7 @@ const findById = async (
   }
 
   const [first, _drop] = rows;
-  assert.ok(first);
+  if (!first) throw new Error("not found");
 
   const lines = rows
     .map(JournalEntryLine.fromRow)
@@ -70,7 +69,7 @@ const findByDateRange = async (
 
   const entries = tuples.map(([key, values]): JournalEntry => {
     const first = values[0];
-    assert.ok(first);
+    if (!first) throw new Error("not found");
 
     const lines = values
       .map(JournalEntryLine.fromRow)

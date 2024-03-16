@@ -1,4 +1,6 @@
+import type { Database } from "@yuuka/db";
 import { Hono } from "hono";
+import type { Kysely } from "kysely";
 import { engine } from "../instances/index.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
@@ -13,15 +15,19 @@ const add: AsControllerFn<Sheet["add"]> = async (req) => {
   return new MyResponse({ sum: a + b });
 };
 
-const app = new Hono();
-registerHandler(app, sheet.add, add);
+const createApp = (db: Kysely<Database>) => {
+  const app = new Hono();
+  registerHandler(app, db, sheet.add, add);
 
-app.get("/", async (c) => {
-  const html = await engine.renderFile("index", { name: "foo" });
-  return c.html(html);
-});
+  app.get("/", async (c) => {
+    const html = await engine.renderFile("index", { name: "foo" });
+    return c.html(html);
+  });
+
+  return app;
+};
 
 export const SampleController = {
   path: sampleSpecification.resource,
-  app,
+  createApp,
 };

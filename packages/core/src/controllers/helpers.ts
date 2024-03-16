@@ -1,5 +1,7 @@
+import type { Database } from "@yuuka/db";
 import type { Hono } from "hono";
 import type { StatusCode } from "hono/utils/http-status";
+import type { Kysely } from "kysely";
 import { ResultAsync } from "neverthrow";
 import type { z } from "zod";
 import { MyRequest } from "../networks/index.js";
@@ -19,6 +21,7 @@ export const registerHandler = <
   IZ extends z.ZodType,
 >(
   app: Hono,
+  db: Kysely<Database>,
   spec: {
     endpoint: HttpEndpoint<M, P>;
     schema: { req: z.infer<IZ> };
@@ -54,7 +57,12 @@ export const registerHandler = <
 
     try {
       const data = data_result.data;
-      const req = new MyRequest({ body: data, userId: payload?.user_id });
+      const req = new MyRequest({
+        body: data,
+        userId: payload?.user_id,
+        db,
+      });
+
       const res = await handler(req);
       return c.json(res.body as unknown);
     } catch (e) {

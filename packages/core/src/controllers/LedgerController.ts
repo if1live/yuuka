@@ -1,5 +1,6 @@
+import type { Database } from "@yuuka/db";
 import { Hono } from "hono";
-import { db } from "../db.js";
+import type { Kysely } from "kysely";
 import { LedgerService } from "../ledgers/LedgerService.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
@@ -18,7 +19,7 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
   const endDate = "9999-12-31";
 
   const permission = { userId: req.userId };
-  const ledgers = await LedgerService.load(db, permission, code, {
+  const ledgers = await LedgerService.load(req.db, permission, code, {
     start: startDate,
     end: endDate,
   });
@@ -29,10 +30,13 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
   });
 };
 
-const app = new Hono();
-registerHandler(app, sheet.list, list);
+const createApp = (db: Kysely<Database>) => {
+  const app = new Hono();
+  registerHandler(app, db, sheet.list, list);
+  return app;
+};
 
 export const LedgerController = {
   path: ledgerSpecification.resource,
-  app,
+  createApp,
 };

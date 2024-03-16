@@ -1,6 +1,7 @@
+import type { Database } from "@yuuka/db";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { db } from "../db.js";
+import type { Kysely } from "kysely";
 import { MyResponse } from "../index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
 import { userSpecification } from "../specifications/index.js";
@@ -13,7 +14,7 @@ type Sheet = typeof sheet;
 
 const authenticate: AsControllerFn<Sheet["authenticate"]> = async (req) => {
   const { username } = req.body;
-  const found = await UserRepository.findByUsername(db, username);
+  const found = await UserRepository.findByUsername(req.db, username);
   if (!found) {
     throw new HTTPException(404, {
       message: "User not found",
@@ -30,10 +31,13 @@ const authenticate: AsControllerFn<Sheet["authenticate"]> = async (req) => {
   });
 };
 
-const app = new Hono();
-registerHandler(app, sheet.authenticate, authenticate);
+const createApp = (db: Kysely<Database>) => {
+  const app = new Hono();
+  registerHandler(app, db, sheet.authenticate, authenticate);
+  return app;
+};
 
 export const UserController = {
   path: userSpecification.resource,
-  app,
+  createApp,
 };

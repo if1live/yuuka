@@ -1,5 +1,6 @@
+import type { Database } from "@yuuka/db";
 import { Hono } from "hono";
-import { db } from "../db.js";
+import type { Kysely } from "kysely";
 import { JournalEntryRepository } from "../journals/JournalEntryRepository.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
@@ -12,17 +13,18 @@ type Sheet = typeof sheet;
 const list: AsControllerFn<Sheet["list"]> = async (req) => {
   const { startDate, endDate } = req.body;
   const permission = { userId: req.userId };
-  const entries = await JournalEntryRepository.findByDateRange(db, permission, {
-    start: startDate,
-    end: endDate,
-  });
+  const entries = await JournalEntryRepository.findByDateRange(
+    req.db,
+    permission,
+    { start: startDate, end: endDate },
+  );
   return new MyResponse({ entries });
 };
 
 const get: AsControllerFn<Sheet["get"]> = async (req) => {
   const { id } = req.body;
   const permission = { userId: req.userId };
-  const found = await JournalEntryRepository.findById(db, permission, id);
+  const found = await JournalEntryRepository.findById(req.db, permission, id);
   return new MyResponse(found);
 };
 
@@ -40,13 +42,16 @@ const edit: AsControllerFn<Sheet["edit"]> = async (req) => {
   return new MyResponse(body);
 };
 
-const app = new Hono();
-registerHandler(app, sheet.list, list);
-registerHandler(app, sheet.get, get);
-registerHandler(app, sheet.create, create);
-registerHandler(app, sheet.edit, edit);
+const createApp = (db: Kysely<Database>) => {
+  const app = new Hono();
+  registerHandler(app, db, sheet.list, list);
+  registerHandler(app, db, sheet.get, get);
+  registerHandler(app, db, sheet.create, create);
+  registerHandler(app, db, sheet.edit, edit);
+  return app;
+};
 
 export const JournalController = {
   path: journalSpecification.resource,
-  app,
+  createApp,
 };

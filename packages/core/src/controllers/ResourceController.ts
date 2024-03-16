@@ -1,5 +1,6 @@
+import type { Database } from "@yuuka/db";
 import { Hono } from "hono";
-import { db } from "../db.js";
+import type { Kysely } from "kysely";
 import { AccountCodeRepository } from "../masterdata/AccountCodeRepository.js";
 import { AccountTagRepository } from "../masterdata/AccountTagRepository.js";
 import { MyResponse } from "../networks/index.js";
@@ -11,6 +12,7 @@ const sheet = resourceSpecification.dataSheet;
 type Sheet = typeof sheet;
 
 const masterdata: AsControllerFn<Sheet["masterdata"]> = async (req) => {
+  const db = req.db;
   const permission = { userId: req.userId };
 
   const [accountTags, accountCodes] = await Promise.all([
@@ -24,10 +26,13 @@ const masterdata: AsControllerFn<Sheet["masterdata"]> = async (req) => {
   });
 };
 
-const app = new Hono();
-registerHandler(app, sheet.masterdata, masterdata);
+const createApp = (db: Kysely<Database>) => {
+  const app = new Hono();
+  registerHandler(app, db, sheet.masterdata, masterdata);
+  return app;
+};
 
 export const ResourceController = {
   path: resourceSpecification.resource,
-  app,
+  createApp,
 };
