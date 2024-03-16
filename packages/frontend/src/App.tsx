@@ -7,6 +7,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import { SWRConfig } from "swr";
 import useSWRImmutable from "swr/immutable";
 import {
   QueryParamProvider,
@@ -107,10 +108,16 @@ export const WithMasterData = (props: PropsWithChildren) => {
 
 export const App = () => (
   <QueryParamProvider adapter={WindowHistoryAdapter}>
-    <WithAuthenticate>
-      <WithMasterData>
-        <RouterProvider router={router} />
-      </WithMasterData>
-    </WithAuthenticate>
+    <SWRConfig
+      value={{
+        shouldRetryOnError: false,
+      }}
+    >
+      <WithAuthenticate>
+        <WithMasterData>
+          <RouterProvider router={router} />
+        </WithMasterData>
+      </WithAuthenticate>
+    </SWRConfig>
   </QueryParamProvider>
 );
