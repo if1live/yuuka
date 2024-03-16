@@ -5,9 +5,15 @@ import { SqlJsDialect } from "kysely-wasm";
 import { createContext } from "react";
 import initSqlJs from "sql.js";
 
-// https://sql.js.org/#/?id=usage
-// https://stackoverflow.com/a/75806317
-// TODO: 더 멀쩡한 방법 찾아서 교체하기
+/**
+ * locateFile을 설정하지 않으면 wasm 제대로 못받아서 터진다
+ * https://stackoverflow.com/a/75806317
+ * https://sql.js.org/#/?id=usage
+ * locateFile을 외부로 쓰는건 좀 멍청한거같지만 일단 작동하니까 유지
+ *
+ * top-level async/await 함수로 쓰면 vite에서 빌드 에러 발생!
+ * 함수 자체를 async로 유지하고 사용하는 지점에서 await
+ */
 const prepareSqlJs = async () => {
   const sqlJs = await initSqlJs({
     locateFile: (file) => `https://sql.js.org/dist/${file}`,
@@ -15,22 +21,21 @@ const prepareSqlJs = async () => {
   return sqlJs;
 };
 
-export interface DatabaseValue {
+export interface DataSourceValue {
   db: Kysely<Database>;
   mode: "sandbox" | "network";
   username: string;
-  // TODO: 싱글턴처럼 쓰는것을 전부 묶어서 어떻게 들고다니지?
   app: Hono;
 }
 
-const defaultValue: DatabaseValue = {
+const defaultValue: DataSourceValue = {
   db: {} as Kysely<Database>,
   mode: "sandbox",
   username: "",
   app: {} as Hono,
 };
 
-export const DatabaseContext = createContext(defaultValue);
+export const DataSourceContext = createContext(defaultValue);
 
 const createDialect_arrayBuffer = async (buffer: ArrayBuffer) => {
   const sqlJs = await prepareSqlJs();
@@ -55,7 +60,7 @@ const createKysely = (dialect: Dialect) => {
   return db;
 };
 
-export const DatabaseValue = {
+export const DataSourceValue = {
   defaultValue,
   createDialect_arrayBuffer,
   createDialect_blank,

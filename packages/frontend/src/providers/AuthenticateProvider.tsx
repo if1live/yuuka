@@ -3,7 +3,7 @@ import { type PropsWithChildren, useContext } from "react";
 import useSWR from "swr";
 import { StringParam, useQueryParams } from "use-query-params";
 import { AuthContext, type AuthState } from "../contexts/AuthContext";
-import { DatabaseContext } from "../contexts/DatabaseContext";
+import { DataSourceContext } from "../contexts/DataSourceProvider";
 import { setAuthToken } from "../fetchers";
 
 // react-router 안쓰고 query string 손대는 편법
@@ -14,7 +14,7 @@ export const myQueryParams = {
 
 // 인증 사용하면 db 업로드, 다운로드 쓸수 있다
 export const AuthenticateProvider = (props: PropsWithChildren) => {
-  const database = useContext(DatabaseContext);
+  const database = useContext(DataSourceContext);
 
   // 샌드박스 모드에서는 인증 안쓴다.
   if (database.mode === "sandbox") {

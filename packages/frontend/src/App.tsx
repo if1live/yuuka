@@ -8,7 +8,7 @@ import { QueryParamProvider } from "use-query-params";
 import { WindowHistoryAdapter } from "use-query-params/adapters/window";
 import "./App.css";
 import { AuthenticateProvider } from "./providers/AuthenticateProvider";
-import { DatabaseProvider } from "./providers/DatabaseProvider";
+import { DataSourceProvider } from "./providers/DataSourceProvider";
 import { MasterDataProvider } from "./providers/MasterDataProvider";
 import { JournalRouter } from "./routes/JournalRoute";
 import { LedgerRouter } from "./routes/LedgerRoute";
@@ -28,12 +28,12 @@ const router = createBrowserRouter(
 
 export const App = () => (
   <QueryParamProvider adapter={WindowHistoryAdapter}>
-    <DatabaseProvider>
+    <DataSourceProvider>
       <AuthenticateProvider>
         <MasterDataProvider>
           <RouterProvider router={router} />
         </MasterDataProvider>
       </AuthenticateProvider>
-    </DatabaseProvider>
+    </DataSourceProvider>
   </QueryParamProvider>
 );
