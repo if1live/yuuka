@@ -41,29 +41,42 @@ const load = async (
     return [];
   }
 
-  const entryIds = lines.map((line) => line.entryId);
+  const entryLineMap = new Map(
+    lines.map((line) => {
+      const next = R.pipe(
+        line,
+        JournalEntryLine.fromRow,
+        JournalEntryLine.cast,
+      );
+      return [line.entryId, next];
+    }),
+  );
+
+  // 날짜순으로 정렬된 journal entry로 보고싶다
   const rows = await db
     .selectFrom(JournalEntrySchema.name)
     .selectAll()
     .where("userId", "=", permission.userId)
-    .where("entryId", "in", entryIds)
+    .where(
+      "entryId",
+      "in",
+      lines.map((line) => line.entryId),
+    )
     .where("date", ">=", range.start)
     .where("date", "<", range.end)
+    .orderBy("date", "asc")
     .execute();
-  const entryMap = new Map(rows.map((row) => [row.entryId, row]));
 
-  const ledgers = lines.map((line) => {
-    const entry = entryMap.get(line.entryId);
-    const entryLine = R.pipe(
-      line,
-      JournalEntryLine.fromRow,
-      JournalEntryLine.cast,
-    );
+  const ledgers = rows.map((entry) => {
+    const entryLine = entryLineMap.get(entry.entryId);
+    if (!entryLine) {
+      throw new Error("entryLine not found");
+    }
 
     return {
-      id: line.entryId,
-      brief: entry?.brief ?? "<unknwon>",
-      date: entry?.date ?? "1970-01-01",
+      id: entry.entryId,
+      brief: entry.brief,
+      date: entry.date,
       debit: entryLine._tag === "debit" ? entryLine.debit : 0,
       credit: entryLine._tag === "credit" ? entryLine.credit : 0,
     };

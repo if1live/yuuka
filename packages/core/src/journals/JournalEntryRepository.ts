@@ -58,6 +58,7 @@ const findByDateRange = async (
     .selectAll()
     .where("journalEntry.date", ">=", range.start)
     .where("journalEntry.date", "<", range.end)
+    .orderBy('date asc')
     .execute();
 
   if (rows.length === 0) {
