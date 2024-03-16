@@ -1,15 +1,16 @@
+import fs from "node:fs/promises";
 import path from "node:path";
 import {
   AccountCodeSchema,
   AccountTagSchema,
-  type Database,
+  Database,
   JournalEntryLineSchema,
   JournalEntrySchema,
   UserSchema,
 } from "@yuuka/db";
-import { type Kysely, sql } from "kysely";
+import { default as SQLite } from "better-sqlite3";
+import { CamelCasePlugin, Kysely, SqliteDialect, sql } from "kysely";
 import * as R from "remeda";
-import { db } from "../src/db.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
 import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";
 import { settings } from "../src/settings.js";
@@ -144,13 +145,15 @@ const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
     .executeTakeFirstOrThrow();
 };
 
-export const insertBulk = async (db: Kysely<Database>) => {
+const deleteAll = async (db: Kysely<Database>) => {
   await db.deleteFrom(AccountTagSchema.name).execute();
   await db.deleteFrom(AccountCodeSchema.name).execute();
   await db.deleteFrom(JournalEntrySchema.name).execute();
   await db.deleteFrom(JournalEntryLineSchema.name).execute();
   await db.deleteFrom(UserSchema.name).execute();
+};
 
+const insertBulk = async (db: Kysely<Database>) => {
   R.pipe(await insertBulk_accountTag(db), (x) =>
     console.log(`account tags: ${x.numInsertedOrUpdatedRows}`),
   );
@@ -170,4 +173,18 @@ export const insertBulk = async (db: Kysely<Database>) => {
   await db.destroy();
 };
 
+// db
+const filename = "sqlite.db";
+await fs.unlink(filename).catch(() => {});
+
+const database = new SQLite(filename);
+const dialect = new SqliteDialect({
+  database: database,
+});
+const db = new Kysely<Database>({
+  dialect,
+  plugins: [new CamelCasePlugin()],
+});
+
+await Database.prepareSchema(db);
 await insertBulk(db);

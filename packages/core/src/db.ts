@@ -48,7 +48,7 @@ const createDialect = async (url: string): Promise<{ dialect: Dialect }> => {
   return await createSqliteDialect(url);
 };
 
-export const createKysely = (dialect: Dialect) => {
+const createKysely = (dialect: Dialect) => {
   return new Kysely<Database>({
     dialect,
     plugins: [new WithSchemaPlugin("yuuka"), new CamelCasePlugin()],
