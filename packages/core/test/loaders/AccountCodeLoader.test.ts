@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { describe, it } from "vitest";
-import { AccountCodeLoader } from "../../src/masterdata/AccountCodeLoader.js";
+import { AccountCodeLoader } from "../../src/loaders/AccountCodeLoader.js";
 import type {
   AccountCodeRecord,
   AccountTagRecord,
-} from "../../src/masterdata/AccountCodeLoader.js";
+} from "../../src/loaders/AccountCodeLoader.js";
 
 describe("AccountCodeLoader", () => {
   const accountTagRecords: AccountTagRecord[] = [

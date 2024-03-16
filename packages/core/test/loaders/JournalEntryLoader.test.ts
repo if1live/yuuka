@@ -3,7 +3,7 @@ import { describe, it } from "vitest";
 import {
   JournalEntryLoader,
   type JournalItemRecord,
-} from "../../src/journals/JournalEntryLoader.js";
+} from "../../src/loaders/JournalEntryLoader.js";
 
 describe("JournalEntryLoader", () => {
   it("ok", () => {
