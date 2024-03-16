@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import * as R from "remeda";
 import {
   Table,
+  TableBody,
   TableFooter,
   TableHeader,
   TableHeaderCell,
@@ -109,19 +110,21 @@ const LedgerReadView = (props: {
           </TableRow>
         </TableHeader>
 
-        {rows.map((row, i) => {
-          const { debit, credit } = row;
+        <TableBody>
+          {rows.map((row, i) => {
+            const { debit, credit } = row;
 
-          const prev = rows[i - 1];
-          const key = [debit?.id, credit?.id].join("-");
+            const prev = rows[i - 1];
+            const key = [debit?.id, credit?.id].join("-");
 
-          return (
-            <TableRow key={key}>
-              <LedgerBlock ledger={debit} prev={prev?.debit} />
-              <LedgerBlock ledger={credit} prev={prev?.credit} />
-            </TableRow>
-          );
-        })}
+            return (
+              <TableRow key={key}>
+                <LedgerBlock ledger={debit} prev={prev?.debit} />
+                <LedgerBlock ledger={credit} prev={prev?.credit} />
+              </TableRow>
+            );
+          })}
+        </TableBody>
 
         <TableFooter>
           <TableRow>
