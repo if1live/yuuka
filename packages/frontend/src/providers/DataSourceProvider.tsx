@@ -7,8 +7,9 @@ import { Database } from "@yuuka/db";
 import { Hono } from "hono";
 import { jwt } from "hono/jwt";
 import type { Kysely } from "kysely";
-import { Image } from "semantic-ui-react";
 import { type PropsWithChildren, useState } from "react";
+import { FileUploader } from "react-drag-drop-files";
+import { Image } from "semantic-ui-react";
 import { Button, Container, Form, FormField } from "semantic-ui-react";
 import { SWRConfig } from "swr";
 import { TOKEN_SECRET } from "../constants";
@@ -70,14 +71,17 @@ const DataSourceNode_Blank = (props: Props) => {
 };
 
 const DataSourceNode_DragAndDrop = (props: Props) => {
+  const fileTypes = ["sqlite", "db"];
+
   const { setDataSource, setError } = props;
 
-  const load = async () => {
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleChange = async (file: File) => {
+    setFile(file);
+
     try {
-      // TODO: 입력으로 받을 파일은 무엇을 기반으로 결정하지?
-      const url = "/yuuka/sqlite.db";
-      const resp = await fetch(url);
-      const arrayBuffer = await resp.arrayBuffer();
+      const arrayBuffer = await file.arrayBuffer();
       const dialect =
         await DataSourceValue.createDialect_arrayBuffer(arrayBuffer);
       const db = DataSourceValue.createKysely(dialect);
@@ -90,9 +94,13 @@ const DataSourceNode_DragAndDrop = (props: Props) => {
   return (
     <>
       <h3>drag and drop</h3>
-      <Button type="button" onClick={load}>
-        upload
-      </Button>
+      <FileUploader
+        multiple={false}
+        handleChange={handleChange}
+        name="file"
+        types={fileTypes}
+      />
+      <p>{file ? `File name: ${file.name}` : "no files uploaded yet"}</p>
     </>
   );
 };
