@@ -9,13 +9,12 @@ import {
   TableHeaderCell,
   TableRow,
 } from "semantic-ui-react";
-import useSWRImmutable from "swr/immutable";
+import useSWR from "swr";
 import {
   AccountCodeLink,
   CurrencyDisplay,
   JournalEntryLink,
 } from "../../../components";
-import { fetcher } from "../../../fetchers";
 
 export const LedgerReadPage = () => {
   const sheet = ledgerSpecification.dataSheet;
@@ -27,7 +26,7 @@ export const LedgerReadPage = () => {
   qs.append("code", `${req.code}`);
 
   const url = `${ledgerSpecification.resource}${spec.endpoint.path}?${qs}`;
-  const { data, error, isLoading } = useSWRImmutable(url, fetcher);
+  const { data, error, isLoading } = useSWR(url);
   const resp = data as (typeof spec)["inout"]["_out"];
 
   if (error) {

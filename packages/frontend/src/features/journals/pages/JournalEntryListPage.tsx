@@ -1,7 +1,6 @@
 import { journalSpecification } from "@yuuka/core";
 import { useParams } from "react-router-dom";
-import useSWRImmutable from "swr/immutable";
-import { fetcher } from "../../../fetchers";
+import useSWR from "swr";
 import { JournalEntryList } from "../components/JournalEntryList";
 
 // TODO: 노가다 코딩 줄이는 방법? swr에서 표준화 시켜야할듯?
@@ -16,7 +15,8 @@ export const JournalEntryListPage = () => {
   const endpoint = `${journalSpecification.resource}${spec.endpoint.path}`;
 
   const url = `${endpoint}?${qs}`;
-  const { data, error, isLoading } = useSWRImmutable(url, fetcher);
+
+  const { data, error, isLoading } = useSWR(url);
   const resp = data as (typeof spec)["inout"]["_out"];
 
   if (error) {

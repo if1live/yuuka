@@ -1,8 +1,7 @@
 import { JournalEntry, journalSpecification } from "@yuuka/core";
 import { Link, useParams } from "react-router-dom";
 import { Button } from "semantic-ui-react";
-import useSWRImmutable from "swr/immutable";
-import { fetcher } from "../../../fetchers";
+import useSWR from "swr";
 import { JournalEntryList } from "../components/JournalEntryList";
 
 export const JournalEntryReadPage = () => {
@@ -16,7 +15,7 @@ export const JournalEntryReadPage = () => {
   const endpoint = `${journalSpecification.resource}${spec.endpoint.path}`;
 
   const url = `${endpoint}?${qs}`;
-  const { data, error, isLoading } = useSWRImmutable(url, fetcher);
+  const { data, error, isLoading } = useSWR(url);
   const resp = data as (typeof spec)["inout"]["_out"];
 
   if (error) {
