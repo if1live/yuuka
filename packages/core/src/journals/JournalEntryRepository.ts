@@ -13,13 +13,13 @@ const findById = async (
 ): Promise<JournalEntry> => {
   const rows = await db
     .selectFrom(JournalEntrySchema.name)
-    .innerJoin(
-      "journalEntryLine",
-      "journalEntryLine.entryId",
-      "journalEntry.entryId",
+    .innerJoin("journalEntryLine", (join) =>
+      join
+        .onRef("journalEntryLine.userId", "=", "journalEntry.userId")
+        .onRef("journalEntryLine.entryId", "=", "journalEntry.entryId")
+        .on("journalEntryLine.userId", "=", permission.userId),
     )
     .selectAll()
-    .where("journalEntry.userId", "=", permission.userId)
     .where("journalEntry.entryId", "=", entryId)
     .execute();
 
@@ -50,13 +50,13 @@ const findByDateRange = async (
 ): Promise<JournalEntry[]> => {
   const rows = await db
     .selectFrom(JournalEntrySchema.name)
-    .innerJoin(
-      "journalEntryLine",
-      "journalEntryLine.entryId",
-      "journalEntry.entryId",
+    .innerJoin("journalEntryLine", (join) =>
+      join
+        .onRef("journalEntryLine.userId", "=", "journalEntry.userId")
+        .onRef("journalEntryLine.entryId", "=", "journalEntry.entryId")
+        .on("journalEntryLine.userId", "=", permission.userId),
     )
     .selectAll()
-    .where("journalEntry.userId", "=", permission.userId)
     .where("journalEntry.date", ">=", range.start)
     .where("journalEntry.date", "<", range.end)
     .execute();
