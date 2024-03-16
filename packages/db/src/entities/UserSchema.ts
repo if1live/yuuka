@@ -1,4 +1,4 @@
-import type { Insertable, Selectable, Updateable } from "kysely";
+import type { ColumnType, Insertable, Selectable, Updateable } from "kysely";
 import type { PascalCase, SnakeCase } from "type-fest";
 import type { MyEntitySchemaOptions } from "../types.js";
 import {
@@ -46,8 +46,8 @@ const columns = createColumnList();
 export interface Table {
   id: number;
   supabase: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: ColumnType<Date, string | undefined, never>;
+  updatedAt: ColumnType<Date, string | undefined, never>;
 }
 
 export const primaryKeyFields = ["id"] as const;
