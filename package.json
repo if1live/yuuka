@@ -11,6 +11,7 @@
     "check:watch": "tsc -b tsconfig.json -w -v",
     "clean": "pnpm -r clean",
     "dev": "pnpm -r dev",
+    "test": "pnpm -r test run",
     "fix": "pnpm -r fix",
     "lint": "pnpm -r lint"
   },
