@@ -136,7 +136,7 @@ export const JournalEntryForm = (props: {
           />
         </FormField>
 
-        <Table basic="very" compact="very">
+        <Table basic="very" compact="very" unstackable>
           <TableHeader>
             <TableRow>
               <TableHeaderCell>code</TableHeaderCell>

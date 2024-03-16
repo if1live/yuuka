@@ -39,7 +39,7 @@ export const JournalEntryBlock = (props: {
     const style = isLastRow ? { borderBottom: "1px solid #ccc" } : undefined;
 
     return (
-      <TableRow key={key} error={result.isErr()}>
+      <TableRow key={key} error={result.isErr()} unstackable>
         <TableCell>{displayDate ? entry.date : null}</TableCell>
 
         <TableCell className={cellClassName} style={style}>

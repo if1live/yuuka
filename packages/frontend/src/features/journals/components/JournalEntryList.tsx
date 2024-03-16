@@ -33,7 +33,7 @@ export const JournalEntryList = (props: {
 
   return (
     <>
-      <Table compact="very" selectable celled>
+      <Table compact="very" selectable celled unstackable>
         <TableHeader>
           <TableRow>
             <TableHeaderCell>date</TableHeaderCell>

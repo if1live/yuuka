@@ -97,7 +97,7 @@ const LedgerReadView = (props: {
         <AccountCodeLink code={code} />
       </h1>
 
-      <Table selectable celled compact="very">
+      <Table selectable celled compact="very" unstackable>
         <TableHeader>
           <TableRow>
             <TableHeaderCell>일자</TableHeaderCell>
