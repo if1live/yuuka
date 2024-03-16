@@ -7,6 +7,7 @@ import { Database } from "@yuuka/db";
 import { Hono } from "hono";
 import { jwt } from "hono/jwt";
 import type { Kysely } from "kysely";
+import { Image } from "semantic-ui-react";
 import { type PropsWithChildren, useState } from "react";
 import { Button, Container, Form, FormField } from "semantic-ui-react";
 import { SWRConfig } from "swr";
@@ -41,47 +42,54 @@ type DataSource = DataSource_Sandbox | DataSource_Network;
 
 interface Props {
   setDataSource: (source: DataSource) => void;
+  setError: (e: Error) => void;
 }
 
 const DataSourceNode_Blank = (props: Props) => {
-  const { setDataSource } = props;
+  const { setDataSource, setError } = props;
 
   const load = async () => {
-    const dialect = await DataSourceValue.createDialect_blank();
-    const db = DataSourceValue.createKysely(dialect);
-    await Database.prepareSchema(db);
-    setDataSource({ _tag: "sandbox", db });
+    try {
+      const dialect = await DataSourceValue.createDialect_blank();
+      const db = DataSourceValue.createKysely(dialect);
+      await Database.prepareSchema(db);
+      setDataSource({ _tag: "sandbox", db });
+    } catch (e) {
+      setError(e as Error);
+    }
   };
 
   return (
     <>
       <h3>blank project</h3>
-      <p>새로운 프로젝트 시작하기</p>
       <Button type="button" onClick={load}>
-        blank
+        start
       </Button>
     </>
   );
 };
 
 const DataSourceNode_DragAndDrop = (props: Props) => {
-  const { setDataSource } = props;
+  const { setDataSource, setError } = props;
 
   const load = async () => {
-    // TODO: 입력으로 받을 파일은 무엇을 기반으로 결정하지?
-    const url = "/yuuka/sqlite.db";
-    const resp = await fetch(url);
-    const arrayBuffer = await resp.arrayBuffer();
-    const dialect =
-      await DataSourceValue.createDialect_arrayBuffer(arrayBuffer);
-    const db = DataSourceValue.createKysely(dialect);
-    setDataSource({ _tag: "sandbox", db });
+    try {
+      // TODO: 입력으로 받을 파일은 무엇을 기반으로 결정하지?
+      const url = "/yuuka/sqlite.db";
+      const resp = await fetch(url);
+      const arrayBuffer = await resp.arrayBuffer();
+      const dialect =
+        await DataSourceValue.createDialect_arrayBuffer(arrayBuffer);
+      const db = DataSourceValue.createKysely(dialect);
+      setDataSource({ _tag: "sandbox", db });
+    } catch (e) {
+      setError(e as Error);
+    }
   };
 
   return (
     <>
-      <h3>upload</h3>
-      <p>sqlite 파일 업로드</p>
+      <h3>drag and drop</h3>
       <Button type="button" onClick={load}>
         upload
       </Button>
@@ -89,23 +97,55 @@ const DataSourceNode_DragAndDrop = (props: Props) => {
   );
 };
 
+const DataSourceNode_Demo = (props: Props) => {
+  const { setDataSource, setError } = props;
+
+  // 예제 파일 뭐로 만들지?
+  const url = "/yuuka/sqlite.db";
+
+  const load = async () => {
+    try {
+      const resp = await fetch(url);
+      const arrayBuffer = await resp.arrayBuffer();
+      const dialect =
+        await DataSourceValue.createDialect_arrayBuffer(arrayBuffer);
+      const db = DataSourceValue.createKysely(dialect);
+      setDataSource({ _tag: "sandbox", db });
+    } catch (e) {
+      setError(e as Error);
+    }
+  };
+
+  return (
+    <>
+      <h3>demo project</h3>
+      <Button type="button" onClick={load}>
+        demo
+      </Button>
+    </>
+  );
+};
+
 const DataSourceNode_Authenticate = (props: Props) => {
-  const { setDataSource } = props;
+  const { setDataSource, setError } = props;
 
   const [username, setUsername] = useState<string>("");
 
   const load = async () => {
-    // 껍데기만 만들고 나머지 정보는 나중에 채운다
-    const dialect = await DataSourceValue.createDialect_blank();
-    const db = DataSourceValue.createKysely(dialect);
-    await Database.prepareSchema(db);
-    setDataSource({ _tag: "network", db, username });
+    try {
+      // 껍데기만 만들고 나머지 정보는 나중에 채운다
+      const dialect = await DataSourceValue.createDialect_blank();
+      const db = DataSourceValue.createKysely(dialect);
+      await Database.prepareSchema(db);
+      setDataSource({ _tag: "network", db, username });
+    } catch (e) {
+      setError(e as Error);
+    }
   };
 
   return (
     <>
       <h3>sign in</h3>
-      <p>TODO: 로그인해서 기존 데이터 이어가기</p>
       <Form>
         <FormField>
           <label>username</label>
@@ -129,6 +169,7 @@ const DataSourceNode_Authenticate = (props: Props) => {
 
 export const DataSourceProvider = (props: PropsWithChildren) => {
   const [value, setValue] = useState<DataSourceValue | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const setDataSource = (source: DataSource) => {
     const db = source.db;
@@ -146,14 +187,51 @@ export const DataSourceProvider = (props: PropsWithChildren) => {
     }
   };
 
-  if (value === null) {
+  if (error) {
     return (
       <Container text>
         <h1>yuuka</h1>
 
-        <DataSourceNode_Blank setDataSource={setDataSource} />
-        <DataSourceNode_DragAndDrop setDataSource={setDataSource} />
-        <DataSourceNode_Authenticate setDataSource={setDataSource} />
+        <p>error: {error.name}</p>
+        <p>{error.message}</p>
+      </Container>
+    );
+  }
+
+  if (value === null) {
+    return (
+      <Container text>
+        <h1>project: yuuka</h1>
+
+        <Image src="/yuuka/yuuka-plain.jpg" />
+
+        <DataSourceNode_Authenticate
+          setDataSource={setDataSource}
+          setError={setError}
+        />
+
+        <DataSourceNode_DragAndDrop
+          setDataSource={setDataSource}
+          setError={setError}
+        />
+
+        <DataSourceNode_Demo
+          setDataSource={setDataSource}
+          setError={setError}
+        />
+
+        <DataSourceNode_Blank
+          setDataSource={setDataSource}
+          setError={setError}
+        />
+
+        <hr />
+
+        <footer>
+          <p>
+            <a href="https://github.com/if1live/yuuka">github</a>
+          </p>
+        </footer>
       </Container>
     );
   }
