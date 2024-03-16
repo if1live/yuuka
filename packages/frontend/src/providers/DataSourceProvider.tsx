@@ -21,7 +21,9 @@ import { fetcherWithApp } from "../fetchers";
 
 const createApp = (db: Kysely<Database>) => {
   const app = new Hono();
-  app.use("/auth/*", jwt({ secret: TOKEN_SECRET }));
+  // TODO: 모바일 크롬에서 안된다? 인증을 다른 식으로 우회할수 있나?
+  // `crypto.subtle.importKey` is undefined. JWT auth middleware requires it
+  // app.use("/auth/*", jwt({ secret: TOKEN_SECRET }));
   app.route(ResourceController.path, ResourceController.createApp(db));
   app.route(JournalController.path, JournalController.createApp(db));
   app.route(LedgerController.path, LedgerController.createApp(db));

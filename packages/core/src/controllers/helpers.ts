@@ -53,13 +53,15 @@ export const registerHandler = <
     }
 
     // 인증없는 API에서는 undefined
-    const payload = c.get("jwtPayload") as AuthToken | undefined;
+    // TODO: 모바일 크롬에서 hono 돌리면 jwt middleware 못쓴다. 하드코딩으로 우회
+    // const payload = c.get("jwtPayload") as AuthToken | undefined;
+    const userId = 1;
 
     try {
       const data = data_result.data;
       const req = new MyRequest({
         body: data,
-        userId: payload?.user_id,
+        userId,
         db,
       });
 
