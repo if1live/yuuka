@@ -1,5 +1,5 @@
 import { assert, describe, it } from "vitest";
-import { AuthToken } from "../../src/auths/tokens.js";
+import { AuthToken } from "../../src/users/tokens.js";
 
 describe("AuthToken", () => {
   const secret = "helloworld";

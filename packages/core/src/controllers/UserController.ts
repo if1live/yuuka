@@ -1,14 +1,14 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import { UserRepository } from "../auths/UserRepository.js";
-import { AuthToken } from "../auths/tokens.js";
 import { db } from "../db.js";
 import { MyResponse } from "../index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
-import { authSpecification } from "../specifications/index.js";
+import { userSpecification } from "../specifications/index.js";
+import { UserRepository } from "../users/UserRepository.js";
+import { AuthToken } from "../users/tokens.js";
 import { registerHandler } from "./helpers.js";
 
-const sheet = authSpecification.dataSheet;
+const sheet = userSpecification.dataSheet;
 type Sheet = typeof sheet;
 
 const authenticate: AsControllerFn<Sheet["authenticate"]> = async (req) => {
@@ -33,7 +33,7 @@ const authenticate: AsControllerFn<Sheet["authenticate"]> = async (req) => {
 const app = new Hono();
 registerHandler(app, sheet.authenticate, authenticate);
 
-export const AuthController = {
-  path: authSpecification.resource,
+export const UserController = {
+  path: userSpecification.resource,
   app,
 };

@@ -7,7 +7,7 @@ import {
 } from "../networks/rpc.js";
 import { Empty } from "./types.js";
 
-export const resource = "/api/ledger";
+export const resource = "/auth/ledger";
 
 // TODO: 원장에도 기간을 붙여야할듯
 const LedgerReq = z.object({

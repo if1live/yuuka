@@ -6,7 +6,7 @@ import {
   InOutSchema,
 } from "../networks/rpc.js";
 
-export const resource = "/api/sample";
+export const resource = "/sample";
 
 const AddReq = z.object({
   a: z.coerce.number().optional().default(0),

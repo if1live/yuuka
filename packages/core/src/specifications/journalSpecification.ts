@@ -8,7 +8,7 @@ import {
 } from "../networks/rpc.js";
 import { Empty } from "./types.js";
 
-export const resource = "/api/journal";
+export const resource = "/auth/journal";
 
 const ListReq = z.object({
   /** start 포함 */

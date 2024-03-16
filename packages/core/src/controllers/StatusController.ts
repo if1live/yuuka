@@ -14,6 +14,6 @@ app.get("/", async (c) => {
 });
 
 export const StatusController = {
-  path: "/status",
+  path: "/status" as const,
   app,
 };

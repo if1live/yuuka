@@ -6,7 +6,7 @@ import {
   InOutSchema,
 } from "../networks/rpc.js";
 
-export const resource = "/api/auth";
+export const resource = "/user";
 
 const AuthenticateReq = z.object({
   username: z.string().min(1),
