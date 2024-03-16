@@ -16,7 +16,7 @@ import { TOKEN_SECRET } from "../constants";
 import {
   DataSourceContext,
   DataSourceValue,
-} from "../contexts/DataSourceProvider";
+} from "../contexts/DataSourceContext";
 import { fetcherWithApp } from "../fetchers";
 
 const createApp = (db: Kysely<Database>) => {

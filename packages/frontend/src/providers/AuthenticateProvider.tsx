@@ -3,7 +3,7 @@ import { type PropsWithChildren, useContext } from "react";
 import useSWR from "swr";
 import { StringParam, useQueryParams } from "use-query-params";
 import { AuthContext, type AuthState } from "../contexts/AuthContext";
-import { DataSourceContext } from "../contexts/DataSourceProvider";
+import { DataSourceContext } from "../contexts/DataSourceContext";
 import { setAuthToken } from "../fetchers";
 
 // react-router 안쓰고 query string 손대는 편법
