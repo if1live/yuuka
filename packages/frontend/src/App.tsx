@@ -31,6 +31,9 @@ const router = createBrowserRouter(
       <Route path="/ledger/*" element={<LedgerRouter />} />
     </Route>,
   ),
+  {
+    basename: "/yuuka",
+  },
 );
 
 // react-router 안쓰고 query string 손대는 편법
