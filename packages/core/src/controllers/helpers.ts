@@ -6,6 +6,7 @@ import type {
   HttpMethod,
   MyResponse,
 } from "../networks/index.js";
+import type { AuthToken } from "../users/tokens.js";
 
 // TODO: 더 멀쩡한 방식?
 export const registerHandler = <
@@ -23,8 +24,15 @@ export const registerHandler = <
   handler: (req: MyRequest<TIn>) => Promise<MyResponse<TOut>>,
 ) => {
   app[spec.endpoint.method](spec.endpoint.path, async (c) => {
+    // TODO: form-data
+    // console.log('formData', await c.req.formData())
+
+    // TODO: json 아닐떄 c.req.json 그냥 써도 되나?
+    const json = await c.req.json();
+
     const data_raw = {
       ...c.req.query(),
+      ...json,
     };
     const data_result = spec.schema.req.safeParse(data_raw);
     if (!data_result.success) {
@@ -37,13 +45,12 @@ export const registerHandler = <
       return c.json(data, 400);
     }
 
-    // TODO: 인증정보를 헤더에서 얻어야한다.
-    // 인증이 필요한 API와 필요없는 API는 뭐로 구분하지?
-    const userId = undefined;
+    // 인증없는 API에서는 undefined
+    const payload = c.get("jwtPayload") as AuthToken | undefined;
 
     try {
       const data = data_result.data;
-      const req = new MyRequest({ body: data, userId });
+      const req = new MyRequest({ body: data, userId: payload?.user_id });
       const res = await handler(req);
       return c.json(res.body as unknown);
     } catch (e) {

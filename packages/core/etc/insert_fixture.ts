@@ -1,5 +1,4 @@
 import path from "node:path";
-import * as R from "remeda";
 import {
   AccountCodeSchema,
   AccountTagSchema,
@@ -8,7 +7,8 @@ import {
   JournalEntrySchema,
   UserSchema,
 } from "@yuuka/db";
-import { sql, type Kysely } from "kysely";
+import { type Kysely, sql } from "kysely";
+import * as R from "remeda";
 import { db } from "../src/db.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
 import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";

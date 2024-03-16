@@ -50,7 +50,7 @@ export interface AccountTag {
 export const AccountTag = {
   fromRow(row: AccountTagSchema.Row): AccountTag {
     return {
-      major: AccountCategory.fromKorean(row.major),
+      major: row.major,
       minor: row.minor,
       code: row.code,
       name: row.name,

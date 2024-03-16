@@ -25,8 +25,8 @@ const authenticate: AsControllerFn<Sheet["authenticate"]> = async (req) => {
   });
 
   return new MyResponse({
-    authToken,
     userId: found.id,
+    authToken,
   });
 };
 
