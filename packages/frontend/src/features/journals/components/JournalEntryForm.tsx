@@ -1,11 +1,13 @@
 import { ErrorMessage } from "@hookform/error-message";
-import { JournalEntry } from "@yuuka/core";
+import { AccountCode, JournalEntry } from "@yuuka/core";
 import { JournalEntryLine } from "@yuuka/core";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as R from "remeda";
 import {
   Button,
+  ButtonGroup,
+  ButtonOr,
   Form,
   FormField,
   Table,
@@ -87,6 +89,17 @@ export const JournalEntryForm = (props: {
     return mat.map((x) => x.join(",")).join("\n");
   };
 
+  const filterAvailableAccountCodes = (line: JournalEntryLine) => {
+    // code는 겹치면 안된다. 자신은 포함되어야한다
+    const codes_used = values.lines.map((x) => x.code);
+    const accounts = masterdata.accountCodes.filter((x) => {
+      if (x.code === line.code) return true;
+      if (codes_used.includes(x.code)) return false;
+      return true;
+    });
+    return accounts;
+  };
+
   return (
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -136,34 +149,16 @@ export const JournalEntryForm = (props: {
           />
         </FormField>
 
-        <Table basic="very" compact="very" unstackable>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderCell>code</TableHeaderCell>
-              <TableHeaderCell>debit</TableHeaderCell>
-              <TableHeaderCell>credit</TableHeaderCell>
-              <TableHeaderCell>actions</TableHeaderCell>
-            </TableRow>
-          </TableHeader>
-
+        <Table compact="very" color="blue">
+          <DebitTableHeader />
           <TableBody>
             {values.lines.map((line, idx) => {
               const key = `line-${idx}`;
+              const accounts = filterAvailableAccountCodes(line);
 
-              const isDebit = line._tag === "debit";
-              const isCredit = line._tag === "credit";
-
-              // code는 겹치면 안된다. 자신은 포함되어야한다
-              const codes_used = values.lines.map((x) => x.code);
-              const accounts = masterdata.accountCodes.filter((x) => {
-                if (x.code === line.code) {
-                  return true;
-                }
-                if (codes_used.includes(x.code)) {
-                  return false;
-                }
-                return true;
-              });
+              if (line._tag !== "debit") {
+                return null;
+              }
 
               return (
                 <TableRow key={key}>
@@ -181,24 +176,12 @@ export const JournalEntryForm = (props: {
                     </select>
                   </TableCell>
                   <TableCell>
-                    {isDebit && (
-                      <input
-                        type="number"
-                        {...register(`lines.${idx}.debit`, {
-                          valueAsNumber: true,
-                        })}
-                      />
-                    )}
-                  </TableCell>
-                  <TableCell>
-                    {isCredit && (
-                      <input
-                        type="number"
-                        {...register(`lines.${idx}.credit`, {
-                          valueAsNumber: true,
-                        })}
-                      />
-                    )}
+                    <input
+                      type="number"
+                      {...register(`lines.${idx}.debit`, {
+                        valueAsNumber: true,
+                      })}
+                    />
                   </TableCell>
                   <TableCell>
                     <Button
@@ -212,22 +195,64 @@ export const JournalEntryForm = (props: {
                 </TableRow>
               );
             })}
-            <TableRow>
-              <TableCell> </TableCell>
-              <TableCell>
-                <Button type="button" size="mini" onClick={addLine_debit}>
-                  debit
-                </Button>
-              </TableCell>
-              <TableCell>
-                <Button type="button" size="mini" onClick={addLine_credit}>
-                  credit
-                </Button>
-              </TableCell>
-              <TableCell> </TableCell>
-            </TableRow>
           </TableBody>
         </Table>
+
+        <Table compact="very" color="red">
+          <CreditTableHeader />
+          <TableBody>
+            {values.lines.map((line, idx) => {
+              const key = `line-${idx}`;
+              const accounts = filterAvailableAccountCodes(line);
+
+              if (line._tag !== "credit") {
+                return null;
+              }
+
+              return (
+                <TableRow key={key}>
+                  <TableCell>
+                    <select
+                      {...register(`lines.${idx}.code`, {
+                        valueAsNumber: true,
+                      })}
+                    >
+                      {accounts.map((x) => (
+                        <option key={x.code} value={x.code}>
+                          [{x.code}] {x.name}
+                        </option>
+                      ))}
+                    </select>
+                  </TableCell>
+                  <TableCell>
+                    <input
+                      type="number"
+                      {...register(`lines.${idx}.credit`, {
+                        valueAsNumber: true,
+                      })}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Button
+                      type="button"
+                      size="mini"
+                      onClick={() => removeLine(line.code)}
+                    >
+                      del
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+
+        <FormField>
+          <DebitCreditTableActions
+            debit={addLine_debit}
+            credit={addLine_credit}
+          />
+        </FormField>
 
         <FormField>
           <Button type="submit" disabled={!valid}>
@@ -243,3 +268,38 @@ export const JournalEntryForm = (props: {
     </>
   );
 };
+
+const DebitTableHeader = () => (
+  <TableHeader>
+    <TableRow>
+      <TableHeaderCell>code</TableHeaderCell>
+      <TableHeaderCell>debit</TableHeaderCell>
+      <TableHeaderCell>actions</TableHeaderCell>
+    </TableRow>
+  </TableHeader>
+);
+
+const CreditTableHeader = () => (
+  <TableHeader>
+    <TableRow>
+      <TableHeaderCell>code</TableHeaderCell>
+      <TableHeaderCell>credit</TableHeaderCell>
+      <TableHeaderCell>actions</TableHeaderCell>
+    </TableRow>
+  </TableHeader>
+);
+
+const DebitCreditTableActions = (props: {
+  debit: () => void;
+  credit: () => void;
+}) => (
+  <ButtonGroup size="mini">
+    <Button type="button" onClick={props.debit}>
+      debit
+    </Button>
+    <ButtonOr />
+    <Button type="button" onClick={props.credit}>
+      credit
+    </Button>
+  </ButtonGroup>
+);
