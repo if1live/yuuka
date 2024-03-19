@@ -12,6 +12,7 @@ import {
 import { default as SQLite } from "better-sqlite3";
 import { CamelCasePlugin, Kysely, SqliteDialect, sql } from "kysely";
 import * as R from "remeda";
+import { JournalEntryService } from "../src/journals/JournalEntryService.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
 import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";
 import { settings } from "../src/settings.js";
@@ -91,55 +92,27 @@ const insertBulk_accountCode = async (db: KyselyDB) => {
     .executeTakeFirstOrThrow();
 };
 
-const insertBulk_journalEntry = async (db: KyselyDB) => {
-  const items = journalContext.entries.map(
-    (journal): JournalEntrySchema.NewRow => {
-      return {
-        entryId: journal.id,
-        date: journal.date,
-        brief: journal.brief,
-      };
-    },
+const insertBulk_journal = async (db: KyselyDB) => {
+  const results = journalContext.entries.map((x) =>
+    JournalEntryService.prepare(x),
   );
-  return await db
+  const rows_entry = results.flatMap((x) => x.entries);
+  const rows_line = results.flatMap((x) => x.lines);
+
+  const result_entry = await db
     .insertInto(JournalEntrySchema.name)
-    .values(items)
+    .values(rows_entry)
     .executeTakeFirstOrThrow();
-};
 
-const insertBulk_journalEntryLine = async (db: KyselyDB) => {
-  const items = journalContext.entries.flatMap((journal) => {
-    const lines = journal.lines.map((line): JournalEntryLineSchema.NewRow => {
-      const skel = {
-        entryId: journal.id,
-        code: line.code,
-      };
-
-      if (line._tag === "debit") {
-        return {
-          ...skel,
-          tag: JournalEntryLineSchema.debitTag,
-          amount: line.debit,
-        };
-      }
-
-      if (line._tag === "credit") {
-        return {
-          ...skel,
-          tag: JournalEntryLineSchema.creditTag,
-          amount: line.credit,
-        };
-      }
-
-      throw new Error("unreachable");
-    });
-    return lines;
-  });
-
-  return await db
+  const result_line = await db
     .insertInto(JournalEntryLineSchema.name)
-    .values(items)
+    .values(rows_line)
     .executeTakeFirstOrThrow();
+
+  return {
+    entry: result_entry,
+    line: result_line,
+  };
 };
 
 const deleteAll = async (db: KyselyDB) => {
@@ -157,12 +130,10 @@ const insertBulk = async (db: KyselyDB) => {
   R.pipe(await insertBulk_accountCode(db), (x) =>
     console.log(`account codes: ${x.numInsertedOrUpdatedRows}`),
   );
-  R.pipe(await insertBulk_journalEntry(db), (x) =>
-    console.log(`journal entries: ${x.numInsertedOrUpdatedRows}`),
-  );
-  R.pipe(await insertBulk_journalEntryLine(db), (x) =>
-    console.log(`journal entry lines: ${x.numInsertedOrUpdatedRows}`),
-  );
+  R.pipe(await insertBulk_journal(db), (x) => {
+    console.log(`journal entry: ${x.entry.numInsertedOrUpdatedRows}`);
+    console.log(`journal entry line: ${x.line.numInsertedOrUpdatedRows}`);
+  });
   R.pipe(await insertBulk_user(db), (x) =>
     console.log(`users: ${x.numInsertedOrUpdatedRows}`),
   );
