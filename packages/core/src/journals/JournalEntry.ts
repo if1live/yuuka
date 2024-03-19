@@ -47,11 +47,10 @@ const toCSV = (entry: JournalEntry): unknown[][] => {
   const cells_padding = Array(cells_metadata.length).fill("");
 
   const rows = entry.lines.map((line, idx) => {
-    const next = JournalEntryLine.cast(line);
     const cells_amount =
-      next._tag === "debit"
-        ? [line.code, next.debit, 0]
-        : [line.code, 0, next.credit];
+      line._tag === "debit"
+        ? [line.code, line.debit, ""]
+        : [line.code, "", line.credit];
 
     return idx === 0
       ? [...cells_metadata, ...cells_amount]

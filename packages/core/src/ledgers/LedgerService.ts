@@ -42,11 +42,7 @@ const load = async (
   // 이런 경우 entry_id 1개에 n개의 line이 발생할 수 있다!
   const entryLineMap = new Map(
     lines.map((line) => {
-      const next = R.pipe(
-        line,
-        JournalEntryLine.fromRow,
-        JournalEntryLine.cast,
-      );
+      const next = R.pipe(line, JournalEntryLine.fromRow);
       return [line.entryId, next];
     }),
   );

@@ -21,16 +21,6 @@ describe("JournalEntryLine#validate", () => {
     const line: JournalEntryLine = { _tag: "credit", code: 102101, credit: 0 };
     assert.throws(() => JournalEntryLine.validate(line));
   });
-
-  it("fail: debit and credit are null", () => {
-    const line: JournalEntryLine = { code: 102101, debit: null, credit: null };
-    assert.throws(() => JournalEntryLine.validate(line));
-  });
-
-  it("fail: debit and credit exists", () => {
-    const line: JournalEntryLine = { code: 102101, debit: 1, credit: 1 };
-    assert.throws(() => JournalEntryLine.validate(line));
-  });
 });
 
 describe("JournalEntryLine#compare", () => {

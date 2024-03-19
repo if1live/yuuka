@@ -11,9 +11,9 @@ describe("JournalEntryLine", () => {
 
   it("ok", () => {
     const lines: JournalEntryLine[] = [
-      { code: 853000, debit: 7740, credit: null },
-      { code: 854000, debit: 7740, credit: null },
-      { code: 102101, debit: null, credit: 15480 },
+      { _tag: "debit", code: 853000, debit: 7740 },
+      { _tag: "debit", code: 854000, debit: 7740 },
+      { _tag: "credit", code: 102101, credit: 15480 },
     ];
     const entry: JournalEntry = { ...skel, lines };
     const actual = JournalEntry.validate(entry);

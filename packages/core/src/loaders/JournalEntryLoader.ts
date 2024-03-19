@@ -107,11 +107,8 @@ const convert = (records: [JournalItemRecord, ...JournalItemRecord[]]) => {
       };
     }
 
-    return {
-      code: record.code,
-      debit: record.debit,
-      credit: record.credit,
-    };
+    // else...
+    throw new Error("invalid record");
   });
 
   const entry: JournalEntry = {
