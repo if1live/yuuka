@@ -10,7 +10,15 @@ import {
   UserSchema,
 } from "@yuuka/db";
 import { default as SQLite } from "better-sqlite3";
-import { CamelCasePlugin, Kysely, SqliteDialect, sql } from "kysely";
+import {
+  CamelCasePlugin,
+  Kysely,
+  PostgresDialect,
+  SqliteDialect,
+  WithSchemaPlugin,
+  sql,
+} from "kysely";
+import { default as Postgres } from "pg";
 import * as R from "remeda";
 import { JournalEntryService } from "../src/journals/JournalEntryService.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
@@ -141,18 +149,51 @@ const insertBulk = async (db: KyselyDB) => {
   await db.destroy();
 };
 
-// db
-const filename = "sqlite.db";
-await fs.unlink(filename).catch(() => {});
+const main_sqlite = async () => {
+  // db
+  const filename = "sqlite.db";
+  await fs.unlink(filename).catch(() => {});
 
-const database = new SQLite(filename);
-const dialect = new SqliteDialect({
-  database: database,
-});
-const db = new Kysely<Database>({
-  dialect,
-  plugins: [new CamelCasePlugin()],
-});
+  const database = new SQLite(filename);
+  const dialect = new SqliteDialect({
+    database: database,
+  });
+  const db = new Kysely<Database>({
+    dialect,
+    plugins: [new CamelCasePlugin()],
+  });
 
-await Database.prepareSchema(db);
-await insertBulk(db);
+  await Database.prepareSchema(db);
+  await insertBulk(db);
+};
+
+const main_pg = async () => {
+  const databaseUrl =
+    "postgres://localhost_dev:localhost_dev@localhost:5432/localhost_dev";
+  const pool = new Postgres.Pool({
+    connectionString: databaseUrl,
+  });
+  const dialect = new PostgresDialect({
+    pool,
+  });
+  const db = new Kysely<Database>({
+    dialect,
+    plugins: [new WithSchemaPlugin("yuuka"), new CamelCasePlugin()],
+  });
+
+  await deleteAll(db);
+  await insertBulk(db);
+};
+
+const target = process.argv[process.argv.length - 1];
+switch (target) {
+  case "sqlite":
+    await main_sqlite();
+    break;
+  case "pg":
+    await main_pg();
+    break;
+  default:
+    console.log("invalid target");
+    break;
+}
