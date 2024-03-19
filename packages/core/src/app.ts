@@ -19,7 +19,8 @@ app.use("*", logger());
 app.use("*", cors());
 app.use("*", compress());
 
-app.use("/auth/*", jwt({ secret: settings.TOKEN_SECRET }));
+// TODO: 인증은 나중에 생각
+// app.use("/auth/*", jwt({ secret: settings.TOKEN_SECRET }));
 
 const robotsTxt = `
 User-agent: *

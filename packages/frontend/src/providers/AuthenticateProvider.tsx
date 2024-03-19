@@ -17,7 +17,12 @@ export const AuthenticateProvider = (props: PropsWithChildren) => {
   const database = useContext(DataSourceContext);
 
   // 샌드박스 모드에서는 인증 안쓴다.
-  if (database.mode === "sandbox") {
+  if (database._tag === "sandbox") {
+    return <>{props.children}</>;
+  }
+
+  // TODO: 서버방식에서는 다른 인증을 쓸거같다
+  if (database._tag === "server") {
     return <>{props.children}</>;
   }
 

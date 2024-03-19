@@ -16,7 +16,7 @@ export const setAuthToken = (token: string) => {
 };
 
 // TODO: fetcher로 GET/POST 전부 대응하는게 맞나?
-export const fetcher = async (...args: unknown[]) => {
+export const fetcherWithHttp = async (...args: unknown[]) => {
   const [first, _] = args;
   const url = `${host}${first}`;
 

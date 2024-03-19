@@ -21,21 +21,47 @@ const prepareSqlJs = async () => {
   return sqlJs;
 };
 
-export interface DataSourceValue {
+/**
+ * sqlite 파일을 브라우저에 집어넣고 돌리기
+ * 서버 운영같은거 신경 안써도 되서 편하다
+ */
+type DataSourceValue_Sandbox = {
+  _tag: "sandbox";
   db: KyselyDB;
-  mode: "sandbox" | "network";
-  username: string;
   app: Hono;
-}
-
-const defaultValue: DataSourceValue = {
-  db: {} as KyselyDB,
-  mode: "sandbox",
-  username: "",
-  app: {} as Hono,
 };
 
-export const DataSourceContext = createContext(defaultValue);
+/**
+ * 백엔드 어딘가 sqlite db 자체를 읽고 쓰는 기능을 만든다.
+ * 웹에서 장부를 수정할때 필요하다
+ */
+type DataSourceValue_Network = {
+  _tag: "network";
+  db: KyselyDB;
+  username: string;
+  app: Hono;
+};
+
+/**
+ * 로컬 개발 환경에서는 vite와 hono가 따로 작동한다.
+ * client-server 모델을 사용해서 개발 주기를 단축한다
+ */
+type DataSourceValue_Server = {
+  _tag: "server";
+  endpoint: string;
+};
+
+export type DataSourceValue =
+  | DataSourceValue_Sandbox
+  | DataSourceValue_Network
+  | DataSourceValue_Server;
+
+const defaultValue: DataSourceValue = {
+  _tag: "server",
+  endpoint: "://127.0.0.1:3000",
+};
+
+export const DataSourceContext = createContext<DataSourceValue>(defaultValue);
 
 const createDialect_arrayBuffer = async (buffer: ArrayBuffer) => {
   const sqlJs = await prepareSqlJs();

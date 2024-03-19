@@ -15,34 +15,18 @@ import {
   DataSourceContext,
   DataSourceValue,
 } from "../contexts/DataSourceContext";
-import { fetcherWithApp } from "../fetchers";
+import { fetcherWithApp, fetcherWithHttp } from "../fetchers";
 
 const createApp = (db: KyselyDB) => {
   const app = new Hono();
-  // TODO: 모바일 크롬에서 안된다? 인증을 다른 식으로 우회할수 있나?
-  // `crypto.subtle.importKey` is undefined. JWT auth middleware requires it
-  // app.use("/auth/*", jwt({ secret: TOKEN_SECRET }));
   app.route(ResourceController.path, ResourceController.createApp(db));
   app.route(JournalController.path, JournalController.createApp(db));
   app.route(LedgerController.path, LedgerController.createApp(db));
   return app;
 };
 
-type DataSource_Sandbox = {
-  _tag: "sandbox";
-  db: KyselyDB;
-};
-
-type DataSource_Network = {
-  _tag: "network";
-  db: KyselyDB;
-  username: string;
-};
-
-type DataSource = DataSource_Sandbox | DataSource_Network;
-
 interface Props {
-  setDataSource: (source: DataSource) => void;
+  setDataSource: (source: DataSourceValue) => void;
   setError: (e: Error) => void;
 }
 
@@ -54,7 +38,9 @@ const DataSourceNode_Blank = (props: Props) => {
       const dialect = await DataSourceValue.createDialect_blank();
       const db = DataSourceValue.createKysely(dialect);
       await Database.prepareSchema(db);
-      setDataSource({ _tag: "sandbox", db });
+
+      const app = createApp(db);
+      setDataSource({ _tag: "sandbox", db, app });
     } catch (e) {
       setError(e as Error);
     }
@@ -85,7 +71,8 @@ const DataSourceNode_DragAndDrop = (props: Props) => {
       const dialect =
         await DataSourceValue.createDialect_arrayBuffer(arrayBuffer);
       const db = DataSourceValue.createKysely(dialect);
-      setDataSource({ _tag: "sandbox", db });
+      const app = createApp(db);
+      setDataSource({ _tag: "sandbox", db, app });
     } catch (e) {
       setError(e as Error);
     }
@@ -118,7 +105,8 @@ const DataSourceNode_Demo = (props: Props) => {
       const dialect =
         await DataSourceValue.createDialect_arrayBuffer(arrayBuffer);
       const db = DataSourceValue.createKysely(dialect);
-      setDataSource({ _tag: "sandbox", db });
+      const app = createApp(db);
+      setDataSource({ _tag: "sandbox", db, app });
     } catch (e) {
       setError(e as Error);
     }
@@ -145,7 +133,7 @@ const DataSourceNode_Authenticate = (props: Props) => {
       const dialect = await DataSourceValue.createDialect_blank();
       const db = DataSourceValue.createKysely(dialect);
       await Database.prepareSchema(db);
-      setDataSource({ _tag: "network", db, username });
+      setDataSource({ _tag: "network", db, username, app: createApp(db) });
     } catch (e) {
       setError(e as Error);
     }
@@ -175,25 +163,60 @@ const DataSourceNode_Authenticate = (props: Props) => {
   );
 };
 
-export const DataSourceProvider = (props: PropsWithChildren) => {
-  const [value, setValue] = useState<DataSourceValue | null>(null);
-  const [error, setError] = useState<Error | null>(null);
+const DataSourceNode_Server = (props: Props) => {
+  const { setDataSource, setError } = props;
 
-  const setDataSource = (source: DataSource) => {
-    const db = source.db;
-    const app = createApp(db);
-    const skel = { app, db };
-    switch (source._tag) {
-      case "sandbox": {
-        setValue({ mode: "sandbox", username: "", ...skel });
-        break;
-      }
-      case "network": {
-        setValue({ mode: "network", username: source.username, ...skel });
-        break;
-      }
+  const [hostname, setHostname] = useState("127.0.0.1");
+  const [port, setPort] = useState(3000);
+
+  const load = async () => {
+    try {
+      const endpoint = `://${hostname}:${port}`;
+      setDataSource({ _tag: "server", endpoint });
+    } catch (e) {
+      setError(e as Error);
     }
   };
+
+  return (
+    <>
+      <h3>api server</h3>
+      <Form>
+        <FormField>
+          <label>hostname</label>
+          <input
+            type="text"
+            onChange={(e) => setHostname(e.target.value)}
+            value={hostname}
+          />
+        </FormField>
+
+        <FormField>
+          <label>port</label>
+          <input
+            type="number"
+            onChange={(e) => setPort(e.target.valueAsNumber)}
+            value={port}
+          />
+        </FormField>
+
+        <FormField>
+          <Button
+            type="submit"
+            onClick={() => load()}
+            disabled={hostname.length === 0}
+          >
+            connect
+          </Button>
+        </FormField>
+      </Form>
+    </>
+  );
+};
+
+export const DataSourceProvider = (props: PropsWithChildren) => {
+  const [dataSource, setDataSource] = useState<DataSourceValue | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   if (error) {
     return (
@@ -206,12 +229,17 @@ export const DataSourceProvider = (props: PropsWithChildren) => {
     );
   }
 
-  if (value === null) {
+  if (dataSource === null) {
     return (
       <Container text>
         <h1>project: yuuka</h1>
 
         <Image src="/yuuka/yuuka-plain.jpg" />
+
+        <DataSourceNode_Server
+          setDataSource={setDataSource}
+          setError={setError}
+        />
 
         <DataSourceNode_Authenticate
           setDataSource={setDataSource}
@@ -244,10 +272,19 @@ export const DataSourceProvider = (props: PropsWithChildren) => {
     );
   }
 
-  const { app } = value;
+  if (dataSource._tag === "server") {
+    return (
+      <DataSourceContext.Provider value={dataSource}>
+        <SWRConfig value={{ fetcher: fetcherWithHttp }}>
+          {props.children}
+        </SWRConfig>
+      </DataSourceContext.Provider>
+    );
+  }
 
+  const { app } = dataSource;
   return (
-    <DataSourceContext.Provider value={value}>
+    <DataSourceContext.Provider value={dataSource}>
       <SWRConfig value={{ fetcher: fetcherWithApp(app) }}>
         {props.children}
       </SWRConfig>
