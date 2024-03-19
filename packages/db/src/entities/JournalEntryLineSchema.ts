@@ -20,12 +20,6 @@ export type DebitTag = typeof debitTag;
 export type CreditTag = typeof creditTag;
 
 const createColumnList = () => {
-  const userId = defineColumn({
-    name: { native: "user_id", kysely: "userId" },
-    primary: true,
-    type: Number,
-  });
-
   const entryId = defineColumn({
     name: { native: "entry_id", kysely: "entryId" },
     primary: true,
@@ -60,14 +54,13 @@ const createColumnList = () => {
     type: "int",
   });
 
-  return [userId, entryId, code, tag, amount];
+  return [entryId, code, tag, amount];
 };
 
 const columns = createColumnList();
 
 // TODO: 타입 유도? columns
 export interface Table {
-  userId: number;
   entryId: string;
   code: number;
   tag: DebitTag | CreditTag;
@@ -75,7 +68,7 @@ export interface Table {
 }
 
 // TODO: 타입 유도?
-export const primaryKeyFields = ["userId", "entryId", "code"] as const;
+export const primaryKeyFields = ["entryId", "code"] as const;
 export type PrimaryKey = Pick<Table, (typeof primaryKeyFields)[number]>;
 
 // 자주 쓰는 타입이라서 미리 정의
@@ -91,15 +84,15 @@ export const options: MyEntitySchemaOptions = {
   },
   columns: Object.fromEntries(columns.map(convertTypeormSchemaColumnOptions)),
   indices: [
-    // 원장 ledger 에서의 유저+계정코드+날짜 조회
+    // TODO: 원장 ledger 에서의 계정코드+날짜 조회
     // {
-    //   name: `${nativeName}_userId_code_date`,
-    //   columns: ["user_id", "code", "date"],
+    //   name: `${nativeName}_code_date`,
+    //   columns: ["code", "date"],
     // },
-    // // 분개장 journalEntry 에서의 유저+날짜 조회
+    // 분개장 journalEntry 에서의 날짜 조회
     // {
-    //   name: `${nativeName}_userId_date`,
-    //   columns: ["user_id", "date"],
+    //   name: `${nativeName}_date`,
+    //   columns: ["date"],
     // },
   ],
 };

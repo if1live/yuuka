@@ -21,60 +21,53 @@ export interface Database {
 const prepare_accountTag = async (db: Kysely<Database>) => {
   await db.schema
     .createTable("account_tag")
-    .addColumn("user_id", "integer")
-    .addColumn("code", "integer")
+    .addColumn("code", "integer", (col) => col.primaryKey())
     .addColumn("major", "varchar(191)")
     .addColumn("minor", "varchar(191)")
     .addColumn("name", "varchar(191)")
     .addColumn("description", "text")
-    .addPrimaryKeyConstraint("primary_key", ["user_id", "code"])
     .execute();
 };
 
 const prepare_accountCode = async (db: Kysely<Database>) => {
   await db.schema
     .createTable("account_code")
-    .addColumn("user_id", "integer")
-    .addColumn("code", "integer")
+    .addColumn("code", "integer", (col) => col.primaryKey())
     .addColumn("name", "varchar(191)")
     .addColumn("description", "text")
-    .addPrimaryKeyConstraint("primary_key", ["user_id", "code"])
     .execute();
 };
 
 const preapre_journalEntry = async (db: Kysely<Database>) => {
   await db.schema
     .createTable("journal_entry")
-    .addColumn("user_id", "integer")
-    .addColumn("entry_id", "varchar(191)")
+    .addColumn("entry_id", "varchar(191)", (col) => col.primaryKey())
     .addColumn("date", "varchar(15)")
     .addColumn("brief", "text")
-    .addPrimaryKeyConstraint("primary_key", ["user_id", "entry_id"])
     .execute();
 };
 
 const prepare_journalEntryLine = async (db: Kysely<Database>) => {
   await db.schema
     .createTable("journal_entry_line")
-    .addColumn("user_id", "integer")
     .addColumn("entry_id", "varchar(191)")
     .addColumn("code", "integer")
     .addColumn("tag", "integer")
     .addColumn("amount", "integer")
-    .addPrimaryKeyConstraint("primary_key", ["user_id", "entry_id", "code"])
+    .addPrimaryKeyConstraint("primary_key", ["entry_id", "code"])
     .execute();
 
   /*
     TODO: sql__js.js?v=5b382feb:469 Uncaught (in promise) Error: near "(": syntax error
     ???
   await db.schema
-    .createIndex("journal_entry_line_userId_code_date")
-    .columns(["user_id", "code", "date"])
+    .createIndex("journal_entry_line_code_date")
+    .columns(["code", "date"])
     .execute();
 
   await db.schema
-    .createIndex("journal_entry_line_userId_date")
-    .columns(["user_id", "date"])
+    .createIndex("journal_entry_line_date")
+    .columns(["date"])
     .execute();
     */
 };

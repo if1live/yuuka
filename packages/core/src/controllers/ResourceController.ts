@@ -13,11 +13,10 @@ type Sheet = typeof sheet;
 
 const masterdata: AsControllerFn<Sheet["masterdata"]> = async (req) => {
   const db = req.db;
-  const permission = { userId: req.userId };
 
   const [accountTags, accountCodes] = await Promise.all([
-    AccountTagRepository.load(db, permission),
-    AccountCodeRepository.load(db, permission),
+    AccountTagRepository.load(db),
+    AccountCodeRepository.load(db),
   ]);
 
   return new MyResponse({

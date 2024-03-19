@@ -10,7 +10,6 @@ import { AccountCode } from "../masterdata/types.js";
 
 const load = async (
   db: Kysely<Database>,
-  permission: { userId: number },
   code: number,
   range: { start: string; end: string },
 ) => {
@@ -21,7 +20,6 @@ const load = async (
     return await db
       .selectFrom(JournalEntryLineSchema.name)
       .selectAll()
-      .where("userId", "=", permission.userId)
       .where("code", "=", code)
       .execute();
   };
@@ -30,7 +28,6 @@ const load = async (
     return await db
       .selectFrom(JournalEntryLineSchema.name)
       .selectAll()
-      .where("userId", "=", permission.userId)
       .where("code", ">=", tagCode * 1000)
       .where("code", "<", (tagCode + 1) * 1000)
       .execute();
@@ -41,6 +38,9 @@ const load = async (
     return [];
   }
 
+  // TODO: 계정코드를 묶어서 볼수 있어야한다.
+  // 102001 -> 102002 송금은 102로 검색하면 나와야한다.
+  // 이런 경우 entry_id 1개에 n개의 line이 발생할 수 있다!
   const entryLineMap = new Map(
     lines.map((line) => {
       const next = R.pipe(
@@ -56,7 +56,6 @@ const load = async (
   const rows = await db
     .selectFrom(JournalEntrySchema.name)
     .selectAll()
-    .where("userId", "=", permission.userId)
     .where(
       "entryId",
       "in",

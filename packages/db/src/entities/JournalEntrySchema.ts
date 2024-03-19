@@ -12,12 +12,6 @@ const typeormName: PascalCase<typeof kyselyName> = "JournalEntry";
 export const name = kyselyName;
 
 const createColumnList = () => {
-  const userId = defineColumn({
-    name: { native: "user_id", kysely: "userId" },
-    primary: true,
-    type: Number,
-  });
-
   const entryId = defineColumn({
     name: { native: "entry_id", kysely: "entryId" },
     primary: true,
@@ -38,21 +32,20 @@ const createColumnList = () => {
     type: "text",
   });
 
-  return [userId, entryId, date, brief];
+  return [entryId, date, brief];
 };
 
 const columns = createColumnList();
 
 // TODO: 타입 유도? columns
 export interface Table {
-  userId: number;
   entryId: string;
   date: string;
   brief: string;
 }
 
 // TODO: 타입 유도?
-export const primaryKeyFields = ["userId", "entryId"] as const;
+export const primaryKeyFields = ["entryId"] as const;
 export type PrimaryKey = Pick<Table, (typeof primaryKeyFields)[number]>;
 
 // 자주 쓰는 타입이라서 미리 정의

@@ -61,7 +61,6 @@ const insertBulk_user = async (db: Kysely<Database>) => {
 const insertBulk_accountTag = async (db: Kysely<Database>) => {
   const items = MasterData.accountTags.map((x): AccountTagSchema.NewRow => {
     return {
-      userId: rootUserId,
       code: x.code,
       major: x.major,
       minor: x.minor,
@@ -79,7 +78,6 @@ const insertBulk_accountTag = async (db: Kysely<Database>) => {
 const insertBulk_accountCode = async (db: Kysely<Database>) => {
   const items = MasterData.accountCodes.map((x): AccountCodeSchema.NewRow => {
     return {
-      userId: rootUserId,
       code: x.code,
       name: x.name,
       description: x.description,
@@ -96,7 +94,6 @@ const insertBulk_journalEntry = async (db: Kysely<Database>) => {
   const items = journalContext.entries.map(
     (journal): JournalEntrySchema.NewRow => {
       return {
-        userId: rootUserId,
         entryId: journal.id,
         date: journal.date,
         brief: journal.brief,
@@ -113,7 +110,6 @@ const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
   const items = journalContext.entries.flatMap((journal) => {
     const lines = journal.lines.map((line): JournalEntryLineSchema.NewRow => {
       const skel = {
-        userId: rootUserId,
         entryId: journal.id,
         code: line.code,
       };

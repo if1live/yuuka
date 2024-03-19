@@ -18,8 +18,7 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
   const startDate = "1970-01-01";
   const endDate = "9999-12-31";
 
-  const permission = { userId: req.userId };
-  const ledgers = await LedgerService.load(req.db, permission, code, {
+  const ledgers = await LedgerService.load(req.db, code, {
     start: startDate,
     end: endDate,
   });
