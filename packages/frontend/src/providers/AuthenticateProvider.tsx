@@ -1,4 +1,4 @@
-import { userSpecification } from "@yuuka/core/dist/src/specifications";
+import { userSpecification } from "@yuuka/core";
 import { type PropsWithChildren, useContext } from "react";
 import useSWR from "swr";
 import { StringParam, useQueryParams } from "use-query-params";

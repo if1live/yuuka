@@ -1,10 +1,9 @@
-import type { Database } from "@yuuka/db";
+import type { KyselyDB } from "@yuuka/db";
 import { PreferenceSchema } from "@yuuka/db";
-import type { Kysely } from "kysely";
 import { assert, afterAll, beforeAll, describe, it } from "vitest";
 import { TestDatabase } from "./mod.js";
 
-async function assert_scenario(db: Kysely<Database>) {
+async function assert_scenario(db: KyselyDB) {
   const input: PreferenceSchema.NewRow = {
     key: "foo",
     value: "bar",

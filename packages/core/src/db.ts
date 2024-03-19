@@ -1,4 +1,4 @@
-import type { Database } from "@yuuka/db";
+import type { Database, KyselyDB } from "@yuuka/db";
 import {
   CamelCasePlugin,
   Kysely,
@@ -48,7 +48,7 @@ const createDialect = async (url: string): Promise<{ dialect: Dialect }> => {
   return await createSqliteDialect(url);
 };
 
-const createKysely = (dialect: Dialect) => {
+const createKysely = (dialect: Dialect): KyselyDB => {
   return new Kysely<Database>({
     dialect,
     plugins: [new WithSchemaPlugin("yuuka"), new CamelCasePlugin()],

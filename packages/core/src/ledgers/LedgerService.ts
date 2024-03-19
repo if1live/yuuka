@@ -1,15 +1,14 @@
 import {
-  type Database,
   JournalEntryLineSchema,
   JournalEntrySchema,
+  type KyselyDB,
 } from "@yuuka/db";
-import type { Kysely } from "kysely";
 import * as R from "remeda";
 import { JournalEntryLine } from "../index.js";
 import { AccountCode } from "../masterdata/types.js";
 
 const load = async (
-  db: Kysely<Database>,
+  db: KyselyDB,
   code: number,
   range: { start: string; end: string },
 ) => {

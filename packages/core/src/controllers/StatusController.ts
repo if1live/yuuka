@@ -1,8 +1,8 @@
-import type { Database } from "@yuuka/db";
+import type { KyselyDB } from "@yuuka/db";
 import { Hono } from "hono";
-import { type Kysely, sql } from "kysely";
+import { sql } from "kysely";
 
-const createApp = (db: Kysely<Database>) => {
+const createApp = (db: KyselyDB) => {
   const app = new Hono();
 
   /** /status */

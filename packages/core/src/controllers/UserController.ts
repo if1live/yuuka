@@ -1,7 +1,6 @@
-import type { Database } from "@yuuka/db";
+import type { KyselyDB } from "@yuuka/db";
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
-import type { Kysely } from "kysely";
 import { MyResponse } from "../index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
 import { userSpecification } from "../specifications/index.js";
@@ -31,7 +30,7 @@ const authenticate: AsControllerFn<Sheet["authenticate"]> = async (req) => {
   });
 };
 
-const createApp = (db: Kysely<Database>) => {
+const createApp = (db: KyselyDB) => {
   const app = new Hono();
   registerHandler(app, db, sheet.authenticate, authenticate);
   return app;

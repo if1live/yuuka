@@ -1,6 +1,5 @@
-import type { Database } from "@yuuka/db";
+import type { KyselyDB } from "@yuuka/db";
 import { Hono } from "hono";
-import type { Kysely } from "kysely";
 import { AccountCodeRepository } from "../masterdata/AccountCodeRepository.js";
 import { AccountTagRepository } from "../masterdata/AccountTagRepository.js";
 import { MyResponse } from "../networks/index.js";
@@ -25,7 +24,7 @@ const masterdata: AsControllerFn<Sheet["masterdata"]> = async (req) => {
   });
 };
 
-const createApp = (db: Kysely<Database>) => {
+const createApp = (db: KyselyDB) => {
   const app = new Hono();
   registerHandler(app, db, sheet.masterdata, masterdata);
   return app;

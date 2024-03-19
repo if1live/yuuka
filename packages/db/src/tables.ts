@@ -97,3 +97,6 @@ const prepareSchema = async (db: Kysely<Database>) => {
 export const Database = {
   prepareSchema,
 };
+
+/** 많은곳에서 사용되는데 import 줄이고 싶어서 단축 정의 */
+export type KyselyDB = Kysely<Database>;

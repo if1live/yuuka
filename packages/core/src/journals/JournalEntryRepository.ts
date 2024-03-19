@@ -1,14 +1,14 @@
 import { JournalEntrySchema } from "@yuuka/db";
-import type { Database } from "@yuuka/db";
-import type { Kysely } from "kysely";
+import type { KyselyDB } from "@yuuka/db";
 import * as R from "remeda";
 import type { JournalEntry } from "./JournalEntry.js";
 import { JournalEntryLine } from "./JournalEntryLine.js";
 
 const findById = async (
-  db: Kysely<Database>,
+  db: KyselyDB,
   entryId: string,
 ): Promise<JournalEntry> => {
+  db.transaction().execute(async (trx) => {});
   const rows = await db
     .selectFrom(JournalEntrySchema.name)
     .innerJoin("journalEntryLine", (join) =>
@@ -39,7 +39,7 @@ const findById = async (
 };
 
 const findByDateRange = async (
-  db: Kysely<Database>,
+  db: KyselyDB,
   range: { start: string; end: string },
 ): Promise<JournalEntry[]> => {
   const rows = await db

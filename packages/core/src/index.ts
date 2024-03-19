@@ -15,6 +15,7 @@ export {
   ledgerSpecification,
   journalSpecification,
   resourceSpecification,
+  userSpecification,
 } from "./specifications/index.js";
 
 export { JournalController } from "./controllers/JournalController.js";

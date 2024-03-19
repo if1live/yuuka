@@ -3,23 +3,21 @@ import {
   LedgerController,
   ResourceController,
 } from "@yuuka/core";
+import type { KyselyDB } from "@yuuka/db";
 import { Database } from "@yuuka/db";
 import { Hono } from "hono";
-import { jwt } from "hono/jwt";
-import type { Kysely } from "kysely";
 import { type PropsWithChildren, useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { Image } from "semantic-ui-react";
 import { Button, Container, Form, FormField } from "semantic-ui-react";
 import { SWRConfig } from "swr";
-import { TOKEN_SECRET } from "../constants";
 import {
   DataSourceContext,
   DataSourceValue,
 } from "../contexts/DataSourceContext";
 import { fetcherWithApp } from "../fetchers";
 
-const createApp = (db: Kysely<Database>) => {
+const createApp = (db: KyselyDB) => {
   const app = new Hono();
   // TODO: 모바일 크롬에서 안된다? 인증을 다른 식으로 우회할수 있나?
   // `crypto.subtle.importKey` is undefined. JWT auth middleware requires it
@@ -32,12 +30,12 @@ const createApp = (db: Kysely<Database>) => {
 
 type DataSource_Sandbox = {
   _tag: "sandbox";
-  db: Kysely<Database>;
+  db: KyselyDB;
 };
 
 type DataSource_Network = {
   _tag: "network";
-  db: Kysely<Database>;
+  db: KyselyDB;
   username: string;
 };
 

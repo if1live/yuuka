@@ -1,4 +1,4 @@
-import type { Database } from "@yuuka/db";
+import type { Database, KyselyDB } from "@yuuka/db";
 import type { Hono } from "hono";
 import { CamelCasePlugin, type Dialect, Kysely } from "kysely";
 import { SqlJsDialect } from "kysely-wasm";
@@ -22,14 +22,14 @@ const prepareSqlJs = async () => {
 };
 
 export interface DataSourceValue {
-  db: Kysely<Database>;
+  db: KyselyDB;
   mode: "sandbox" | "network";
   username: string;
   app: Hono;
 }
 
 const defaultValue: DataSourceValue = {
-  db: {} as Kysely<Database>,
+  db: {} as KyselyDB,
   mode: "sandbox",
   username: "",
   app: {} as Hono,

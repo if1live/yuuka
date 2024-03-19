@@ -1,7 +1,6 @@
-import { type Database, UserSchema } from "@yuuka/db";
-import type { Kysely } from "kysely";
+import { type KyselyDB, UserSchema } from "@yuuka/db";
 
-const findByUsername = async (db: Kysely<Database>, username: string) => {
+const findByUsername = async (db: KyselyDB, username: string) => {
   return await db
     .selectFrom(UserSchema.name)
     .selectAll()

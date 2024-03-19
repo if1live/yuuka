@@ -7,4 +7,4 @@ export {
   UserSchema,
 } from "./entities/index.js";
 
-export { Database } from "./tables.js";
+export { Database, type KyselyDB } from "./tables.js";

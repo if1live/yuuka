@@ -1,6 +1,5 @@
-import type { Database } from "@yuuka/db";
+import type { KyselyDB } from "@yuuka/db";
 import { Hono } from "hono";
-import type { Kysely } from "kysely";
 import { JournalEntryRepository } from "../journals/JournalEntryRepository.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
@@ -37,7 +36,7 @@ const edit: AsControllerFn<Sheet["edit"]> = async (req) => {
   return new MyResponse(body);
 };
 
-const createApp = (db: Kysely<Database>) => {
+const createApp = (db: KyselyDB) => {
   const app = new Hono();
   registerHandler(app, db, sheet.list, list);
   registerHandler(app, db, sheet.get, get);

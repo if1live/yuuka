@@ -1,7 +1,6 @@
-import type { Database } from "@yuuka/db";
+import type { KyselyDB } from "@yuuka/db";
 import type { Hono } from "hono";
 import type { StatusCode } from "hono/utils/http-status";
-import type { Kysely } from "kysely";
 import { ResultAsync } from "neverthrow";
 import type { z } from "zod";
 import { MyRequest } from "../networks/index.js";
@@ -21,7 +20,7 @@ export const registerHandler = <
   IZ extends z.ZodType,
 >(
   app: Hono,
-  db: Kysely<Database>,
+  db: KyselyDB,
   spec: {
     endpoint: HttpEndpoint<M, P>;
     schema: { req: z.infer<IZ> };

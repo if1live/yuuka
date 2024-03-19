@@ -6,6 +6,7 @@ import {
   Database,
   JournalEntryLineSchema,
   JournalEntrySchema,
+  type KyselyDB,
   UserSchema,
 } from "@yuuka/db";
 import { default as SQLite } from "better-sqlite3";
@@ -46,7 +47,7 @@ const MasterData = Object.freeze({
 
 const rootUserId = 1;
 
-const insertBulk_user = async (db: Kysely<Database>) => {
+const insertBulk_user = async (db: KyselyDB) => {
   const item: UserSchema.NewRow = {
     id: rootUserId,
     supabase: "root",
@@ -58,7 +59,7 @@ const insertBulk_user = async (db: Kysely<Database>) => {
 };
 
 // 데이터를 다양한 방식으로 뒤지려면 db에 채워놓는게 나을듯
-const insertBulk_accountTag = async (db: Kysely<Database>) => {
+const insertBulk_accountTag = async (db: KyselyDB) => {
   const items = MasterData.accountTags.map((x): AccountTagSchema.NewRow => {
     return {
       code: x.code,
@@ -75,7 +76,7 @@ const insertBulk_accountTag = async (db: Kysely<Database>) => {
     .executeTakeFirstOrThrow();
 };
 
-const insertBulk_accountCode = async (db: Kysely<Database>) => {
+const insertBulk_accountCode = async (db: KyselyDB) => {
   const items = MasterData.accountCodes.map((x): AccountCodeSchema.NewRow => {
     return {
       code: x.code,
@@ -90,7 +91,7 @@ const insertBulk_accountCode = async (db: Kysely<Database>) => {
     .executeTakeFirstOrThrow();
 };
 
-const insertBulk_journalEntry = async (db: Kysely<Database>) => {
+const insertBulk_journalEntry = async (db: KyselyDB) => {
   const items = journalContext.entries.map(
     (journal): JournalEntrySchema.NewRow => {
       return {
@@ -106,7 +107,7 @@ const insertBulk_journalEntry = async (db: Kysely<Database>) => {
     .executeTakeFirstOrThrow();
 };
 
-const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
+const insertBulk_journalEntryLine = async (db: KyselyDB) => {
   const items = journalContext.entries.flatMap((journal) => {
     const lines = journal.lines.map((line): JournalEntryLineSchema.NewRow => {
       const skel = {
@@ -141,7 +142,7 @@ const insertBulk_journalEntryLine = async (db: Kysely<Database>) => {
     .executeTakeFirstOrThrow();
 };
 
-const deleteAll = async (db: Kysely<Database>) => {
+const deleteAll = async (db: KyselyDB) => {
   await db.deleteFrom(AccountTagSchema.name).execute();
   await db.deleteFrom(AccountCodeSchema.name).execute();
   await db.deleteFrom(JournalEntrySchema.name).execute();
@@ -149,7 +150,7 @@ const deleteAll = async (db: Kysely<Database>) => {
   await db.deleteFrom(UserSchema.name).execute();
 };
 
-const insertBulk = async (db: Kysely<Database>) => {
+const insertBulk = async (db: KyselyDB) => {
   R.pipe(await insertBulk_accountTag(db), (x) =>
     console.log(`account tags: ${x.numInsertedOrUpdatedRows}`),
   );

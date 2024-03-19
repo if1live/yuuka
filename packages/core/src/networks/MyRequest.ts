@@ -1,11 +1,10 @@
-import type { Database } from "@yuuka/db";
-import type { Kysely } from "kysely";
+import type { KyselyDB } from "@yuuka/db";
 
 export class MyRequest<T> {
   constructor(
     private readonly params: {
       body: T;
-      db: Kysely<Database>;
+      db: KyselyDB;
       userId?: number;
     },
   ) {}
@@ -22,7 +21,7 @@ export class MyRequest<T> {
     return v;
   }
 
-  get db(): Kysely<Database> {
+  get db(): KyselyDB {
     return this.params.db;
   }
 }
