@@ -7,6 +7,10 @@ import * as R from "remeda";
 import { JournalEntryLine } from "../index.js";
 import { AccountCode } from "../masterdata/types.js";
 
+/**
+ * 계정코드를 묶어서 볼수 있어야한다.
+ * 102_000으로 검색하면 102_000 ~ 102_999까지 모아서 보기
+ */
 const load = async (
   db: KyselyDB,
   code: number,
@@ -37,15 +41,12 @@ const load = async (
     return [];
   }
 
-  // TODO: 계정코드를 묶어서 볼수 있어야한다.
-  // 102001 -> 102002 송금은 102로 검색하면 나와야한다.
-  // 이런 경우 entry_id 1개에 n개의 line이 발생할 수 있다!
-  const entryLineMap = new Map(
-    lines.map((line) => {
-      const next = R.pipe(line, JournalEntryLine.fromRow);
-      return [line.entryId, next];
-    }),
-  );
+  const entryLineMap = new Map<string, JournalEntryLine[]>();
+  for (const line of lines) {
+    const next = R.pipe(line, JournalEntryLine.fromRow);
+    const prev = entryLineMap.get(line.entryId) ?? [];
+    entryLineMap.set(line.entryId, [...prev, next]);
+  }
 
   // 날짜순으로 정렬된 journal entry로 보고싶다
   const rows = await db
@@ -61,19 +62,20 @@ const load = async (
     .orderBy("date", "asc")
     .execute();
 
-  const ledgers = rows.map((entry) => {
-    const entryLine = entryLineMap.get(entry.entryId);
-    if (!entryLine) {
+  const ledgers = rows.flatMap((entry) => {
+    const lines = entryLineMap.get(entry.entryId);
+    if (!lines) {
       throw new Error("entryLine not found");
     }
 
-    return {
+    // TODO: ledger 타입 어떻게 정의하지?
+    return lines.map((line) => ({
       id: entry.entryId,
       brief: entry.brief,
       date: entry.date,
-      debit: entryLine._tag === "debit" ? entryLine.debit : 0,
-      credit: entryLine._tag === "credit" ? entryLine.credit : 0,
-    };
+      debit: line._tag === "debit" ? line.debit : 0,
+      credit: line._tag === "credit" ? line.credit : 0,
+    }));
   });
   return ledgers;
 };

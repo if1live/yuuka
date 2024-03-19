@@ -79,7 +79,15 @@ const findByDateRange = async (
   return entries;
 };
 
+const insertBulk = async (db: KyselyDB, rows: JournalEntrySchema.NewRow[]) => {
+  return await db
+    .insertInto(JournalEntrySchema.name)
+    .values(rows)
+    .executeTakeFirstOrThrow();
+};
+
 export const JournalEntryRepository = {
   findById,
   findByDateRange,
+  insertBulk,
 };
