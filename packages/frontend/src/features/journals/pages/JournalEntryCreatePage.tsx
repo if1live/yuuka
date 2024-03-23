@@ -27,8 +27,8 @@ export const JournalEntryCreatePage = () => {
     date,
     id,
     lines: [
-      { code: 930_000, _tag: "debit", debit: 0 },
-      { code: 960_000, _tag: "credit", credit: 0 },
+      { code: 960_000, _tag: "debit", debit: 0 }, // 잡손실
+      { code: 930_000, _tag: "credit", credit: 0 }, // 잡이익
     ],
   };
 
