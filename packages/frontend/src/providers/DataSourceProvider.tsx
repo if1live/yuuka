@@ -95,7 +95,7 @@ const DataSourceNode_DragAndDrop = (props: Props) => {
 const DataSourceNode_Demo = (props: Props) => {
   const { setDataSource, setError } = props;
 
-  // 예제 파일 뭐로 만들지?
+  // TODO: 예제 파일 뭐로 만들지?
   const url = "/yuuka/sqlite.db";
 
   const load = async () => {
@@ -122,10 +122,8 @@ const DataSourceNode_Demo = (props: Props) => {
   );
 };
 
-const DataSourceNode_Authenticate = (props: Props) => {
+const DataSourceNode_Supabase = (props: Props) => {
   const { setDataSource, setError } = props;
-
-  const [username, setUsername] = useState<string>("");
 
   const load = async () => {
     try {
@@ -133,7 +131,7 @@ const DataSourceNode_Authenticate = (props: Props) => {
       const dialect = await DataSourceValue.createDialect_blank();
       const db = DataSourceValue.createKysely(dialect);
       await Database.prepareSchema(db);
-      setDataSource({ _tag: "network", db, username, app: createApp(db) });
+      setDataSource({ _tag: "supabase", db, app: createApp(db) });
     } catch (e) {
       setError(e as Error);
     }
@@ -141,24 +139,10 @@ const DataSourceNode_Authenticate = (props: Props) => {
 
   return (
     <>
-      <h3>sign in</h3>
-      <Form>
-        <FormField>
-          <label>username</label>
-          <input type="text" onChange={(e) => setUsername(e.target.value)} />
-        </FormField>
-
-        <FormField>
-          <label>password</label>
-          <input type="password" />
-        </FormField>
-
-        <FormField>
-          <Button type="submit" onClick={load} disabled={username.length === 0}>
-            sign in
-          </Button>
-        </FormField>
-      </Form>
+      <h3>supabase</h3>
+      <Button type="button" onClick={load}>
+        authenticate
+      </Button>
     </>
   );
 };
@@ -166,16 +150,10 @@ const DataSourceNode_Authenticate = (props: Props) => {
 const DataSourceNode_Server = (props: Props) => {
   const { setDataSource, setError } = props;
 
-  const [hostname, setHostname] = useState("127.0.0.1");
-  const [port, setPort] = useState(3000);
+  const [endpoint, setEndpoint] = useState("http://127.0.0.1:3000");
 
   const load = async () => {
-    try {
-      const endpoint = `://${hostname}:${port}`;
-      setDataSource({ _tag: "server", endpoint });
-    } catch (e) {
-      setError(e as Error);
-    }
+    setDataSource({ _tag: "server", endpoint });
   };
 
   return (
@@ -183,20 +161,11 @@ const DataSourceNode_Server = (props: Props) => {
       <h3>api server</h3>
       <Form>
         <FormField>
-          <label>hostname</label>
+          <label>endpoint</label>
           <input
             type="text"
-            onChange={(e) => setHostname(e.target.value)}
-            value={hostname}
-          />
-        </FormField>
-
-        <FormField>
-          <label>port</label>
-          <input
-            type="number"
-            onChange={(e) => setPort(e.target.valueAsNumber)}
-            value={port}
+            onChange={(e) => setEndpoint(e.target.value)}
+            value={endpoint}
           />
         </FormField>
 
@@ -204,7 +173,7 @@ const DataSourceNode_Server = (props: Props) => {
           <Button
             type="submit"
             onClick={() => load()}
-            disabled={hostname.length === 0}
+            disabled={endpoint.length === 0}
           >
             connect
           </Button>
@@ -241,7 +210,7 @@ export const DataSourceProvider = (props: PropsWithChildren) => {
           setError={setError}
         />
 
-        <DataSourceNode_Authenticate
+        <DataSourceNode_Supabase
           setDataSource={setDataSource}
           setError={setError}
         />

@@ -1,18 +1,15 @@
-import { useContext } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Container, Menu } from "semantic-ui-react";
-import { AuthContext } from "../contexts/AuthContext";
+import { Button, Container, Menu } from "semantic-ui-react";
 
 export const Root = () => {
   const loc = useLocation();
-  const auth = useContext(AuthContext);
 
   const checkActive = (prefix: string) => loc.pathname.startsWith(prefix);
 
   return (
     <>
       <Container>
-        <Menu fiexed="top">
+        <Menu fiexed="top" size="small">
           <Menu.Item as={Link} to="/" header>
             yuuka
           </Menu.Item>
@@ -25,7 +22,14 @@ export const Root = () => {
             ledger
           </Menu.Item>
 
-          <Menu.Item position="right">UserID: {auth.userId}</Menu.Item>
+          <Menu.Item
+            as={Link}
+            to="/user"
+            active={checkActive("/user")}
+            position="right"
+          >
+            user
+          </Menu.Item>
         </Menu>
       </Container>
 

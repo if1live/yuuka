@@ -1,68 +1,50 @@
-import { userSpecification } from "@yuuka/core";
-import { type PropsWithChildren, useContext } from "react";
-import useSWR from "swr";
-import { StringParam, useQueryParams } from "use-query-params";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import type { Session } from "@supabase/supabase-js";
+import { type PropsWithChildren, useContext, useEffect, useState } from "react";
+import { supabase } from "../constants";
 import { AuthContext, type AuthState } from "../contexts/AuthContext";
 import { DataSourceContext } from "../contexts/DataSourceContext";
-import { setAuthToken } from "../fetchers";
 
-// react-router 안쓰고 query string 손대는 편법
-// https://github.com/pbeshai/use-query-params/issues/237#issuecomment-1825975483
-export const myQueryParams = {
-  username: StringParam,
-} as const;
-
-// 인증 사용하면 db 업로드, 다운로드 쓸수 있다
 export const AuthenticateProvider = (props: PropsWithChildren) => {
-  const database = useContext(DataSourceContext);
+  const dataSource = useContext(DataSourceContext);
 
-  // 샌드박스 모드에서는 인증 안쓴다.
-  if (database._tag === "sandbox") {
-    return <>{props.children}</>;
+  return dataSource._tag === "supabase" ? (
+    <AuthenticateProvider_Supabase {...props} />
+  ) : (
+    <>{props.children}</>
+  );
+};
+
+const AuthenticateProvider_Supabase = (props: PropsWithChildren) => {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (!session) {
+    return (
+      <Auth
+        supabaseClient={supabase}
+        appearance={{ theme: ThemeSupa }}
+        providers={[]}
+      />
+    );
   }
-
-  // TODO: 서버방식에서는 다른 인증을 쓸거같다
-  if (database._tag === "server") {
-    return <>{props.children}</>;
-  }
-
-  const [query, setQuery] = useQueryParams(myQueryParams);
-
-  let username = "";
-  if (query.username) {
-    username = query.username;
-  }
-  if (database.username) {
-    username = database.username;
-  }
-  if (!username) {
-    return <div>username not found</div>;
-  }
-
-  const sheet = userSpecification.dataSheet;
-  const spec = sheet.authenticate;
-  type Req = (typeof spec)["inout"]["_in"];
-  type Resp = (typeof spec)["inout"]["_out"];
-
-  const req: Req = { username };
-  const qs = new URLSearchParams(req);
-  const endpoint = `${userSpecification.resource}${spec.endpoint.path}?${qs}`;
-  const { data, error, isLoading } = useSWR(endpoint);
-  const resp = data as Resp;
-
-  if (error) {
-    return <div>failed to authenticate</div>;
-  }
-  if (isLoading) {
-    return <div>loading...</div>;
-  }
-
-  // TODO: fetcher로 auth token 넘기는 방법 생각나지 않아서 변수 깡을 설정
-  setAuthToken(resp.authToken);
 
   const store: AuthState = {
-    userId: resp.userId,
-    authToken: resp.authToken,
+    session,
   };
 
   return (

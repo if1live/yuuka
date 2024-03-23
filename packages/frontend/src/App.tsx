@@ -4,8 +4,6 @@ import {
   createHashRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { QueryParamProvider } from "use-query-params";
-import { WindowHistoryAdapter } from "use-query-params/adapters/window";
 import "./App.css";
 import { AuthenticateProvider } from "./providers/AuthenticateProvider";
 import { DataSourceProvider } from "./providers/DataSourceProvider";
@@ -13,12 +11,14 @@ import { MasterDataProvider } from "./providers/MasterDataProvider";
 import { JournalRouter } from "./routes/JournalRoute";
 import { LedgerRouter } from "./routes/LedgerRoute";
 import { Root } from "./routes/Root";
+import { UserRouter } from "./routes/UserRoute";
 
 const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
       <Route path="/journal/*" element={<JournalRouter />} />
       <Route path="/ledger/*" element={<LedgerRouter />} />
+      <Route path="/user/*" element={<UserRouter />} />
     </Route>,
   ),
   {
@@ -31,13 +31,11 @@ const router = createHashRouter(
 );
 
 export const App = () => (
-  <QueryParamProvider adapter={WindowHistoryAdapter}>
-    <DataSourceProvider>
-      <AuthenticateProvider>
-        <MasterDataProvider>
-          <RouterProvider router={router} />
-        </MasterDataProvider>
-      </AuthenticateProvider>
-    </DataSourceProvider>
-  </QueryParamProvider>
+  <DataSourceProvider>
+    <AuthenticateProvider>
+      <MasterDataProvider>
+        <RouterProvider router={router} />
+      </MasterDataProvider>
+    </AuthenticateProvider>
+  </DataSourceProvider>
 );

@@ -32,13 +32,12 @@ type DataSourceValue_Sandbox = {
 };
 
 /**
- * 백엔드 어딘가 sqlite db 자체를 읽고 쓰는 기능을 만든다.
+ * supabase storage로 sqlite db 자체를 읽고 쓰는 기능
  * 웹에서 장부를 수정할때 필요하다
  */
-type DataSourceValue_Network = {
-  _tag: "network";
+type DataSourceValue_Supabase = {
+  _tag: "supabase";
   db: KyselyDB;
-  username: string;
   app: Hono;
 };
 
@@ -53,7 +52,7 @@ type DataSourceValue_Server = {
 
 export type DataSourceValue =
   | DataSourceValue_Sandbox
-  | DataSourceValue_Network
+  | DataSourceValue_Supabase
   | DataSourceValue_Server;
 
 const defaultValue: DataSourceValue = {

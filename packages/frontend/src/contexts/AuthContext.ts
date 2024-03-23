@@ -1,13 +1,12 @@
+import type { Session } from "@supabase/supabase-js";
 import { createContext } from "react";
 
 export interface AuthState {
-  userId: number;
-  authToken: string;
+  session: Session | null;
 }
 
 const defaultValues: AuthState = {
-  userId: 0,
-  authToken: "",
+  session: null,
 };
 
 export const AuthContext = createContext(defaultValues);
