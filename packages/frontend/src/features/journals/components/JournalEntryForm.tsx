@@ -100,6 +100,12 @@ export const JournalEntryForm = (props: {
     setValue("lines", lines);
   };
 
+  const resetLines = () => {
+    // 날짜는 이어서 작성하고 싶다.
+    setValue("brief", props.defaultValue.brief);
+    setValue("lines", props.defaultValue.lines);
+  };
+
   const removeLine = (code: number) => {
     const lines = values.lines.filter((x) => x.code !== code);
     setValue("lines", lines);
@@ -273,6 +279,7 @@ export const JournalEntryForm = (props: {
             debit={addLine_debit}
             credit={addLine_credit}
             swap={swapLines}
+            reset={resetLines}
           />
         </FormField>
 
@@ -315,6 +322,7 @@ const DebitCreditTableActions = (props: {
   debit: () => void;
   credit: () => void;
   swap: () => void;
+  reset: () => void;
 }) => (
   <ButtonGroup size="mini">
     <Button type="button" onClick={props.debit}>
@@ -327,6 +335,10 @@ const DebitCreditTableActions = (props: {
     <ButtonOr />
     <Button type="button" onClick={props.swap}>
       swap
+    </Button>
+    <ButtonOr />
+    <Button type="button" onClick={props.reset}>
+      reset
     </Button>
   </ButtonGroup>
 );
