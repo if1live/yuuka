@@ -5,7 +5,6 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import "./App.css";
-import { AuthenticateProvider } from "./providers/AuthenticateProvider";
 import { DataSourceProvider } from "./providers/DataSourceProvider";
 import { MasterDataProvider } from "./providers/MasterDataProvider";
 import { JournalRouter } from "./routes/JournalRoute";
@@ -32,10 +31,8 @@ const router = createHashRouter(
 
 export const App = () => (
   <DataSourceProvider>
-    <AuthenticateProvider>
-      <MasterDataProvider>
-        <RouterProvider router={router} />
-      </MasterDataProvider>
-    </AuthenticateProvider>
+    <MasterDataProvider>
+      <RouterProvider router={router} />
+    </MasterDataProvider>
   </DataSourceProvider>
 );

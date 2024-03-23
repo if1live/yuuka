@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import { supabase } from "../constants";
-import { AuthContext } from "../contexts/AuthContext";
+import { DataSourceContext } from "../contexts/DataSourceContext";
 
 export const UserRouter = () => (
   <Routes>
@@ -11,7 +11,9 @@ export const UserRouter = () => (
 );
 
 const UserRootPage = () => {
-  const { session } = useContext(AuthContext);
+  const dataSource = useContext(DataSourceContext);
+  const session = dataSource._tag === "supabase" ? dataSource.session : null;
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
   };

@@ -1,3 +1,4 @@
+import type { Session } from "@supabase/supabase-js";
 import type { Database, KyselyDB } from "@yuuka/db";
 import type { Hono } from "hono";
 import { CamelCasePlugin, type Dialect, Kysely } from "kysely";
@@ -39,6 +40,7 @@ type DataSourceValue_Supabase = {
   _tag: "supabase";
   db: KyselyDB;
   app: Hono;
+  session: Session;
 };
 
 /**
