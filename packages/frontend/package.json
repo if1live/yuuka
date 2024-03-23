@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
+    "check:watch": "tsc --watch --noEmit",
     "dev": "vite",
     "fix": "biome check --apply-unsafe .",
     "lint": "biome check .",
