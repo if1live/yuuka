@@ -79,6 +79,27 @@ export const JournalEntryForm = (props: {
     setValue("lines", lines);
   };
 
+  const swapLines = () => {
+    const lines_debit = JournalEntryLine.filter_credit(values.lines).map(
+      (x): JournalEntryLine => ({
+        _tag: "debit",
+        code: x.code,
+        debit: x.credit,
+      }),
+    );
+
+    const lines_credit = JournalEntryLine.filter_debit(values.lines).map(
+      (x): JournalEntryLine => ({
+        _tag: "credit",
+        code: x.code,
+        credit: x.debit,
+      }),
+    );
+
+    const lines = [...lines_debit, ...lines_credit];
+    setValue("lines", lines);
+  };
+
   const removeLine = (code: number) => {
     const lines = values.lines.filter((x) => x.code !== code);
     setValue("lines", lines);
@@ -153,7 +174,7 @@ export const JournalEntryForm = (props: {
           <DebitTableHeader />
           <TableBody>
             {values.lines.map((line, idx) => {
-              const key = `line-${idx}`;
+              const key = `${line._tag}-${line.code}`;
               const accounts = filterAvailableAccountCodes(line);
 
               if (line._tag !== "debit") {
@@ -202,7 +223,7 @@ export const JournalEntryForm = (props: {
           <CreditTableHeader />
           <TableBody>
             {values.lines.map((line, idx) => {
-              const key = `line-${idx}`;
+              const key = `${line._tag}-${line.code}`;
               const accounts = filterAvailableAccountCodes(line);
 
               if (line._tag !== "credit") {
@@ -251,6 +272,7 @@ export const JournalEntryForm = (props: {
           <DebitCreditTableActions
             debit={addLine_debit}
             credit={addLine_credit}
+            swap={swapLines}
           />
         </FormField>
 
@@ -292,6 +314,7 @@ const CreditTableHeader = () => (
 const DebitCreditTableActions = (props: {
   debit: () => void;
   credit: () => void;
+  swap: () => void;
 }) => (
   <ButtonGroup size="mini">
     <Button type="button" onClick={props.debit}>
@@ -300,6 +323,10 @@ const DebitCreditTableActions = (props: {
     <ButtonOr />
     <Button type="button" onClick={props.credit}>
       credit
+    </Button>
+    <ButtonOr />
+    <Button type="button" onClick={props.swap}>
+      swap
     </Button>
   </ButtonGroup>
 );
