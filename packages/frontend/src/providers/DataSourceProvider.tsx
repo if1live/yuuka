@@ -92,13 +92,12 @@ const DataSourceNode_DragAndDrop = (props: Props) => {
   );
 };
 
-const DataSourceNode_Demo = (props: Props) => {
+const DataSourceNode_RemoteFile = (props: Props) => {
   const { setDataSource, setError } = props;
 
-  // TODO: 예제 파일 뭐로 만들지?
-  const url = "/yuuka/sqlite.db";
+  const [url, setUrl] = useState("/yuuka/sqlite.db");
 
-  const load = async () => {
+  const handleSubmit = async () => {
     try {
       const resp = await fetch(url);
       const arrayBuffer = await resp.arrayBuffer();
@@ -114,18 +113,30 @@ const DataSourceNode_Demo = (props: Props) => {
 
   return (
     <>
-      <h3>demo project</h3>
-      <Button type="button" onClick={load}>
-        demo
-      </Button>
+      <h3>remote file</h3>
+      <Form onSubmit={handleSubmit}>
+        <FormField>
+          <input
+            type="url"
+            onChange={(e) => setUrl(e.target.value)}
+            value={url}
+          />
+        </FormField>
+
+        <FormField>
+          <Button type="submit" disabled={url.length === 0}>
+            fetch
+          </Button>
+        </FormField>
+      </Form>
     </>
   );
 };
 
-const DataSourceNode_Supabase = (props: Props) => {
+const DataSourceNode_Cloud = (props: Props) => {
   const { setDataSource, setError } = props;
 
-  const load = async () => {
+  const load_supabase = async () => {
     try {
       // 껍데기만 만들고 나머지 정보는 나중에 채운다
       const dialect = await DataSourceValue.createDialect_blank();
@@ -139,9 +150,9 @@ const DataSourceNode_Supabase = (props: Props) => {
 
   return (
     <>
-      <h3>supabase</h3>
-      <Button type="button" onClick={load}>
-        authenticate
+      <h3>cloud</h3>
+      <Button type="button" onClick={load_supabase}>
+        supabase
       </Button>
     </>
   );
@@ -152,16 +163,15 @@ const DataSourceNode_Server = (props: Props) => {
 
   const [endpoint, setEndpoint] = useState("http://127.0.0.1:3000");
 
-  const load = async () => {
+  const handleSubmit = async () => {
     setDataSource({ _tag: "server", endpoint });
   };
 
   return (
     <>
       <h3>api server</h3>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <FormField>
-          <label>endpoint</label>
           <input
             type="text"
             onChange={(e) => setEndpoint(e.target.value)}
@@ -170,11 +180,7 @@ const DataSourceNode_Server = (props: Props) => {
         </FormField>
 
         <FormField>
-          <Button
-            type="submit"
-            onClick={() => load()}
-            disabled={endpoint.length === 0}
-          >
+          <Button type="submit" disabled={endpoint.length === 0}>
             connect
           </Button>
         </FormField>
@@ -210,7 +216,7 @@ export const DataSourceProvider = (props: PropsWithChildren) => {
           setError={setError}
         />
 
-        <DataSourceNode_Supabase
+        <DataSourceNode_Cloud
           setDataSource={setDataSource}
           setError={setError}
         />
@@ -220,7 +226,7 @@ export const DataSourceProvider = (props: PropsWithChildren) => {
           setError={setError}
         />
 
-        <DataSourceNode_Demo
+        <DataSourceNode_RemoteFile
           setDataSource={setDataSource}
           setError={setError}
         />
