@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# https://notes.dt.in.th/ViteBundleSize
+stats.html
