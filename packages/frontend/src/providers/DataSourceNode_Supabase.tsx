@@ -13,6 +13,10 @@ export const DataSourceNode_Supabase = (props: DataSourceNodeProps) => {
 
   const [session, setSession] = useState<Session | null>(null);
 
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -77,6 +81,10 @@ export const DataSourceNode_Supabase = (props: DataSourceNodeProps) => {
         <ButtonOr />
         <Button type="button" onClick={() => load_browser(session)}>
           browser
+        </Button>
+        <ButtonOr />
+        <Button type="button" onClick={signOut} negative>
+          sign out
         </Button>
       </ButtonGroup>
     </>
