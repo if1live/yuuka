@@ -15,11 +15,11 @@ export const DataSourceNode_DragAndDrop = (props: DataSourceNodeProps) => {
 
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const dialect =
+      const { dialect, sqlite } =
         await DataSourceValue.createDialect_arrayBuffer(arrayBuffer);
       const db = DataSourceValue.createKysely(dialect);
       const app = createApp(db);
-      setDataSource({ _tag: "sandbox", db, app });
+      setDataSource({ _tag: "sandbox", sqlite, db, app });
     } catch (e) {
       setError(e as Error);
     }

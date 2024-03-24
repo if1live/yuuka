@@ -8,12 +8,12 @@ export const DataSourceNode_Blank = (props: DataSourceNodeProps) => {
 
   const load = async () => {
     try {
-      const dialect = await DataSourceValue.createDialect_blank();
+      const { dialect, sqlite } = await DataSourceValue.createDialect_blank();
       const db = DataSourceValue.createKysely(dialect);
       await Database.prepareSchema(db);
 
       const app = createApp(db);
-      setDataSource({ _tag: "sandbox", db, app });
+      setDataSource({ _tag: "sandbox", sqlite, db, app });
     } catch (e) {
       setError(e as Error);
     }

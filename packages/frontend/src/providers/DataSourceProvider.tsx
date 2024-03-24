@@ -74,7 +74,7 @@ export const DataSourceProvider = (props: PropsWithChildren) => {
   if (dataSource._tag === "server") {
     return (
       <DataSourceContext.Provider value={dataSource}>
-        <SWRConfig value={{ fetcher: fetcherWithHttp }}>
+        <SWRConfig value={{ fetcher: fetcherWithHttp() }}>
           {props.children}
         </SWRConfig>
       </DataSourceContext.Provider>

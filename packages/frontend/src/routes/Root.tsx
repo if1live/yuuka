@@ -1,5 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Button, Container, Menu } from "semantic-ui-react";
+import { Container, Menu, MenuMenu } from "semantic-ui-react";
+import { SupabaseUploadButton } from "../features/users/components/SupabaseUploadButton";
 
 export const Root = () => {
   const loc = useLocation();
@@ -22,14 +23,15 @@ export const Root = () => {
             ledger
           </Menu.Item>
 
-          <Menu.Item
-            as={Link}
-            to="/user"
-            active={checkActive("/user")}
-            position="right"
-          >
-            user
-          </Menu.Item>
+          <MenuMenu position="right">
+            <Menu.Item>
+              <SupabaseUploadButton />
+            </Menu.Item>
+
+            <Menu.Item as={Link} to="/user" active={checkActive("/user")}>
+              user
+            </Menu.Item>
+          </MenuMenu>
         </Menu>
       </Container>
 

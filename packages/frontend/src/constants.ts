@@ -1,7 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const TOKEN_SECRET = "helloworld";
-
 const SUPABASE_URL = "https://mjrrhdjdbsaystkbxvup.supabase.co";
 
 // anon key는 어차피 클라가 알아야하니까 대충 때려박음

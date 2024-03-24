@@ -4,7 +4,7 @@ import type { Hono } from "hono";
 import { CamelCasePlugin, type Dialect, Kysely } from "kysely";
 import { SqlJsDialect } from "kysely-wasm";
 import { createContext } from "react";
-import initSqlJs from "sql.js";
+import initSqlJs, { type Database as SqliteDatabase } from "sql.js";
 
 /**
  * locateFile을 설정하지 않으면 wasm 제대로 못받아서 터진다
@@ -28,6 +28,7 @@ const prepareSqlJs = async () => {
  */
 type DataSourceValue_Sandbox = {
   _tag: "sandbox";
+  sqlite: SqliteDatabase;
   db: KyselyDB;
   app: Hono;
 };
@@ -38,6 +39,7 @@ type DataSourceValue_Sandbox = {
  */
 type DataSourceValue_Supabase = {
   _tag: "supabase";
+  sqlite: SqliteDatabase;
   db: KyselyDB;
   app: Hono;
   session: Session;
@@ -68,14 +70,20 @@ const createDialect_arrayBuffer = async (buffer: ArrayBuffer) => {
   const sqlJs = await prepareSqlJs();
   const database = new sqlJs.Database(new Uint8Array(buffer));
   const dialect = new SqlJsDialect({ database });
-  return dialect;
+  return {
+    sqlite: database,
+    dialect,
+  };
 };
 
 const createDialect_blank = async () => {
   const sqlJs = await prepareSqlJs();
   const database = new sqlJs.Database();
   const dialect = new SqlJsDialect({ database });
-  return dialect;
+  return {
+    sqlite: database,
+    dialect,
+  };
 };
 
 const createKysely = (dialect: Dialect) => {

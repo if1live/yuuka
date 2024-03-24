@@ -7,11 +7,13 @@ import { Button, ButtonGroup, ButtonOr } from "semantic-ui-react";
 import { supabase } from "../constants";
 import { DataSourceValue } from "../contexts/DataSourceContext";
 import { type DataSourceNodeProps, createApp } from "./dataSourceNodes";
+import { downloadBook } from "./networks";
 
 export const DataSourceNode_Supabase = (props: DataSourceNodeProps) => {
   const { setDataSource, setError } = props;
 
   const [session, setSession] = useState<Session | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -33,26 +35,38 @@ export const DataSourceNode_Supabase = (props: DataSourceNodeProps) => {
 
   const load_remote = async (session: Session) => {
     try {
-      // 껍데기만 만들고 나머지 정보는 나중에 채운다
-      // TODO: 인증 정보로 DB정보 가져오기?
-      const dialect = await DataSourceValue.createDialect_blank();
+      setLoading(true);
+      const arraybuffer = await downloadBook(session.user.id);
+      const { dialect, sqlite } =
+        await DataSourceValue.createDialect_arrayBuffer(arraybuffer);
       const db = DataSourceValue.createKysely(dialect);
-      await Database.prepareSchema(db);
-      setDataSource({ _tag: "supabase", db, app: createApp(db), session });
+      setDataSource({
+        _tag: "supabase",
+        sqlite,
+        db,
+        app: createApp(db),
+        session,
+      });
     } catch (e) {
       setError(e as Error);
+    } finally {
+      setLoading(false);
     }
   };
 
   // TODO: 브라우저에 저장된 데이터 그대로 쓰기
   const load_browser = async (session: Session) => {
     try {
-      // 껍데기만 만들고 나머지 정보는 나중에 채운다
-      // TODO: 인증 정보로 DB정보 가져오기?
-      const dialect = await DataSourceValue.createDialect_blank();
+      const { dialect, sqlite } = await DataSourceValue.createDialect_blank();
       const db = DataSourceValue.createKysely(dialect);
       await Database.prepareSchema(db);
-      setDataSource({ _tag: "supabase", db, app: createApp(db), session });
+      setDataSource({
+        _tag: "supabase",
+        sqlite,
+        db,
+        app: createApp(db),
+        session,
+      });
     } catch (e) {
       setError(e as Error);
     }
@@ -75,7 +89,11 @@ export const DataSourceNode_Supabase = (props: DataSourceNodeProps) => {
     <>
       <h3>supabase</h3>
       <ButtonGroup>
-        <Button type="button" onClick={() => load_remote(session)}>
+        <Button
+          type="button"
+          onClick={() => load_remote(session)}
+          loading={loading}
+        >
           remote
         </Button>
         <ButtonOr />
