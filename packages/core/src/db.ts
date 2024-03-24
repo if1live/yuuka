@@ -2,12 +2,10 @@ import type { Database, KyselyDB } from "@yuuka/db";
 import {
   CamelCasePlugin,
   Kysely,
-  PostgresDialect,
   SqliteDialect,
   WithSchemaPlugin,
 } from "kysely";
 import type { Dialect } from "kysely";
-import { default as Postgres } from "pg";
 import { settings } from "./settings.js";
 
 const createSqliteDialect = async (filename: string) => {
@@ -24,27 +22,8 @@ const createSqliteDialect = async (filename: string) => {
   };
 };
 
-const createPostgresDialect = (databaseUrl: string) => {
-  const pool = new Postgres.Pool({
-    connectionString: databaseUrl,
-  });
-
-  const dialect = new PostgresDialect({
-    pool,
-  });
-
-  return {
-    dialect,
-    pool,
-  };
-};
-
 // TODO: 로컬에서 in-memory sqlite 사용하는게 없어져야 교체할 수 있음
 const createDialect = async (url: string): Promise<{ dialect: Dialect }> => {
-  if (url.startsWith("postgres://")) {
-    return createPostgresDialect(url);
-  }
-
   return await createSqliteDialect(url);
 };
 

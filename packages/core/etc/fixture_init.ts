@@ -18,7 +18,6 @@ import {
   WithSchemaPlugin,
   sql,
 } from "kysely";
-import { default as Postgres } from "pg";
 import * as R from "remeda";
 import { JournalEntryService } from "../src/journals/JournalEntryService.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
@@ -167,31 +166,10 @@ const main_sqlite = async () => {
   await insertBulk(db);
 };
 
-const main_pg = async () => {
-  const databaseUrl =
-    "postgres://localhost_dev:localhost_dev@localhost:5432/localhost_dev";
-  const pool = new Postgres.Pool({
-    connectionString: databaseUrl,
-  });
-  const dialect = new PostgresDialect({
-    pool,
-  });
-  const db = new Kysely<Database>({
-    dialect,
-    plugins: [new WithSchemaPlugin("yuuka"), new CamelCasePlugin()],
-  });
-
-  await deleteAll(db);
-  await insertBulk(db);
-};
-
 const target = process.argv[process.argv.length - 1];
 switch (target) {
   case "sqlite":
     await main_sqlite();
-    break;
-  case "pg":
-    await main_pg();
     break;
   default:
     console.log("invalid target");
