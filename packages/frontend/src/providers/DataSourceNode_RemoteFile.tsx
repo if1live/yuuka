@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Form, FormField } from "semantic-ui-react";
 import { DataSourceValue } from "../contexts/DataSourceContext";
+import { LocalStore } from "../stores/LocalStore";
 import { type DataSourceNodeProps, createApp } from "./dataSourceNodes";
 
 export const DataSourceNode_RemoteFile = (props: DataSourceNodeProps) => {
@@ -12,8 +13,8 @@ export const DataSourceNode_RemoteFile = (props: DataSourceNodeProps) => {
     try {
       const resp = await fetch(url);
       const arrayBuffer = await resp.arrayBuffer();
-      const { dialect, sqlite } =
-        await DataSourceValue.createDialect_arrayBuffer(arrayBuffer);
+      const sqlite = await LocalStore.initial(arrayBuffer);
+      const dialect = DataSourceValue.createDialect(sqlite);
       const db = DataSourceValue.createKysely(dialect);
       const app = createApp(db);
       setDataSource({ _tag: "sandbox", sqlite, db, app });

@@ -4,23 +4,7 @@ import type { Hono } from "hono";
 import { CamelCasePlugin, type Dialect, Kysely } from "kysely";
 import { SqlJsDialect } from "kysely-wasm";
 import { createContext } from "react";
-import initSqlJs, { type Database as SqliteDatabase } from "sql.js";
-
-/**
- * locateFile을 설정하지 않으면 wasm 제대로 못받아서 터진다
- * https://stackoverflow.com/a/75806317
- * https://sql.js.org/#/?id=usage
- * locateFile을 외부로 쓰는건 좀 멍청한거같지만 일단 작동하니까 유지
- *
- * top-level async/await 함수로 쓰면 vite에서 빌드 에러 발생!
- * 함수 자체를 async로 유지하고 사용하는 지점에서 await
- */
-const prepareSqlJs = async () => {
-  const sqlJs = await initSqlJs({
-    locateFile: (file) => `https://sql.js.org/dist/${file}`,
-  });
-  return sqlJs;
-};
+import type { Database as SqliteDatabase } from "sql.js";
 
 /**
  * sqlite 파일을 브라우저에 집어넣고 돌리기
@@ -66,24 +50,8 @@ const defaultValue: DataSourceValue = {
 
 export const DataSourceContext = createContext<DataSourceValue>(defaultValue);
 
-const createDialect_arrayBuffer = async (buffer: ArrayBuffer) => {
-  const sqlJs = await prepareSqlJs();
-  const database = new sqlJs.Database(new Uint8Array(buffer));
-  const dialect = new SqlJsDialect({ database });
-  return {
-    sqlite: database,
-    dialect,
-  };
-};
-
-const createDialect_blank = async () => {
-  const sqlJs = await prepareSqlJs();
-  const database = new sqlJs.Database();
-  const dialect = new SqlJsDialect({ database });
-  return {
-    sqlite: database,
-    dialect,
-  };
+const createDialect = (database: SqliteDatabase) => {
+  return new SqlJsDialect({ database });
 };
 
 const createKysely = (dialect: Dialect) => {
@@ -97,7 +65,6 @@ const createKysely = (dialect: Dialect) => {
 
 export const DataSourceValue = {
   defaultValue,
-  createDialect_arrayBuffer,
-  createDialect_blank,
   createKysely,
+  createDialect,
 };

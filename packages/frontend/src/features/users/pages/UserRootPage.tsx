@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { Button } from "semantic-ui-react";
 import { supabase } from "../../../constants";
 import { DataSourceContext } from "../../../contexts/DataSourceContext";
-import { SupabaseUploadButton } from "../components/SupabaseUploadButton";
 
 export const UserRootPage = () => {
   const dataSource = useContext(DataSourceContext);
@@ -15,13 +14,14 @@ export const UserRootPage = () => {
   return (
     <>
       <h1>user</h1>
+      <h2>data source: {dataSource._tag}</h2>
 
-      <h2>supabase</h2>
-      <Button onClick={signOut}>Sign Out</Button>
-
-      <SupabaseUploadButton />
-
-      <pre>{JSON.stringify(session, null, 2)}</pre>
+      {session ? (
+        <>
+          <h2>supabase</h2>
+          <Button onClick={signOut}>Sign Out</Button>
+        </>
+      ) : null}
     </>
   );
 };

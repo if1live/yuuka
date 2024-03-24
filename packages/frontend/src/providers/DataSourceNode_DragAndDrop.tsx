@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { DataSourceValue } from "../contexts/DataSourceContext";
+import { LocalStore } from "../stores/LocalStore";
 import { type DataSourceNodeProps, createApp } from "./dataSourceNodes";
 
 export const DataSourceNode_DragAndDrop = (props: DataSourceNodeProps) => {
@@ -15,8 +16,8 @@ export const DataSourceNode_DragAndDrop = (props: DataSourceNodeProps) => {
 
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const { dialect, sqlite } =
-        await DataSourceValue.createDialect_arrayBuffer(arrayBuffer);
+      const sqlite = await LocalStore.initial(arrayBuffer);
+      const dialect = DataSourceValue.createDialect(sqlite);
       const db = DataSourceValue.createKysely(dialect);
       const app = createApp(db);
       setDataSource({ _tag: "sandbox", sqlite, db, app });

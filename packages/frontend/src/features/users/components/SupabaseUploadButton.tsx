@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Button } from "semantic-ui-react";
 import { supabase } from "../../../constants";
 import { DataSourceContext } from "../../../contexts/DataSourceContext";
-import { uploadBook } from "../../../providers/networks";
+import { RemoteStore } from "../../../stores/RemoteStore";
 
 const loadUserId = async () => {
   const { data, error } = await supabase.auth.getSession();
@@ -30,7 +30,7 @@ export const SupabaseUploadButton = () => {
     try {
       setLoading(true);
       const userId = await loadUserId();
-      const result = await uploadBook(userId, sqlite);
+      const result = await RemoteStore.upload(userId, sqlite);
       console.log(result);
     } catch (e) {
       console.error(e);

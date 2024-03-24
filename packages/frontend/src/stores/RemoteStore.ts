@@ -1,11 +1,12 @@
 import type { Database } from "sql.js";
 import { supabase } from "../constants";
+import { prepareSqlJs } from "./core";
 
 const bucket = "yuuka";
 
 const getBookFilePath = (userId: string) => `${userId}/book.db`;
 
-export const uploadBook = async (userId: string, sqlite: Database) => {
+const upload = async (userId: string, sqlite: Database) => {
   const fp = getBookFilePath(userId);
   const bytes = sqlite.export();
 
@@ -22,11 +23,23 @@ export const uploadBook = async (userId: string, sqlite: Database) => {
   return data;
 };
 
-export const downloadBook = async (userId: string) => {
+const downloadArrayBuffer = async (userId: string): Promise<ArrayBuffer> => {
   const fp = getBookFilePath(userId);
   const { data, error } = await supabase.storage.from(bucket).download(fp);
   if (error) throw error;
 
   const arrayBuffer = await data.arrayBuffer();
   return arrayBuffer;
+};
+
+const download = async (userId: string): Promise<Database> => {
+  const sqlJs = await prepareSqlJs();
+  const buffer = await downloadArrayBuffer(userId);
+  const database = new sqlJs.Database(new Uint8Array(buffer));
+  return database;
+};
+
+export const RemoteStore = {
+  upload,
+  download,
 };
