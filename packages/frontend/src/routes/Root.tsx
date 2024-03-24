@@ -23,6 +23,10 @@ export const Root = () => {
             ledger
           </Menu.Item>
 
+          <Menu.Item as={Link} to="/book" active={checkActive("/book")}>
+            book
+          </Menu.Item>
+
           <MenuMenu position="right">
             <Menu.Item>
               <SupabaseUploadButton />

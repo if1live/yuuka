@@ -7,6 +7,7 @@ import {
 import "./App.css";
 import { DataSourceProvider } from "./providers/DataSourceProvider";
 import { MasterDataProvider } from "./providers/MasterDataProvider";
+import { BookRouter } from "./routes/BookRoute";
 import { JournalRouter } from "./routes/JournalRoute";
 import { LedgerRouter } from "./routes/LedgerRoute";
 import { Root } from "./routes/Root";
@@ -17,6 +18,7 @@ const router = createHashRouter(
     <Route path="/" element={<Root />}>
       <Route path="/journal/*" element={<JournalRouter />} />
       <Route path="/ledger/*" element={<LedgerRouter />} />
+      <Route path="/book/*" element={<BookRouter />} />
       <Route path="/user/*" element={<UserRouter />} />
     </Route>,
   ),

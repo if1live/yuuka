@@ -17,6 +17,10 @@ const load_remote: LoadFn = async (session: Session) => {
   const sqlite = await RemoteStore.download(session.user.id);
   const dialect = DataSourceValue.createDialect(sqlite);
   const db = DataSourceValue.createKysely(dialect);
+
+  // remote는 최시
+  await LocalStore.save(sqlite);
+
   return { db, sqlite };
 };
 
