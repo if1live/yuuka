@@ -70,6 +70,10 @@ export const DataSourceNode_Supabase = (props: DataSourceNodeProps) => {
     const { error } = await supabase.auth.signOut();
   };
 
+  const deleteLocal = async () => {
+    await LocalStore.del();
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -111,6 +115,10 @@ export const DataSourceNode_Supabase = (props: DataSourceNodeProps) => {
         <ButtonOr />
         <Button type="button" onClick={signOut} negative>
           sign out
+        </Button>
+        <ButtonOr />
+        <Button type="button" onClick={deleteLocal} negative>
+          delete
         </Button>
       </ButtonGroup>
     </>

@@ -29,16 +29,22 @@ const openDatabase = (): Promise<IDBDatabase> => {
   });
 };
 
+type Row = {
+  id: string;
+  buffer: ArrayBuffer;
+};
+
 const save = async (sqlite: Database) => {
   const db = await openDatabase();
   const transaction = db.transaction(storeName, "readwrite");
   const store = transaction.objectStore(storeName);
 
   return new Promise((resolve, reject) => {
-    const request = store.put({
+    const row: Row = {
       id: fileId,
       buffer: sqlite.export(),
-    });
+    };
+    const request = store.put(row);
 
     request.onsuccess = () => {
       resolve(true);
@@ -60,8 +66,13 @@ const loadArrayBuffer = async (): Promise<ArrayBuffer> => {
     const request = store.get(fileId);
 
     request.onsuccess = (event) => {
-      const target = event.target as IDBRequest;
-      resolve(target.result.buffer);
+      const target = event.target as IDBRequest<Row | undefined>;
+      if (target.result) {
+        resolve(target.result.buffer);
+      } else {
+        const error = new Error("file not found");
+        reject(error);
+      }
     };
 
     request.onerror = (event) => {
@@ -74,6 +85,26 @@ const loadArrayBuffer = async (): Promise<ArrayBuffer> => {
 const load = async (): Promise<Database> => {
   const buffer = await loadArrayBuffer();
   return initial(buffer);
+};
+
+const del = async () => {
+  const db = await openDatabase();
+  const transaction = db.transaction(storeName, "readwrite");
+  const store = transaction.objectStore(storeName);
+
+  return new Promise((resolve, reject) => {
+    const request = store.delete(fileId);
+
+    request.onsuccess = (event) => {
+      const target = event.target as IDBRequest;
+      resolve(true);
+    };
+
+    request.onerror = (event) => {
+      const target = event.target as IDBRequest;
+      reject(target.error);
+    };
+  });
 };
 
 const empty = async (): Promise<Database> => {
@@ -91,6 +122,7 @@ const initial = async (arrayBuffer: ArrayBuffer) => {
 export const LocalStore = {
   load,
   save,
+  del,
   empty,
   initial,
 };
