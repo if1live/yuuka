@@ -9,7 +9,6 @@ import type {
   HttpMethod,
   MyResponse,
 } from "../networks/index.js";
-import type { AuthToken } from "../users/tokens.js";
 
 // TODO: 더 멀쩡한 방식?
 export const registerHandler = <
@@ -51,16 +50,10 @@ export const registerHandler = <
       return c.json(data, 400);
     }
 
-    // 인증없는 API에서는 undefined
-    // TODO: 모바일 크롬에서 hono 돌리면 jwt middleware 못쓴다. 하드코딩으로 우회
-    // const payload = c.get("jwtPayload") as AuthToken | undefined;
-    const userId = 1;
-
     try {
       const data = data_result.data;
       const req = new MyRequest({
         body: data,
-        userId,
         db,
       });
 

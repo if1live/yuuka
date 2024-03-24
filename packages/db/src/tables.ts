@@ -5,7 +5,6 @@ import {
   JournalEntryLineSchema,
   JournalEntrySchema,
   PreferenceSchema,
-  UserSchema,
 } from "./entities/index.js";
 
 export interface Database {
@@ -14,7 +13,6 @@ export interface Database {
   [AccountCodeSchema.name]: AccountCodeSchema.Table;
   [JournalEntryLineSchema.name]: JournalEntryLineSchema.Table;
   [PreferenceSchema.name]: PreferenceSchema.Table;
-  [UserSchema.name]: UserSchema.Table;
 }
 
 // sqlite를 운영의 중심으로 넣으니까 결국 테이블 생성을 손으로 관리해야한다.
@@ -72,26 +70,11 @@ const prepare_journalEntryLine = async (db: Kysely<Database>) => {
     */
 };
 
-const prepare_user = async (db: Kysely<Database>) => {
-  await db.schema
-    .createTable("user")
-    .addColumn("id", "integer", (col) => col.primaryKey())
-    .addColumn("supabase", "varchar(191)")
-    .addColumn("created_at", "timestamp", (col) =>
-      col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
-    )
-    .addColumn("updated_at", "timestamp", (col) =>
-      col.defaultTo(sql`CURRENT_TIMESTAMP`).notNull(),
-    )
-    .execute();
-};
-
 const prepareSchema = async (db: Kysely<Database>) => {
   await prepare_accountTag(db);
   await prepare_accountCode(db);
   await preapre_journalEntry(db);
   await prepare_journalEntryLine(db);
-  await prepare_user(db);
 };
 
 export const Database = {

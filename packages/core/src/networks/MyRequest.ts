@@ -5,20 +5,11 @@ export class MyRequest<T> {
     private readonly params: {
       body: T;
       db: KyselyDB;
-      userId?: number;
     },
   ) {}
 
   get body(): T {
     return this.params.body;
-  }
-
-  get userId(): number {
-    const v = this.params.userId;
-    if (!v) {
-      throw new Error("userId is not set");
-    }
-    return v;
   }
 
   get db(): KyselyDB {

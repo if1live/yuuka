@@ -31,8 +31,8 @@ provider:
     STAGE: ${self:provider.stage}
     NODE_ENV: production
 
-    TOKEN_SECRET: ${env:TOKEN_SECRET}
-    DATABASE_URL: ${env:DATABASE_URL}
+    SUPABASE_PROJECT_REF: ${env:SUPABASE_PROJECT_REF}
+    SUPABASE_SERVICE_KEY: ${env:SUPABASE_SERVICE_KEY}
 
 package:
   individually: true

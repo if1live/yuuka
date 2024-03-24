@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import url from "node:url";
 import {
   AccountCodeSchema,
   AccountTagSchema,
@@ -7,7 +8,6 @@ import {
   JournalEntryLineSchema,
   JournalEntrySchema,
   type KyselyDB,
-  UserSchema,
 } from "@yuuka/db";
 import { default as SQLite } from "better-sqlite3";
 import {
@@ -24,12 +24,14 @@ import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
 import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";
 import { settings } from "../src/settings.js";
 
+// https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
+const filename = url.fileURLToPath(import.meta.url);
+const dirname = url.fileURLToPath(new URL(".", import.meta.url));
+const packagePath = path.join(dirname, "..");
+const rootPath = path.join(packagePath, "..", "..");
+
 const financialReportsDir = "personal-financial-statements";
-const financialReportsPath = path.resolve(
-  settings.rootPath,
-  "..",
-  financialReportsDir,
-);
+const financialReportsPath = path.resolve(rootPath, "..", financialReportsDir);
 
 // TODO: journal은 가변데이터가 가까운데 어디에서 취급하지?
 const journalPath = path.join(financialReportsPath, "journals");
@@ -52,19 +54,6 @@ const MasterData = Object.freeze({
   accountCodes: masterdata_account.accountCodes,
   accountTags: masterdata_account.accountTags,
 });
-
-const rootUserId = 1;
-
-const insertBulk_user = async (db: KyselyDB) => {
-  const item: UserSchema.NewRow = {
-    id: rootUserId,
-    supabase: "root",
-  };
-  return await db
-    .insertInto(UserSchema.name)
-    .values(item)
-    .executeTakeFirstOrThrow();
-};
 
 // 데이터를 다양한 방식으로 뒤지려면 db에 채워놓는게 나을듯
 const insertBulk_accountTag = async (db: KyselyDB) => {
@@ -127,7 +116,6 @@ const deleteAll = async (db: KyselyDB) => {
   await db.deleteFrom(AccountCodeSchema.name).execute();
   await db.deleteFrom(JournalEntrySchema.name).execute();
   await db.deleteFrom(JournalEntryLineSchema.name).execute();
-  await db.deleteFrom(UserSchema.name).execute();
 };
 
 const insertBulk = async (db: KyselyDB) => {
@@ -141,9 +129,6 @@ const insertBulk = async (db: KyselyDB) => {
     console.log(`journal entry: ${x.entry.numInsertedOrUpdatedRows}`);
     console.log(`journal entry line: ${x.line.numInsertedOrUpdatedRows}`);
   });
-  R.pipe(await insertBulk_user(db), (x) =>
-    console.log(`users: ${x.numInsertedOrUpdatedRows}`),
-  );
 
   await db.destroy();
 };
