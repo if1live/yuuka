@@ -25,12 +25,8 @@
     "typeorm:sqlite": "typeorm-ts-node-esm -d data-source-sqlite.ts"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.9",
-    "better-sqlite3": "^9.4.3",
     "reflect-metadata": "^0.2.1",
-    "remeda": "^1.54.0",
     "ts-node": "^10.9.2",
-    "typeorm": "^0.3.20",
-    "vitest": "^1.4.0"
+    "typeorm": "^0.3.20"
   }
 }

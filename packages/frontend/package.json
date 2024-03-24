@@ -19,8 +19,6 @@
     "@supabase/supabase-js": "^2.39.8",
     "@yuuka/core": "workspace:*",
     "@yuuka/db": "workspace:*",
-    "kysely": "^0.27.3",
-    "kysely-wasm": "^0.5.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-drag-drop-files": "^2.3.10",
@@ -37,8 +35,6 @@
     "@types/react-dom": "^18.2.22",
     "@types/sql.js": "^1.4.9",
     "@vitejs/plugin-react": "^4.2.1",
-    "typescript": "^5.4.2",
-    "vite": "^5.1.6",
-    "vitest": "^1.4.0"
+    "vite": "^5.1.6"
   }
 }
