@@ -4,7 +4,7 @@ import { JournalEntryLineRepository } from "../../src/journals/JournalEntryLineR
 import { JournalEntryRepository } from "../../src/journals/JournalEntryRepository.js";
 import { JournalEntryService } from "../../src/journals/JournalEntryService.js";
 import { LedgerService } from "../../src/ledgers/LedgerService.js";
-import { TestDatabase } from "../mod.js";
+import { TestDatabase } from "../TestDatabase.js";
 
 describe("LedgerService", () => {
   const journal: JournalEntry = {

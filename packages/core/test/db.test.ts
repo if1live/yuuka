@@ -1,18 +1,18 @@
-import type { KyselyDB } from "@yuuka/db";
-import { PreferenceSchema } from "@yuuka/db";
 import { assert, afterAll, beforeAll, describe, it } from "vitest";
-import { TestDatabase } from "./mod.js";
+import { AccountCodeSchema, type KyselyDB } from "../src/tables/index.js";
+import { TestDatabase } from "./TestDatabase.js";
 
 async function assert_scenario(db: KyselyDB) {
-  const input: PreferenceSchema.NewRow = {
-    key: "foo",
-    value: "bar",
+  const input: AccountCodeSchema.NewRow = {
+    code: 101,
+    name: "foo",
+    description: "bar",
   };
 
-  await db.insertInto(PreferenceSchema.name).values(input).execute();
+  await db.insertInto(AccountCodeSchema.name).values(input).execute();
 
   const found = await db
-    .selectFrom(PreferenceSchema.name)
+    .selectFrom(AccountCodeSchema.name)
     .selectAll()
     .executeTakeFirstOrThrow();
   assert.deepStrictEqual(found, input);

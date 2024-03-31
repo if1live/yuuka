@@ -1,11 +1,11 @@
+import * as R from "remeda";
+import { JournalEntryLine } from "../index.js";
+import { AccountCode } from "../masterdata/types.js";
 import {
   JournalEntryLineSchema,
   JournalEntrySchema,
   type KyselyDB,
-} from "@yuuka/db";
-import * as R from "remeda";
-import { JournalEntryLine } from "../index.js";
-import { AccountCode } from "../masterdata/types.js";
+} from "../tables/index.js";
 
 /**
  * 계정코드를 묶어서 볼수 있어야한다.

@@ -1,14 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import url from "node:url";
-import {
-  AccountCodeSchema,
-  AccountTagSchema,
-  Database,
-  JournalEntryLineSchema,
-  JournalEntrySchema,
-  type KyselyDB,
-} from "@yuuka/db";
 import { default as SQLite } from "better-sqlite3";
 import {
   CamelCasePlugin,
@@ -23,6 +15,14 @@ import { JournalEntryService } from "../src/journals/JournalEntryService.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
 import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";
 import { settings } from "../src/settings.js";
+import {
+  AccountCodeSchema,
+  AccountTagSchema,
+  JournalEntryLineSchema,
+  JournalEntrySchema,
+  type KyselyDB,
+  MyDatabase,
+} from "../src/tables/index.js";
 
 // https://blog.logrocket.com/alternatives-dirname-node-js-es-modules/
 const filename = url.fileURLToPath(import.meta.url);
@@ -142,12 +142,12 @@ const main_sqlite = async () => {
   const dialect = new SqliteDialect({
     database: database,
   });
-  const db = new Kysely<Database>({
+  const db = new Kysely<MyDatabase>({
     dialect,
     plugins: [new CamelCasePlugin()],
   });
 
-  await Database.prepareSchema(db);
+  await MyDatabase.createSchema(db);
   await insertBulk(db);
 };
 

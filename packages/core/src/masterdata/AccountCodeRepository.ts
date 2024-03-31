@@ -1,4 +1,4 @@
-import { AccountCodeSchema, type KyselyDB } from "@yuuka/db";
+import { AccountCodeSchema, type KyselyDB } from "../tables/index.js";
 import { AccountCode } from "./types.js";
 
 const load = async (db: KyselyDB): Promise<AccountCode[]> => {

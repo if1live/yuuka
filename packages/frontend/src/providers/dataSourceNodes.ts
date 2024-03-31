@@ -3,7 +3,7 @@ import {
   LedgerController,
   ResourceController,
 } from "@yuuka/core";
-import type { KyselyDB } from "@yuuka/db";
+import type { KyselyDB } from "@yuuka/core";
 import { Hono } from "hono";
 import type { DataSourceValue } from "../contexts/DataSourceContext";
 

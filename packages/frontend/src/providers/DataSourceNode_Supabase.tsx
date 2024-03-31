@@ -1,7 +1,7 @@
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import type { Session } from "@supabase/supabase-js";
-import type { KyselyDB } from "@yuuka/db";
+import type { KyselyDB } from "@yuuka/core";
 import { type PropsWithChildren, useEffect, useState } from "react";
 import { Button, ButtonGroup, ButtonOr } from "semantic-ui-react";
 import type { Database } from "sql.js";

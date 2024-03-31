@@ -1,4 +1,4 @@
-import { Database } from "@yuuka/db";
+import { MyDatabase } from "@yuuka/core";
 import { Button } from "semantic-ui-react";
 import { DataSourceValue } from "../contexts/DataSourceContext";
 import { LocalStore } from "../stores/LocalStore";
@@ -12,7 +12,7 @@ export const DataSourceNode_Blank = (props: DataSourceNodeProps) => {
       const sqlite = await LocalStore.empty();
       const dialect = DataSourceValue.createDialect(sqlite);
       const db = DataSourceValue.createKysely(dialect);
-      await Database.prepareSchema(db);
+      await MyDatabase.createSchema(db);
 
       const app = createApp(db);
       setDataSource({ _tag: "sandbox", sqlite, db, app });

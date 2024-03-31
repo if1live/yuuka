@@ -1,4 +1,3 @@
-import type { KyselyDB } from "@yuuka/db";
 import type { Hono } from "hono";
 import type { StatusCode } from "hono/utils/http-status";
 import { ResultAsync } from "neverthrow";
@@ -9,6 +8,7 @@ import type {
   HttpMethod,
   MyResponse,
 } from "../networks/index.js";
+import type { KyselyDB } from "../tables/index.js";
 
 // TODO: 더 멀쩡한 방식?
 export const registerHandler = <

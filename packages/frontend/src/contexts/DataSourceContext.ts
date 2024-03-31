@@ -1,5 +1,5 @@
 import type { Session } from "@supabase/supabase-js";
-import type { Database, KyselyDB } from "@yuuka/db";
+import type { MyDatabase, KyselyDB } from "@yuuka/core";
 import type { Hono } from "hono";
 import { CamelCasePlugin, type Dialect, Kysely } from "kysely";
 import { SqlJsDialect } from "kysely-wasm";
@@ -55,7 +55,7 @@ const createDialect = (database: SqliteDatabase) => {
 };
 
 const createKysely = (dialect: Dialect) => {
-  const db = new Kysely<Database>({
+  const db = new Kysely<MyDatabase>({
     dialect,
     plugins: [new CamelCasePlugin()],
     // log: ["error", "query"],

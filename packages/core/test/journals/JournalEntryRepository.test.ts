@@ -1,8 +1,11 @@
 import { faker } from "@faker-js/faker";
-import { JournalEntryLineSchema, JournalEntrySchema } from "@yuuka/db";
 import { assert, afterAll, beforeAll, describe, expect, it } from "vitest";
 import { JournalEntryRepository } from "../../src/journals/JournalEntryRepository.js";
-import { TestDatabase } from "../mod.js";
+import {
+  JournalEntryLineSchema,
+  JournalEntrySchema,
+} from "../../src/tables/index.js";
+import { TestDatabase } from "../TestDatabase.js";
 
 describe("JournalEntryRepository", () => {
   const db = TestDatabase.create();

@@ -1,4 +1,4 @@
-import type { AccountCodeSchema, AccountTagSchema } from "@yuuka/db";
+import type { AccountCodeSchema, AccountTagSchema } from "../tables/index.js";
 
 export type AccountCategory =
   | "asset"

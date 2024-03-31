@@ -1,10 +1,10 @@
-import type { KyselyDB } from "@yuuka/db";
 import { Hono } from "hono";
 import { AccountCodeRepository } from "../masterdata/AccountCodeRepository.js";
 import { AccountTagRepository } from "../masterdata/AccountTagRepository.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
 import { resourceSpecification } from "../specifications/index.js";
+import type { KyselyDB } from "../tables/index.js";
 import { registerHandler } from "./helpers.js";
 
 const sheet = resourceSpecification.dataSheet;

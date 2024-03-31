@@ -1,4 +1,4 @@
-import { JournalEntryLineSchema, type KyselyDB } from "@yuuka/db";
+import { JournalEntryLineSchema, type KyselyDB } from "../tables/index.js";
 
 const insertBulk = async (
   db: KyselyDB,

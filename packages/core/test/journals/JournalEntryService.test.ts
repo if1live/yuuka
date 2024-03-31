@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
-import { JournalEntryLineSchema, JournalEntrySchema } from "@yuuka/db";
 import { describe, expect, it } from "vitest";
 import { type JournalEntry, JournalEntryLine } from "../../src/index.js";
 import { JournalEntryService } from "../../src/journals/JournalEntryService.js";
+import {
+  JournalEntryLineSchema,
+  JournalEntrySchema,
+} from "../../src/tables/index.js";
 
 describe("JournalEntryService#prepare", () => {
   const journal: JournalEntry = {

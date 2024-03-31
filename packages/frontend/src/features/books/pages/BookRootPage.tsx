@@ -1,4 +1,4 @@
-import type { KyselyDB } from "@yuuka/db";
+import type { KyselyDB } from "@yuuka/core";
 import { useContext } from "react";
 import { Button } from "semantic-ui-react";
 import type { Database } from "sql.js";

@@ -6,9 +6,6 @@
   "files": [],
   "references": [
     {
-      "path": "packages/db/tsconfig.json"
-    },
-    {
       "path": "packages/core/tsconfig.json"
     }
   ],

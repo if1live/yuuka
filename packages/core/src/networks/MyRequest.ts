@@ -1,4 +1,4 @@
-import type { KyselyDB } from "@yuuka/db";
+import type { KyselyDB } from "../tables/index.js";
 
 export class MyRequest<T> {
   constructor(

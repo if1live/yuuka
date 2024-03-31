@@ -1,6 +1,6 @@
-import { JournalEntrySchema } from "@yuuka/db";
-import type { KyselyDB } from "@yuuka/db";
 import * as R from "remeda";
+import { JournalEntrySchema } from "../tables/index.js";
+import type { KyselyDB } from "../tables/index.js";
 import type { JournalEntry } from "./JournalEntry.js";
 import { JournalEntryLine } from "./JournalEntryLine.js";
 

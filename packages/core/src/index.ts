@@ -19,3 +19,12 @@ export {
 export { JournalController } from "./controllers/JournalController.js";
 export { LedgerController } from "./controllers/LedgerController.js";
 export { ResourceController } from "./controllers/ResourceController.js";
+
+export {
+  AccountCodeSchema,
+  AccountTagSchema,
+  JournalEntryLineSchema,
+  JournalEntrySchema,
+  type KyselyDB,
+  MyDatabase,
+} from "./tables/index.js";

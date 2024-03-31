@@ -1,4 +1,3 @@
-import type { Database, KyselyDB } from "@yuuka/db";
 import {
   CamelCasePlugin,
   Kysely,
@@ -7,6 +6,7 @@ import {
 } from "kysely";
 import type { Dialect } from "kysely";
 import { settings } from "./settings.js";
+import type { KyselyDB, MyDatabase } from "./tables/index.js";
 
 const createSqliteDialect = async (filename: string) => {
   const { default: SQLite } = await import("better-sqlite3");
@@ -28,7 +28,7 @@ const createDialect = async (url: string): Promise<{ dialect: Dialect }> => {
 };
 
 const createKysely = (dialect: Dialect): KyselyDB => {
-  return new Kysely<Database>({
+  return new Kysely<MyDatabase>({
     dialect,
     plugins: [new WithSchemaPlugin("yuuka"), new CamelCasePlugin()],
   });

@@ -1,4 +1,7 @@
-import { JournalEntryLineSchema, type JournalEntrySchema } from "@yuuka/db";
+import {
+  JournalEntryLineSchema,
+  type JournalEntrySchema,
+} from "../tables/index.js";
 import type { JournalEntry } from "./JournalEntry.js";
 
 /**

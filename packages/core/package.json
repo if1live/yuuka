@@ -23,9 +23,7 @@
     "lint": "biome check .",
     "test": "vitest"
   },
-  "dependencies": {
-    "@yuuka/db": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.11.30"
   }

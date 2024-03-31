@@ -1,4 +1,4 @@
-import { JournalEntryLineSchema } from "@yuuka/db";
+import { JournalEntryLineSchema } from "../tables/index.js";
 
 type JournalEntryLine_Debit = {
   _tag: "debit";
