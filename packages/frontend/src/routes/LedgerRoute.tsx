@@ -5,6 +5,9 @@ import { LedgerRootPage } from "../features/ledgers/pages/LedgerRootPage";
 export const LedgerRouter = () => (
   <Routes>
     <Route index element={<LedgerRootPage />} />
-    <Route path="/account/:code" element={<LedgerReadPage />} />
+    <Route
+      path="/account/:code/:startDate/:endDate"
+      element={<LedgerReadPage />}
+    />
   </Routes>
 );

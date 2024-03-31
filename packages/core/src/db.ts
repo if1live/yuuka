@@ -1,9 +1,4 @@
-import {
-  CamelCasePlugin,
-  Kysely,
-  SqliteDialect,
-  WithSchemaPlugin,
-} from "kysely";
+import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
 import type { Dialect } from "kysely";
 import { settings } from "./settings.js";
 import type { KyselyDB, MyDatabase } from "./tables/index.js";
@@ -30,7 +25,7 @@ const createDialect = async (url: string): Promise<{ dialect: Dialect }> => {
 const createKysely = (dialect: Dialect): KyselyDB => {
   return new Kysely<MyDatabase>({
     dialect,
-    plugins: [new WithSchemaPlugin("yuuka"), new CamelCasePlugin()],
+    plugins: [new CamelCasePlugin()],
   });
 };
 

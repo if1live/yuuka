@@ -13,10 +13,12 @@ import {
 import * as R from "remeda";
 import { JournalEntryService } from "../src/journals/JournalEntryService.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
+import { AccountStatementLoader } from "../src/loaders/AccountStatementLoader.js";
 import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";
 import { settings } from "../src/settings.js";
 import {
   AccountCodeSchema,
+  AccountStatementSchema,
   AccountTagSchema,
   JournalEntryLineSchema,
   JournalEntrySchema,
@@ -34,10 +36,20 @@ const financialReportsDir = "personal-financial-statements";
 const financialReportsPath = path.resolve(rootPath, "..", financialReportsDir);
 
 // TODO: journal은 가변데이터가 가까운데 어디에서 취급하지?
+// TODO: 하드코딩 줄일 방법?
 const journalPath = path.join(financialReportsPath, "journals");
 const journalContext = R.pipe(
   await JournalEntryLoader.read(journalPath, "journal_2024_03.csv"),
   (x) => JournalEntryLoader.convert(x),
+);
+
+const accountStatementPath = path.join(financialReportsPath, "accounts");
+const accountStatementContext = R.pipe(
+  await AccountStatementLoader.read(
+    accountStatementPath,
+    "AccountStatement_2024_03.csv",
+  ),
+  (x) => AccountStatementLoader.convert(x),
 );
 
 const sheetPath = path.join(financialReportsPath, "sheets");
@@ -111,6 +123,14 @@ const insertBulk_journal = async (db: KyselyDB) => {
   };
 };
 
+const insertBulk_accountStatement = async (db: KyselyDB) => {
+  const rows = accountStatementContext.entries;
+  return await db
+    .insertInto(AccountStatementSchema.name)
+    .values(rows)
+    .executeTakeFirstOrThrow();
+};
+
 const deleteAll = async (db: KyselyDB) => {
   await db.deleteFrom(AccountTagSchema.name).execute();
   await db.deleteFrom(AccountCodeSchema.name).execute();
@@ -129,6 +149,9 @@ const insertBulk = async (db: KyselyDB) => {
     console.log(`journal entry: ${x.entry.numInsertedOrUpdatedRows}`);
     console.log(`journal entry line: ${x.line.numInsertedOrUpdatedRows}`);
   });
+  R.pipe(await insertBulk_accountStatement(db), (x) =>
+    console.log(`account statement: ${x.numInsertedOrUpdatedRows}`),
+  );
 
   await db.destroy();
 };
@@ -157,6 +180,6 @@ switch (target) {
     await main_sqlite();
     break;
   default:
-    console.log("invalid target");
+    await main_sqlite();
     break;
 }

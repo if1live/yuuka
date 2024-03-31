@@ -5,17 +5,20 @@ import {
   HttpRpc,
   InOutSchema,
 } from "../networks/rpc.js";
+import type { AccountStatementSchema } from "../tables/index.js";
 import { Empty } from "./types.js";
 
 export const resource = "/auth/ledger";
 
-// TODO: 원장에도 기간을 붙여야할듯
 const LedgerReq = z.object({
   code: z.coerce.number(),
+  startDate: z.string(),
+  endDate: z.string(),
 });
 
 type LedgerResp = {
   code: number;
+  statement: AccountStatementSchema.Row;
   ledgers: Array<{
     id: string;
     date: string;

@@ -5,7 +5,7 @@ import * as R from "remeda";
 import { z } from "zod";
 import type { JournalEntry } from "../journals/JournalEntry.js";
 import type { JournalEntryLine } from "../journals/JournalEntryLine.js";
-import { parseJournalFileName } from "../journals/helpers.js";
+import { parseFileName } from "./helpers.js";
 
 const journalItemSchema = z.object({
   date: z.string(),
@@ -139,7 +139,7 @@ const readRoot = async (
   rootPath: string,
   filename: string,
 ): Promise<RecordContext> => {
-  const ymd = parseJournalFileName(filename);
+  const ymd = parseFileName(filename);
   const fp = path.join(rootPath, filename);
   const text = await fs.readFile(fp, "utf8");
   const records = parseJournalSheet(text, ymd.year, ymd.month);

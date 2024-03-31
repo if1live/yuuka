@@ -4,6 +4,7 @@ import * as R from "remeda";
 import {
   Table,
   TableBody,
+  TableCell,
   TableFooter,
   TableHeader,
   TableHeaderCell,
@@ -24,6 +25,8 @@ export const LedgerReadPage = () => {
   const req = spec.schema.req.parse(params);
   const qs = new URLSearchParams();
   qs.append("code", `${req.code}`);
+  qs.append("startDate", `${req.startDate}`);
+  qs.append("endDate", `${req.endDate}`);
 
   const url = `${ledgerSpecification.resource}${spec.endpoint.path}?${qs}`;
   const { data, error, isLoading } = useSWR(url);
@@ -55,8 +58,8 @@ const LedgerReadView = (props: {
 }) => {
   const { req, resp } = props;
 
-  const { code } = req;
-  const { ledgers } = resp;
+  const { code, startDate, endDate } = req;
+  const { statement, ledgers } = resp;
 
   const ledgers_debit: Ledger[] = [];
   const ledgers_credit: Ledger[] = [];
@@ -88,13 +91,36 @@ const LedgerReadView = (props: {
     });
   }
 
-  const sum_debit = R.sumBy(ledgers_debit, (x) => x.debit);
-  const sum_credit = R.sumBy(ledgers_credit, (x) => x.credit);
+  const initial_skel: Ledger = {
+    id: "",
+    brief: "TODO_시작",
+    date: startDate,
+    debit: 0,
+    credit: 0,
+  };
+
+  // TODO: 시작금액 기록을 더 멀쩡하게 만들어야한다.
+  // TODO: account tag 보고 기록하기. 비용은 initial 항목이 없어야한다!
+  const initial_debit: Ledger = {
+    ...initial_skel,
+    debit: statement.totalDebit + statement.closingBalance,
+  };
+  const initial_credit: Ledger = {
+    ...initial_skel,
+    credit: statement.totalCredit,
+  };
+
+  // 기초자산을 끼워넣는게 맞나?
+  const sum_debit = R.sumBy([initial_debit, ...ledgers_debit], (x) => x.debit);
+  const sum_credit = R.sumBy(
+    [initial_credit, ...ledgers_credit],
+    (x) => x.credit,
+  );
 
   return (
     <>
       <h1>
-        <AccountCodeLink code={code} />
+        <AccountCodeLink code={code} startDate={startDate} endDate={endDate} />
       </h1>
 
       <Table selectable celled compact="very" unstackable>
@@ -110,6 +136,10 @@ const LedgerReadView = (props: {
         </TableHeader>
 
         <TableBody>
+          <TableRow>
+            <LedgerBlock ledger={initial_debit} prev={undefined} />
+            <LedgerBlock ledger={initial_credit} prev={undefined} />
+          </TableRow>
           {rows.map((row, i) => {
             const { debit, credit } = row;
 

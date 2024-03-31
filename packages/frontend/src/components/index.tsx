@@ -2,6 +2,7 @@ import { AccountCategory, AccountCode } from "@yuuka/core";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { MasterDataContext } from "../contexts/MasterDataContext";
+import { convertDateToRange } from "../features/ledgers/pages/LedgerRootPage";
 
 export const CurrencyDisplay = (props: {
   amount: number;
@@ -16,6 +17,8 @@ export const CurrencyDisplay = (props: {
 
 export const AccountCodeLink = (props: {
   code: number;
+  startDate?: string;
+  endDate?: string;
 }) => {
   const { accountCodes, accountTags } = useContext(MasterDataContext);
   const code = props.code < 1000 ? props.code * 1000 : props.code;
@@ -25,7 +28,13 @@ export const AccountCodeLink = (props: {
   const tagCode = AccountCode.toTag(code);
   const tag = accountTags.find((x) => x.code === tagCode);
 
-  const url = `/ledger/account/${code}`;
+  const now = new Date();
+  const initial = convertDateToRange(now);
+
+  const startDate = props.startDate ?? initial.startDate;
+  const endDate = props.endDate ?? initial.endDate;
+
+  const url = `/ledger/account/${code}/${startDate}/${endDate}`;
 
   const major = tag ? AccountCategory.toKorean(tag.major) : "unknown";
   const minor = tag?.minor ?? "unknown";
