@@ -8,7 +8,7 @@ import {
 import type { AccountStatementSchema } from "../tables/index.js";
 import { Empty } from "./types.js";
 
-export const resource = "/auth/ledger";
+export const resource = "/ledger";
 
 const LedgerReq = z.object({
   code: z.coerce.number(),

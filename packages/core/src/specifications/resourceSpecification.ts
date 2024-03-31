@@ -8,7 +8,7 @@ import {
 } from "../networks/rpc.js";
 import { Empty } from "./types.js";
 
-export const resource = "/auth/resource";
+export const resource = "/resource";
 
 type MasterDataResp = {
   accountTags: AccountTag[];

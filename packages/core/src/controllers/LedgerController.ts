@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { AccountStatementService } from "../accounts/AccountStatementService.js";
+import { engine } from "../instances.js";
 import { LedgerService } from "../ledgers/LedgerService.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
@@ -43,6 +44,12 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
 const createApp = (db: KyselyDB) => {
   const app = new Hono();
   registerHandler(app, db, sheet.list, list);
+
+  app.get("/", async (c) => {
+    const html = await engine.renderFile("ledgers/ledger_index", {});
+    return c.html(html);
+  });
+
   return app;
 };
 

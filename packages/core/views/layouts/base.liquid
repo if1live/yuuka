@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="content-language" content="ko-kr">
+
+  <link
+    rel="icon"
+    href="/static/favicon.ico"
+    sizes="any" />
+  <link rel="apple-touch-icon" href="/static/icon.png" />
+
+  <title>yuuka</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.css"
+    integrity="sha512-KXol4x3sVoO+8ZsWPFI/r5KBVB/ssCGB5tsv2nVOKwLg33wTFP3fmnXa47FdSVIshVTgsYk/1734xSk9aFIa4A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer" />
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.5.0/semantic.min.js"
+    integrity="sha512-Xo0Jh8MsOn72LGV8kU5LsclG7SUzJsWGhXbWcYs2MAmChkQzwiW/yTQwdJ8w6UA9C6EVG18GHb/TrYpYCjyAQw=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+
+  <!-- https://www.srihash.org/: unpkg을 cdnjs 같은 형태로 만들떄 쓴거 -->
+  <script
+    src="https://unpkg.com/htmx.org@1.9.4"
+    integrity="sha384-zUfuhFKKZCbHTY6aRR46gxiqszMk5tcHjsVFxnUo8VMus4kHGVdIYVbOYYNlKmHV"
+    crossorigin="anonymous"></script>
+  <script
+    src="https://unpkg.com/hyperscript.org@0.9.11"
+    integrity="sha384-SWTvl6gg9wW7CzNqGD9/s3vxwaaKN2g8/eYyu0yT+rkQ/Rb/6NmjnbTi9lYNrpZ1"
+    crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header class="ui top small menu">
+    <div class="ui container">
+      <a class="header item" href="/">yuuka</a>
+      <a class="item" href="/account">account</a>
+      <a class="item" href="/ledger">ledger</a>
+
+    <!--
+      <div class="right menu"><a class="item" href="/right">right</a></div>
+    -->
+    </div>
+  </header>
+
+  <section class="ui container">
+    {% block content %}
+    {% endblock %}
+  </section>
+</body>
