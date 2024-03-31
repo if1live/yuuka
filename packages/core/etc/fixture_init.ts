@@ -20,9 +20,9 @@ import {
   AccountSchema,
   AccountStatementSchema,
   AccountTagSchema,
-  JournalEntryLineSchema,
-  JournalEntrySchema,
+  AccountTransactionSchema,
   type KyselyDB,
+  LedgerTransactionSchema,
   MyDatabase,
 } from "../src/tables/index.js";
 
@@ -108,12 +108,12 @@ const insertBulk_journal = async (db: KyselyDB) => {
   const rows_line = results.flatMap((x) => x.lines);
 
   const result_entry = await db
-    .insertInto(JournalEntrySchema.name)
+    .insertInto(AccountTransactionSchema.name)
     .values(rows_entry)
     .executeTakeFirstOrThrow();
 
   const result_line = await db
-    .insertInto(JournalEntryLineSchema.name)
+    .insertInto(LedgerTransactionSchema.name)
     .values(rows_line)
     .executeTakeFirstOrThrow();
 
@@ -134,8 +134,8 @@ const insertBulk_accountStatement = async (db: KyselyDB) => {
 const deleteAll = async (db: KyselyDB) => {
   await db.deleteFrom(AccountTagSchema.name).execute();
   await db.deleteFrom(AccountSchema.name).execute();
-  await db.deleteFrom(JournalEntrySchema.name).execute();
-  await db.deleteFrom(JournalEntryLineSchema.name).execute();
+  await db.deleteFrom(AccountTransactionSchema.name).execute();
+  await db.deleteFrom(LedgerTransactionSchema.name).execute();
 };
 
 const insertBulk = async (db: KyselyDB) => {

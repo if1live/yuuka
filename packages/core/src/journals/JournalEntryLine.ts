@@ -1,4 +1,4 @@
-import { JournalEntryLineSchema } from "../tables/index.js";
+import { LedgerTransactionSchema } from "../tables/index.js";
 
 type JournalEntryLine_Debit = {
   _tag: "debit";
@@ -69,11 +69,11 @@ const filter_credit = (
   return results;
 };
 
-const fromRow = (x: JournalEntryLineSchema.Row): JournalEntryLine => {
+const fromRow = (x: LedgerTransactionSchema.Row): JournalEntryLine => {
   switch (x.tag) {
-    case JournalEntryLineSchema.debitTag:
+    case LedgerTransactionSchema.debitTag:
       return { _tag: "debit", code: x.code, debit: x.amount };
-    case JournalEntryLineSchema.creditTag:
+    case LedgerTransactionSchema.creditTag:
       return { _tag: "credit", code: x.code, credit: x.amount };
   }
 };

@@ -1,5 +1,5 @@
 import * as R from "remeda";
-import { JournalEntrySchema } from "../tables/index.js";
+import { AccountTransactionSchema } from "../tables/index.js";
 import type { KyselyDB } from "../tables/index.js";
 import type { JournalEntry } from "./JournalEntry.js";
 import { JournalEntryLine } from "./JournalEntryLine.js";
@@ -10,12 +10,16 @@ const findById = async (
 ): Promise<JournalEntry> => {
   db.transaction().execute(async (trx) => {});
   const rows = await db
-    .selectFrom(JournalEntrySchema.name)
-    .innerJoin("journalEntryLine", (join) =>
-      join.onRef("journalEntryLine.entryId", "=", "journalEntry.entryId"),
+    .selectFrom(AccountTransactionSchema.name)
+    .innerJoin("ledgerTransaction", (join) =>
+      join.onRef(
+        "ledgerTransaction.entryId",
+        "=",
+        "accountTransaction.entryId",
+      ),
     )
     .selectAll()
-    .where("journalEntry.entryId", "=", entryId)
+    .where("accountTransaction.entryId", "=", entryId)
     .execute();
 
   if (rows.length <= 0) {
@@ -43,13 +47,17 @@ const findByDateRange = async (
   range: { start: string; end: string },
 ): Promise<JournalEntry[]> => {
   const rows = await db
-    .selectFrom(JournalEntrySchema.name)
-    .innerJoin("journalEntryLine", (join) =>
-      join.onRef("journalEntryLine.entryId", "=", "journalEntry.entryId"),
+    .selectFrom(AccountTransactionSchema.name)
+    .innerJoin("ledgerTransaction", (join) =>
+      join.onRef(
+        "ledgerTransaction.entryId",
+        "=",
+        "accountTransaction.entryId",
+      ),
     )
     .selectAll()
-    .where("journalEntry.date", ">=", range.start)
-    .where("journalEntry.date", "<", range.end)
+    .where("accountTransaction.date", ">=", range.start)
+    .where("accountTransaction.date", "<", range.end)
     .orderBy("date asc")
     .execute();
 
@@ -79,9 +87,12 @@ const findByDateRange = async (
   return entries;
 };
 
-const insertBulk = async (db: KyselyDB, rows: JournalEntrySchema.NewRow[]) => {
+const insertBulk = async (
+  db: KyselyDB,
+  rows: AccountTransactionSchema.NewRow[],
+) => {
   return await db
-    .insertInto(JournalEntrySchema.name)
+    .insertInto(AccountTransactionSchema.name)
     .values(rows)
     .executeTakeFirstOrThrow();
 };

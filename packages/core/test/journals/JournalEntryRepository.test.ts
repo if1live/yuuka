@@ -2,8 +2,8 @@ import { faker } from "@faker-js/faker";
 import { assert, afterAll, beforeAll, describe, expect, it } from "vitest";
 import { JournalEntryRepository } from "../../src/journals/JournalEntryRepository.js";
 import {
-  JournalEntryLineSchema,
-  JournalEntrySchema,
+  AccountTransactionSchema,
+  LedgerTransactionSchema,
 } from "../../src/tables/index.js";
 import { TestDatabase } from "../TestDatabase.js";
 
@@ -15,20 +15,20 @@ describe("JournalEntryRepository", () => {
   beforeAll(async () => {
     await TestDatabase.synchronize(db);
 
-    const entry: JournalEntrySchema.NewRow = {
+    const entry: AccountTransactionSchema.NewRow = {
       entryId,
       date: "2024-03-01",
       brief: faker.lorem.sentence(),
     };
-    await db.insertInto(JournalEntrySchema.name).values(entry).execute();
+    await db.insertInto(AccountTransactionSchema.name).values(entry).execute();
 
     const skel = { entryId };
-    const { debitTag, creditTag } = JournalEntryLineSchema;
-    const lines: JournalEntryLineSchema.NewRow[] = [
+    const { debitTag, creditTag } = LedgerTransactionSchema;
+    const lines: LedgerTransactionSchema.NewRow[] = [
       { ...skel, code: 102, tag: debitTag, amount: 100 },
       { ...skel, code: 103, tag: creditTag, amount: 100 },
     ];
-    await db.insertInto(JournalEntryLineSchema.name).values(lines).execute();
+    await db.insertInto(LedgerTransactionSchema.name).values(lines).execute();
   });
 
   afterAll(async () => {

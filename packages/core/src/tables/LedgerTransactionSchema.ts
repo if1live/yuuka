@@ -1,8 +1,8 @@
 import type { Insertable, Kysely, Selectable, Updateable } from "kysely";
 import type { SnakeCase } from "type-fest";
 
-const kyselyName = "journalEntryLine";
-const nativeName: SnakeCase<typeof kyselyName> = "journal_entry_line";
+const kyselyName = "ledgerTransaction";
+const nativeName: SnakeCase<typeof kyselyName> = "ledger_transaction";
 export const name = kyselyName;
 
 // debit, credit을 rdbms enum 없으 타입스크립트 수준에서 구분하고 싶다.

@@ -2,9 +2,9 @@ import * as R from "remeda";
 import { JournalEntryLine } from "../index.js";
 import { AccountCode } from "../masterdata/types.js";
 import {
-  JournalEntryLineSchema,
-  JournalEntrySchema,
+  AccountTransactionSchema,
   type KyselyDB,
+  LedgerTransactionSchema,
 } from "../tables/index.js";
 
 /**
@@ -21,7 +21,7 @@ const load = async (
 
   const load_plain = async () => {
     return await db
-      .selectFrom(JournalEntryLineSchema.name)
+      .selectFrom(LedgerTransactionSchema.name)
       .selectAll()
       .where("code", "=", code)
       .execute();
@@ -29,7 +29,7 @@ const load = async (
 
   const load_group = async () => {
     return await db
-      .selectFrom(JournalEntryLineSchema.name)
+      .selectFrom(LedgerTransactionSchema.name)
       .selectAll()
       .where("code", ">=", tagCode * 1000)
       .where("code", "<", (tagCode + 1) * 1000)
@@ -50,7 +50,7 @@ const load = async (
 
   // 날짜순으로 정렬된 journal entry로 보고싶다
   const rows = await db
-    .selectFrom(JournalEntrySchema.name)
+    .selectFrom(AccountTransactionSchema.name)
     .selectAll()
     .where(
       "entryId",

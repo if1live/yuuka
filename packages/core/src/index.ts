@@ -23,8 +23,8 @@ export { ResourceController } from "./controllers/ResourceController.js";
 export {
   AccountSchema,
   AccountTagSchema,
-  JournalEntryLineSchema,
-  JournalEntrySchema,
+  LedgerTransactionSchema,
+  AccountTransactionSchema,
   type KyselyDB,
   MyDatabase,
 } from "./tables/index.js";

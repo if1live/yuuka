@@ -3,14 +3,14 @@ import type { Kysely } from "kysely";
 import * as AccountSchema from "./AccountSchema.js";
 import * as AccountStatementSchema from "./AccountStatementSchema.js";
 import * as AccountTagSchema from "./AccountTagSchema.js";
-import * as JournalEntryLineSchema from "./JournalEntryLineSchema.js";
-import * as JournalEntrySchema from "./JournalEntrySchema.js";
+import * as AccountTransactionSchema from "./AccountTransactionSchema.js";
 import * as LedgerStatementSchema from "./LedgerStatementSchema.js";
+import * as LedgerTransactionSchema from "./LedgerTransactionSchema.js";
 
-export * as JournalEntrySchema from "./JournalEntrySchema.js";
-export * as JournalEntryLineSchema from "./JournalEntryLineSchema.js";
-export * as AccountSchema from "./AccountSchema.js";
 export * as AccountTagSchema from "./AccountTagSchema.js";
+export * as AccountSchema from "./AccountSchema.js";
+export * as AccountTransactionSchema from "./AccountTransactionSchema.js";
+export * as LedgerTransactionSchema from "./LedgerTransactionSchema.js";
 export * as AccountStatementSchema from "./AccountStatementSchema.js";
 export * as LedgerStatementSchema from "./LedgerStatementSchema.js";
 
@@ -19,10 +19,10 @@ export * as LedgerStatementSchema from "./LedgerStatementSchema.js";
  * 이를 피하려고 이름을 다르게 쓴다.
  */
 export interface MyDatabase {
-  [JournalEntrySchema.name]: JournalEntrySchema.Table;
   [AccountTagSchema.name]: AccountTagSchema.Table;
   [AccountSchema.name]: AccountSchema.Table;
-  [JournalEntryLineSchema.name]: JournalEntryLineSchema.Table;
+  [AccountTransactionSchema.name]: AccountTransactionSchema.Table;
+  [LedgerTransactionSchema.name]: LedgerTransactionSchema.Table;
   [AccountStatementSchema.name]: AccountStatementSchema.Table;
   [LedgerStatementSchema.name]: LedgerStatementSchema.Table;
 }
@@ -30,8 +30,8 @@ export interface MyDatabase {
 const createSchema = async <T>(db: Kysely<T>) => {
   await AccountTagSchema.createSchema(db);
   await AccountSchema.createSchema(db);
-  await JournalEntrySchema.createSchema(db);
-  await JournalEntryLineSchema.createSchema(db);
+  await AccountTransactionSchema.createSchema(db);
+  await LedgerTransactionSchema.createSchema(db);
   await AccountStatementSchema.createSchema(db);
   await LedgerStatementSchema.createSchema(db);
 };

@@ -3,8 +3,8 @@ import { describe, expect, it } from "vitest";
 import { type JournalEntry, JournalEntryLine } from "../../src/index.js";
 import { JournalEntryService } from "../../src/journals/JournalEntryService.js";
 import {
-  JournalEntryLineSchema,
-  JournalEntrySchema,
+  AccountTransactionSchema,
+  LedgerTransactionSchema,
 } from "../../src/tables/index.js";
 
 describe("JournalEntryService#prepare", () => {
@@ -33,14 +33,14 @@ describe("JournalEntryService#prepare", () => {
 
   it("lines: debit", () => {
     const lines = actual.lines.filter(
-      (x) => x.tag === JournalEntryLineSchema.debitTag,
+      (x) => x.tag === LedgerTransactionSchema.debitTag,
     );
     expect(lines).toHaveLength(2);
   });
 
   it("lines: credit", () => {
     const lines = actual.lines.filter(
-      (x) => x.tag === JournalEntryLineSchema.creditTag,
+      (x) => x.tag === LedgerTransactionSchema.creditTag,
     );
     expect(lines).toHaveLength(1);
   });

@@ -1,11 +1,11 @@
-import { JournalEntryLineSchema, type KyselyDB } from "../tables/index.js";
+import { type KyselyDB, LedgerTransactionSchema } from "../tables/index.js";
 
 const insertBulk = async (
   db: KyselyDB,
-  rows: JournalEntryLineSchema.NewRow[],
+  rows: LedgerTransactionSchema.NewRow[],
 ) => {
   return await db
-    .insertInto(JournalEntryLineSchema.name)
+    .insertInto(LedgerTransactionSchema.name)
     .values(rows)
     .executeTakeFirstOrThrow();
 };
