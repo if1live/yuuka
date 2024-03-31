@@ -168,6 +168,18 @@ const LedgerReadView = (props: {
               <CurrencyDisplay amount={sum_credit} />
             </TableHeaderCell>
           </TableRow>
+          <TableRow>
+            <TableHeaderCell> </TableHeaderCell>
+            <TableHeaderCell>debit - credit</TableHeaderCell>
+            <TableHeaderCell textAlign="right">
+              <CurrencyDisplay amount={sum_debit - sum_credit} />
+            </TableHeaderCell>
+            <TableHeaderCell> </TableHeaderCell>
+            <TableHeaderCell>credit - debit</TableHeaderCell>
+            <TableHeaderCell textAlign="right">
+              <CurrencyDisplay amount={sum_credit - sum_debit} />
+            </TableHeaderCell>
+          </TableRow>
         </TableFooter>
       </Table>
     </>
