@@ -1,6 +1,6 @@
 import type { Kysely } from "kysely";
 
-import * as AccountCodeSchema from "./AccountCodeSchema.js";
+import * as AccountSchema from "./AccountSchema.js";
 import * as AccountStatementSchema from "./AccountStatementSchema.js";
 import * as AccountTagSchema from "./AccountTagSchema.js";
 import * as JournalEntryLineSchema from "./JournalEntryLineSchema.js";
@@ -9,7 +9,7 @@ import * as LedgerStatementSchema from "./LedgerStatementSchema.js";
 
 export * as JournalEntrySchema from "./JournalEntrySchema.js";
 export * as JournalEntryLineSchema from "./JournalEntryLineSchema.js";
-export * as AccountCodeSchema from "./AccountCodeSchema.js";
+export * as AccountSchema from "./AccountSchema.js";
 export * as AccountTagSchema from "./AccountTagSchema.js";
 export * as AccountStatementSchema from "./AccountStatementSchema.js";
 export * as LedgerStatementSchema from "./LedgerStatementSchema.js";
@@ -21,7 +21,7 @@ export * as LedgerStatementSchema from "./LedgerStatementSchema.js";
 export interface MyDatabase {
   [JournalEntrySchema.name]: JournalEntrySchema.Table;
   [AccountTagSchema.name]: AccountTagSchema.Table;
-  [AccountCodeSchema.name]: AccountCodeSchema.Table;
+  [AccountSchema.name]: AccountSchema.Table;
   [JournalEntryLineSchema.name]: JournalEntryLineSchema.Table;
   [AccountStatementSchema.name]: AccountStatementSchema.Table;
   [LedgerStatementSchema.name]: LedgerStatementSchema.Table;
@@ -29,7 +29,7 @@ export interface MyDatabase {
 
 const createSchema = async <T>(db: Kysely<T>) => {
   await AccountTagSchema.createSchema(db);
-  await AccountCodeSchema.createSchema(db);
+  await AccountSchema.createSchema(db);
   await JournalEntrySchema.createSchema(db);
   await JournalEntryLineSchema.createSchema(db);
   await AccountStatementSchema.createSchema(db);

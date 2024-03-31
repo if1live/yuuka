@@ -1,4 +1,5 @@
 import type { KyselyDB } from "@yuuka/core";
+import { AccountSchema } from "@yuuka/core";
 import { useContext } from "react";
 import { Button } from "semantic-ui-react";
 import type { Database } from "sql.js";
@@ -8,7 +9,7 @@ import { LocalStore } from "../../../stores/LocalStore";
 
 const loadAccountCount = (db: KyselyDB, sqlite: Database) => {
   const compiledQuery = db
-    .selectFrom("accountCode")
+    .selectFrom(AccountSchema.name)
     .select((eb) => eb.fn.count<number>("code").as("cnt"))
     .compile();
   return QueryRunner.executeTakeFirst(compiledQuery, sqlite);

@@ -21,7 +21,7 @@ export { LedgerController } from "./controllers/LedgerController.js";
 export { ResourceController } from "./controllers/ResourceController.js";
 
 export {
-  AccountCodeSchema,
+  AccountSchema,
   AccountTagSchema,
   JournalEntryLineSchema,
   JournalEntrySchema,

@@ -1,4 +1,4 @@
-import type { AccountCodeSchema, AccountTagSchema } from "../tables/index.js";
+import type { AccountSchema, AccountTagSchema } from "../tables/index.js";
 
 export type AccountCategory =
   | "asset"
@@ -69,7 +69,7 @@ export const AccountCode = {
   toTag(code: number) {
     return Math.floor(code / 1000);
   },
-  fromRow(row: AccountCodeSchema.Row): AccountCode {
+  fromRow(row: AccountSchema.Row): AccountCode {
     return {
       code: row.code,
       name: row.name,

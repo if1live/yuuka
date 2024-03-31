@@ -1,8 +1,8 @@
 import type { Insertable, Kysely, Selectable, Updateable } from "kysely";
 import type { SnakeCase } from "type-fest";
 
-const kyselyName = "accountCode";
-const nativeName: SnakeCase<typeof kyselyName> = "account_code";
+const kyselyName = "account";
+const nativeName: SnakeCase<typeof kyselyName> = "account";
 export const name = kyselyName;
 
 // TODO: 타입 유도? columns

@@ -17,7 +17,7 @@ import { AccountStatementLoader } from "../src/loaders/AccountStatementLoader.js
 import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";
 import { settings } from "../src/settings.js";
 import {
-  AccountCodeSchema,
+  AccountSchema,
   AccountStatementSchema,
   AccountTagSchema,
   JournalEntryLineSchema,
@@ -86,7 +86,7 @@ const insertBulk_accountTag = async (db: KyselyDB) => {
 };
 
 const insertBulk_accountCode = async (db: KyselyDB) => {
-  const items = MasterData.accountCodes.map((x): AccountCodeSchema.NewRow => {
+  const items = MasterData.accountCodes.map((x): AccountSchema.NewRow => {
     return {
       code: x.code,
       name: x.name,
@@ -95,7 +95,7 @@ const insertBulk_accountCode = async (db: KyselyDB) => {
   });
 
   return await db
-    .insertInto(AccountCodeSchema.name)
+    .insertInto(AccountSchema.name)
     .values(items)
     .executeTakeFirstOrThrow();
 };
@@ -133,7 +133,7 @@ const insertBulk_accountStatement = async (db: KyselyDB) => {
 
 const deleteAll = async (db: KyselyDB) => {
   await db.deleteFrom(AccountTagSchema.name).execute();
-  await db.deleteFrom(AccountCodeSchema.name).execute();
+  await db.deleteFrom(AccountSchema.name).execute();
   await db.deleteFrom(JournalEntrySchema.name).execute();
   await db.deleteFrom(JournalEntryLineSchema.name).execute();
 };
