@@ -1,11 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, expect, it } from "vitest";
-import { type JournalEntry, JournalEntryLine } from "../../src/index.js";
-import { JournalEntryService } from "../../src/journals/JournalEntryService.js";
+import { type JournalEntry, JournalEntryLine } from "../../../src/index.js";
+import { JournalEntryService } from "../../../src/journals/services/JournalEntryService.js";
 import {
   AccountTransactionSchema,
   LedgerTransactionSchema,
-} from "../../src/tables/index.js";
+} from "../../../src/tables/index.js";
 
 describe("JournalEntryService#prepare", () => {
   const journal: JournalEntry = {

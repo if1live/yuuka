@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { JournalEntryRepository } from "../journals/JournalEntryRepository.js";
+import { AccountTransactionRepository } from "../journals/repositories/AccountTransactionRepository.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
 import { journalSpecification } from "../specifications/index.js";
@@ -11,7 +11,7 @@ type Sheet = typeof sheet;
 
 const list: AsControllerFn<Sheet["list"]> = async (req) => {
   const { startDate, endDate } = req.body;
-  const entries = await JournalEntryRepository.findByDateRange(req.db, {
+  const entries = await AccountTransactionRepository.findByDateRange(req.db, {
     start: startDate,
     end: endDate,
   });
@@ -20,7 +20,7 @@ const list: AsControllerFn<Sheet["list"]> = async (req) => {
 
 const get: AsControllerFn<Sheet["get"]> = async (req) => {
   const { id } = req.body;
-  const found = await JournalEntryRepository.findById(req.db, id);
+  const found = await AccountTransactionRepository.findById(req.db, id);
   return new MyResponse(found);
 };
 

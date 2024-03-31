@@ -11,7 +11,7 @@ import {
   sql,
 } from "kysely";
 import * as R from "remeda";
-import { JournalEntryService } from "../src/journals/JournalEntryService.js";
+import { JournalEntryService } from "../src/journals/services/JournalEntryService.js";
 import { AccountCodeLoader } from "../src/loaders/AccountCodeLoader.js";
 import { AccountStatementLoader } from "../src/loaders/AccountStatementLoader.js";
 import { JournalEntryLoader } from "../src/loaders/JournalEntryLoader.js";

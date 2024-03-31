@@ -1,8 +1,8 @@
 import {
   type AccountTransactionSchema,
   LedgerTransactionSchema,
-} from "../tables/index.js";
-import type { JournalEntry } from "./JournalEntry.js";
+} from "../../tables/index.js";
+import type { JournalEntry } from "../models/JournalEntry.js";
 
 /**
  * journal entry 여러개를 한번에 넣게 하려면 변환과 insert를 나눌수 있어야한다.

@@ -1,6 +1,6 @@
 import { Hono } from "hono";
-import { AccountCodeRepository } from "../masterdata/AccountCodeRepository.js";
-import { AccountTagRepository } from "../masterdata/AccountTagRepository.js";
+import { AccountRepository } from "../masterdata/repositories/AccountRepository.js";
+import { AccountTagRepository } from "../masterdata/repositories/AccountTagRepository.js";
 import { MyResponse } from "../networks/index.js";
 import type { AsControllerFn } from "../networks/rpc.js";
 import { resourceSpecification } from "../specifications/index.js";
@@ -15,7 +15,7 @@ const masterdata: AsControllerFn<Sheet["masterdata"]> = async (req) => {
 
   const [accountTags, accountCodes] = await Promise.all([
     AccountTagRepository.load(db),
-    AccountCodeRepository.load(db),
+    AccountRepository.load(db),
   ]);
 
   return new MyResponse({

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { JournalEntry } from "../journals/JournalEntry.js";
+import type { JournalEntry } from "../journals/models/JournalEntry.js";
 import {
   HttpEndpoint,
   HttpInOut,

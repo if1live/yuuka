@@ -1,4 +1,4 @@
-import { type KyselyDB, LedgerTransactionSchema } from "../tables/index.js";
+import { type KyselyDB, LedgerTransactionSchema } from "../../tables/index.js";
 
 const insertBulk = async (
   db: KyselyDB,
@@ -10,6 +10,6 @@ const insertBulk = async (
     .executeTakeFirstOrThrow();
 };
 
-export const JournalEntryLineRepository = {
+export const LedgerTransactionRepository = {
   insertBulk,
 };

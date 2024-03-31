@@ -1,6 +1,6 @@
 import { assert, describe, it } from "vitest";
-import { JournalEntry } from "../../src/journals/JournalEntry.js";
-import type { JournalEntryLine } from "../../src/journals/JournalEntryLine.js";
+import { JournalEntry } from "../../../src/journals/models/JournalEntry.js";
+import type { JournalEntryLine } from "../../../src/journals/models/JournalEntryLine.js";
 
 describe("JournalEntryLine", () => {
   const skel = {

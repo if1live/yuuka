@@ -3,8 +3,8 @@ import path from "node:path";
 import { parse } from "csv-parse/sync";
 import * as R from "remeda";
 import { z } from "zod";
-import type { JournalEntry } from "../journals/JournalEntry.js";
-import type { JournalEntryLine } from "../journals/JournalEntryLine.js";
+import type { JournalEntry } from "../journals/models/JournalEntry.js";
+import type { JournalEntryLine } from "../journals/models/JournalEntryLine.js";
 import { parseFileName } from "./helpers.js";
 
 const journalItemSchema = z.object({

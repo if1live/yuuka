@@ -1,5 +1,5 @@
 import { assert, describe, it } from "vitest";
-import { JournalEntryLine } from "../../src/journals/JournalEntryLine.js";
+import { JournalEntryLine } from "../../../src/journals/models/JournalEntryLine.js";
 
 describe("JournalEntryLine#validate", () => {
   it("ok: debit", () => {

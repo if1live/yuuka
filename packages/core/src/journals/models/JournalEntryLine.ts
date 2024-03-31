@@ -1,4 +1,4 @@
-import { LedgerTransactionSchema } from "../tables/index.js";
+import { LedgerTransactionSchema } from "../../tables/index.js";
 
 type JournalEntryLine_Debit = {
   _tag: "debit";

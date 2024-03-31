@@ -1,8 +1,8 @@
 import * as R from "remeda";
-import { AccountTransactionSchema } from "../tables/index.js";
-import type { KyselyDB } from "../tables/index.js";
-import type { JournalEntry } from "./JournalEntry.js";
-import { JournalEntryLine } from "./JournalEntryLine.js";
+import { AccountTransactionSchema } from "../../tables/index.js";
+import type { KyselyDB } from "../../tables/index.js";
+import type { JournalEntry } from "../models/JournalEntry.js";
+import { JournalEntryLine } from "../models/JournalEntryLine.js";
 
 const findById = async (
   db: KyselyDB,
@@ -97,7 +97,7 @@ const insertBulk = async (
     .executeTakeFirstOrThrow();
 };
 
-export const JournalEntryRepository = {
+export const AccountTransactionRepository = {
   findById,
   findByDateRange,
   insertBulk,

@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import type { JournalEntry } from "../../src/journals/JournalEntry.js";
-import { JournalEntryLineRepository } from "../../src/journals/JournalEntryLineRepository.js";
-import { JournalEntryRepository } from "../../src/journals/JournalEntryRepository.js";
-import { JournalEntryService } from "../../src/journals/JournalEntryService.js";
+import type { JournalEntry } from "../../src/journals/models/JournalEntry.js";
+import { LedgerTransactionRepository } from "../../src/journals/repositories/LedgerTransactionRepository.js";
+import { AccountTransactionRepository } from "../../src/journals/repositories/AccountTransactionRepository.js";
+import { JournalEntryService } from "../../src/journals/services/JournalEntryService.js";
 import { LedgerService } from "../../src/ledgers/LedgerService.js";
 import { TestDatabase } from "../TestDatabase.js";
 
@@ -23,8 +23,8 @@ describe("LedgerService", () => {
     await TestDatabase.synchronize(db);
 
     const data = JournalEntryService.prepare(journal);
-    await JournalEntryRepository.insertBulk(db, data.entries);
-    await JournalEntryLineRepository.insertBulk(db, data.lines);
+    await AccountTransactionRepository.insertBulk(db, data.entries);
+    await LedgerTransactionRepository.insertBulk(db, data.lines);
   });
 
   afterAll(async () => {

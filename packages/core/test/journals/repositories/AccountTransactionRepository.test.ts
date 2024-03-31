@@ -1,13 +1,13 @@
 import { faker } from "@faker-js/faker";
 import { assert, afterAll, beforeAll, describe, expect, it } from "vitest";
-import { JournalEntryRepository } from "../../src/journals/JournalEntryRepository.js";
+import { AccountTransactionRepository } from "../../../src/journals/repositories/AccountTransactionRepository.js";
 import {
   AccountTransactionSchema,
   LedgerTransactionSchema,
-} from "../../src/tables/index.js";
-import { TestDatabase } from "../TestDatabase.js";
+} from "../../../src/tables/index.js";
+import { TestDatabase } from "../../TestDatabase.js";
 
-describe("JournalEntryRepository", () => {
+describe("AccountTransactionRepository", () => {
   const db = TestDatabase.create();
 
   const entryId = faker.string.alphanumeric(8);
@@ -36,18 +36,18 @@ describe("JournalEntryRepository", () => {
   });
 
   it("findById: exists", async () => {
-    const entry = await JournalEntryRepository.findById(db, entryId);
+    const entry = await AccountTransactionRepository.findById(db, entryId);
     assert.strictEqual(entry.lines.length, 2);
   });
 
   it("findById: not exists", async () => {
     expect(() =>
-      JournalEntryRepository.findById(db, "invalid"),
+      AccountTransactionRepository.findById(db, "invalid"),
     ).rejects.toThrow();
   });
 
   it("findByDateRange: exists", async () => {
-    const entries = await JournalEntryRepository.findByDateRange(db, {
+    const entries = await AccountTransactionRepository.findByDateRange(db, {
       start: "2024-03-01",
       end: "2024-03-02",
     });
@@ -55,7 +55,7 @@ describe("JournalEntryRepository", () => {
   });
 
   it("findByDateRange: not exists", async () => {
-    const entries = await JournalEntryRepository.findByDateRange(db, {
+    const entries = await AccountTransactionRepository.findByDateRange(db, {
       start: "2024-03-02",
       end: "2024-03-03",
     });
