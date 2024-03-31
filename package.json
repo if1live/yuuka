@@ -17,23 +17,24 @@
   },
   "dependencies": {
     "csv-parse": "^5.5.5",
-    "hono": "^4.1.2",
+    "csv-stringify": "^6.4.6",
+    "hono": "^4.1.6",
     "kysely": "^0.27.3",
-    "kysely-wasm": "^0.5.7",
+    "kysely-wasm": "^0.6.0",
     "neverthrow": "^6.1.0",
-    "remeda": "^1.54.0",
-    "type-fest": "^4.13.0",
+    "remeda": "^1.56.0",
+    "type-fest": "^4.14.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.6.1",
+    "@biomejs/biome": "^1.6.3",
     "@faker-js/faker": "^8.4.1",
-    "@hono/node-server": "^1.8.2",
+    "@hono/node-server": "^1.9.1",
     "@types/better-sqlite3": "^7.6.9",
     "better-sqlite3": "^9.4.3",
     "rimraf": "^5.0.5",
     "tsx": "^4.7.1",
-    "typescript": "^5.4.2",
+    "typescript": "^5.4.3",
     "vitest": "^1.4.0"
   },
   "packageManager": "pnpm@8.15.4"

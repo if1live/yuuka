@@ -1,5 +1,5 @@
 import type { Session } from "@supabase/supabase-js";
-import type { MyDatabase, KyselyDB } from "@yuuka/core";
+import type { KyselyDB, MyDatabase } from "@yuuka/core";
 import type { Hono } from "hono";
 import { CamelCasePlugin, type Dialect, Kysely } from "kysely";
 import { SqlJsDialect } from "kysely-wasm";
