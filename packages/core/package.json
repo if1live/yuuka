@@ -24,6 +24,9 @@
     "test": "vitest"
   },
   "devDependencies": {
-    "@types/node": "^20.12.2"
+    "@hono/node-server": "^1.9.1",
+    "@types/better-sqlite3": "^7.6.9",
+    "@types/node": "^20.12.2",
+    "better-sqlite3": "^9.4.3"
   }
 }

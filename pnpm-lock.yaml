@@ -42,15 +42,6 @@ importers:
       '@faker-js/faker':
         specifier: ^8.4.1
         version: 8.4.1
-      '@hono/node-server':
-        specifier: ^1.9.1
-        version: 1.9.1
-      '@types/better-sqlite3':
-        specifier: ^7.6.9
-        version: 7.6.9
-      better-sqlite3:
-        specifier: ^9.4.3
-        version: 9.4.3
       rimraf:
         specifier: ^5.0.5
         version: 5.0.5
@@ -66,9 +57,18 @@ importers:
 
   packages/core:
     devDependencies:
+      '@hono/node-server':
+        specifier: ^1.9.1
+        version: 1.9.1
+      '@types/better-sqlite3':
+        specifier: ^7.6.9
+        version: 7.6.9
       '@types/node':
         specifier: ^20.12.2
         version: 20.12.2
+      better-sqlite3:
+        specifier: ^9.4.3
+        version: 9.4.3
 
   packages/frontend:
     dependencies:
