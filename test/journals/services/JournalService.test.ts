@@ -18,9 +18,9 @@ describe("JournalService#prepare", () => {
   const actual = JournalService.prepare(journal);
 
   it("entry", () => {
-    expect(actual.entries).toHaveLength(1);
+    expect(actual.accounts).toHaveLength(1);
 
-    const entry = actual.entries[0];
+    const entry = actual.accounts[0];
     assert.ok(entry);
 
     assert.strictEqual(entry.txid, journal.id);
@@ -29,14 +29,14 @@ describe("JournalService#prepare", () => {
   });
 
   it("lines: debit", () => {
-    const lines = actual.lines.filter(
+    const lines = actual.ledgers.filter(
       (x) => x.tag === LedgerTransactionTable.debitTag,
     );
     expect(lines).toHaveLength(2);
   });
 
   it("lines: credit", () => {
-    const lines = actual.lines.filter(
+    const lines = actual.ledgers.filter(
       (x) => x.tag === LedgerTransactionTable.creditTag,
     );
     expect(lines).toHaveLength(1);

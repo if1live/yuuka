@@ -17,7 +17,7 @@ import type { MyDatabase } from "./rdbms/types.js";
 export const app = new Hono();
 
 // TODO: db
-const database = new SQLite(":memory:");
+const database = new SQLite("sqlite.db");
 const dialect = new SqliteDialect({
   database: database,
 });
@@ -26,7 +26,6 @@ const db = new Kysely<MyDatabase>({
   plugins: [new CamelCasePlugin()],
   // log: ['query', 'error']
 });
-await KyselyHelper.createSchema(db);
 
 app.use("*", logger());
 app.use("*", cors());

@@ -25,8 +25,8 @@ describe("LedgerService", () => {
     await KyselyHelper.createSchema(db);
 
     const data = JournalService.prepare(journal);
-    await AccountTransactionRepository.insertBulk(db, data.entries);
-    await LedgerTransactionRepository.insertBulk(db, data.lines);
+    await AccountTransactionRepository.insertBulk(db, data.accounts);
+    await LedgerTransactionRepository.insertBulk(db, data.ledgers);
   });
 
   afterAll(async () => {

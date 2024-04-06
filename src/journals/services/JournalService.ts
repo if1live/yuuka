@@ -10,16 +10,16 @@ import type { Journal } from "../models/Journal.js";
 export const prepare = (
   input: Journal,
 ): {
-  entries: AccountTransactionTable.NewRow[];
-  lines: LedgerTransactionTable.NewRow[];
+  accounts: AccountTransactionTable.NewRow[];
+  ledgers: LedgerTransactionTable.NewRow[];
 } => {
-  const entry: AccountTransactionTable.NewRow = {
+  const account: AccountTransactionTable.NewRow = {
     txid: input.id,
     date: input.date,
     brief: input.brief,
   };
 
-  const lines = input.lines.map((line): LedgerTransactionTable.NewRow => {
+  const ledgers = input.lines.map((line): LedgerTransactionTable.NewRow => {
     switch (line._tag) {
       case "credit":
         return {
@@ -39,7 +39,7 @@ export const prepare = (
   });
 
   return {
-    entries: [entry],
-    lines,
+    accounts: [account],
+    ledgers,
   };
 };
