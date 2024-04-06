@@ -52,7 +52,7 @@ app.get("/robots.txt", async (c) => {
 app.use("/static/*", serveStatic({ root: "./" }));
 
 app.get("/", async (c) => {
-  return c.json({ name: "yuuka" });
+  return c.redirect("/account");
 });
 
 app.route(SampleController.path, SampleController.app);
