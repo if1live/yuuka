@@ -1,6 +1,6 @@
 import type { AccountTable } from "../../tables/index.js";
 
-export interface AccountCode {
+export interface Account {
   code: number;
   name: string;
   description: string;
@@ -10,7 +10,7 @@ const toGroup = (code: number) => {
   return Math.floor(code / 1000);
 };
 
-const fromRow = (row: AccountTable.Row): AccountCode => {
+const fromRow = (row: AccountTable.Row): Account => {
   return {
     code: row.code,
     name: row.name,
@@ -18,7 +18,7 @@ const fromRow = (row: AccountTable.Row): AccountCode => {
   };
 };
 
-export const AccountCode = {
+export const Account = {
   toGroup,
   fromRow,
 };

@@ -13,6 +13,7 @@ import {
   LedgerStatementTable,
   LedgerTransactionTable,
 } from "../tables/index.js";
+import type { MyDatabase } from "./types.js";
 
 /**
  * locateFile을 설정하지 않으면 wasm 제대로 못받아서 터진다
@@ -38,7 +39,7 @@ export const SQL = await initSqlJs({
 
 type MyConfig = Omit<KyselyConfig, "dialect">;
 
-export const fromBuffer = <T>(buffer: Buffer, opts: MyConfig) => {
+export const fromBuffer = <T = MyDatabase>(buffer: Buffer, opts: MyConfig) => {
   const database = new SQL.Database(buffer);
   const dialect = new SqlJsDialect({ database });
   return new Kysely<T>({
@@ -49,7 +50,7 @@ export const fromBuffer = <T>(buffer: Buffer, opts: MyConfig) => {
 };
 
 // 유닛테스트 같은 목적으로 사용할 수 있다.
-export const fromEmpty = <T>(opts: MyConfig) => {
+export const fromEmpty = <T = MyDatabase>(opts: MyConfig) => {
   const buffer = Buffer.alloc(0);
   return fromBuffer<T>(buffer, opts);
 };
