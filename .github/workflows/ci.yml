@@ -2,7 +2,7 @@ name: yuuka
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "preview"]
 
 jobs:
   build:
