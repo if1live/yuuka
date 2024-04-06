@@ -9,11 +9,7 @@
     "enabled": true
   },
   "files": {
-    "ignore": [
-      "biome.json",
-      "package.json",
-      "tsconfig.json"
-    ]
+    "ignore": ["biome.json", "package.json", "tsconfig.json"]
   },
   "linter": {
     "enabled": true,
