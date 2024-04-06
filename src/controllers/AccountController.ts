@@ -1,13 +1,10 @@
-import { Hono } from "hono";
 import {
   AccountGroupRepository,
   AccountRepository,
 } from "../accounts/repositories/index.js";
-import type { MyKysely } from "../rdbms/types.js";
+import { createControllerApp } from "./helpers.js";
 
-export const app = new Hono<{
-  Bindings: { db: MyKysely };
-}>();
+export const app = createControllerApp();
 
 app.get("/", async (c) => {
   const { db } = c.env;

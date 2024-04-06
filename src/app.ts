@@ -5,7 +5,12 @@ import { compress } from "hono/compress";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
-import { AccountController } from "./controllers/index.js";
+import {
+  AccountController,
+  JournalController,
+  LedgerController,
+  SampleController,
+} from "./controllers/index.js";
 import { KyselyHelper } from "./rdbms/index.js";
 import type { MyDatabase } from "./rdbms/types.js";
 
@@ -50,4 +55,7 @@ app.get("/", async (c) => {
   return c.json({ name: "yuuka" });
 });
 
+app.route(SampleController.path, SampleController.app);
 app.route(AccountController.path, AccountController.app);
+app.route(LedgerController.path, LedgerController.app);
+app.route(JournalController.path, JournalController.app);
