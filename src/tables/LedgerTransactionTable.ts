@@ -40,6 +40,7 @@ export const createSchema = async <T>(db: Kysely<T>) => {
     .addPrimaryKeyConstraint("primary_key", [...primaryKeyFields])
     .execute();
 
+  /*
   // 계정 기준으로 검색
   await db.schema
     .createIndex(`${nativeName}_code_date`)
@@ -53,4 +54,5 @@ export const createSchema = async <T>(db: Kysely<T>) => {
     .on(nativeName)
     .columns(["date"])
     .execute();
+  */
 };

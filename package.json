@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "csv": "^6.3.8",
+    "hono": "^4.2.2",
     "kysely": "^0.27.3",
     "kysely-wasm": "^0.6.0",
     "remeda": "^1.57.2",
@@ -31,8 +32,11 @@
   "devDependencies": {
     "@biomejs/biome": "^1.6.4",
     "@faker-js/faker": "^8.4.1",
+    "@hono/node-server": "^1.9.1",
+    "@types/better-sqlite3": "^7.6.9",
     "@types/node": "^20.12.5",
     "@types/sql.js": "^1.4.9",
+    "better-sqlite3": "^9.4.5",
     "rimraf": "^5.0.5",
     "tsx": "^4.7.2",
     "typescript": "^5.4.4",
