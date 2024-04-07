@@ -8,8 +8,8 @@ export const Root = () => {
 
   return (
     <>
-      <Container>
-        <Menu fiexed="top" size="small">
+      <Menu fiexed="top" size="small">
+        <Container>
           <Menu.Item as={Link} to="/" header>
             yuuka
           </Menu.Item>
@@ -25,8 +25,8 @@ export const Root = () => {
           <Menu.Item as={Link} to="/book" active={checkActive("/book")}>
             book
           </Menu.Item>
-        </Menu>
-      </Container>
+        </Container>
+      </Menu>
 
       <div
         style={{
