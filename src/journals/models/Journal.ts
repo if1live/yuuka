@@ -7,7 +7,7 @@ const schema = z.object({
   id: z.string(),
   date: z.string(),
   brief: z.string(),
-  lines: z.array(JournalLine.schema),
+  lines: z.array(JournalLine.schema).min(2),
 });
 
 export type Journal = z.infer<typeof schema>;

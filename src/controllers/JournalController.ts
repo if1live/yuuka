@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { Journal } from "../journals/models/Journal.js";
 import { AccountTransactionRepository } from "../journals/repositories/index.js";
+import { JournalService } from "../journals/services/index.js";
 import type { MyRequest } from "../networks/types.js";
 
 export const ListReq = z.object({
@@ -36,16 +37,27 @@ export const CreateReq = Journal.schema;
 export type CreateReq = z.infer<typeof CreateReq>;
 
 export const create = async (req: MyRequest<CreateReq>) => {
-  // TODO:
-  return {};
+  const db = req.db;
+  const journal = req.body;
+
+  const result = await db.transaction().execute(async (trx) => {
+    return await JournalService.insert(trx, journal);
+  });
+
+  return journal;
 };
 
 export const UpdateReq = Journal.schema;
 export type UpdateReq = z.infer<typeof UpdateReq>;
 
 export const update = async (req: MyRequest<UpdateReq>) => {
-  // TODO:
-  return {};
+  const db = req.db;
+  const journal = req.body;
+
+  const result = await db.transaction().execute(async (trx) => {
+    return await JournalService.update(trx, journal);
+  });
+  return journal;
 };
 
 export const RemoveReq = z.object({
@@ -54,6 +66,11 @@ export const RemoveReq = z.object({
 export type RemoveReq = z.infer<typeof RemoveReq>;
 
 export const remove = async (req: MyRequest<RemoveReq>) => {
-  // TODO:
-  return {};
+  const db = req.db;
+  const { id } = req.body;
+
+  const result = await db.transaction().execute(async (trx) => {
+    return await JournalService.remove(trx, id);
+  });
+  return id;
 };
