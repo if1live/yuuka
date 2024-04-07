@@ -105,7 +105,9 @@
   },
   "include": [
     "src/**/*.ts",
+    "src/**/*.tsx",
     "test/**/*.ts",
+    "test/**/*.tsx",
     "etc/**/*.ts",
     "vite.config.ts"
   ]
