@@ -2,7 +2,7 @@ name: yuuka
 
 on:
   push:
-    branches: ["main", "preview"]
+    branches: ["main"]
 
 jobs:
   build:
@@ -49,14 +49,13 @@ jobs:
           pnpm build
           pnpm test
 
-      # - name: frontend
-      #   working-directory: packages/frontend
-      #   run: |
-      #     pnpm build
+      - name: frontend
+        run: |
+          pnpm build:frontend
 
       # - name: Deploy
       #   uses: peaceiris/actions-gh-pages@v3
       #   if: github.ref == 'refs/heads/main'
       #   with:
       #     github_token: ${{ secrets.GITHUB_TOKEN }}
-      #     publish_dir: packages/frontend/dist
+      #     publish_dir: dist/frontend

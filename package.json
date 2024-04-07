@@ -19,7 +19,7 @@
     "fix": "biome check --apply-unsafe .",
     "lint": "biome check .",
     "test": "vitest",
-    "build:frontend": "tsc && vite build",
+    "build:frontend": "tsc && vite build --outDir dist/frontend",
     "preview": "vite preview"
   },
   "dependencies": {
