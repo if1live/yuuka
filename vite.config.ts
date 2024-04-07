@@ -1,6 +1,6 @@
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
 import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig } from "vite";
 
 const baseUrl_ghpage = "/yuuka/";
 const baseUrl_vercel = undefined;

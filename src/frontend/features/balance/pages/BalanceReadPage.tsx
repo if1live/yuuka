@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import * as R from "remeda";
 import {
   Table,
   TableBody,
@@ -37,12 +36,17 @@ const BalanceReadView = (props: {
 }) => {
   const { req, resp } = props;
   const { date, code } = req;
-  const { statement, ledgers } = resp;
+  const { statement, ledgers, balance } = resp;
 
   return (
     <>
-      <h1>balance: {req.code}</h1>
-      <BalanceTable date={date} ledgers={ledgers} statement={statement} />
+      <h1>balance: {code}</h1>
+      <BalanceTable
+        date={date}
+        ledgers={ledgers}
+        statement={statement}
+        balance={balance}
+      />
     </>
   );
 };
@@ -51,17 +55,9 @@ const BalanceTable = (props: {
   date: DateText;
   statement: BalanceController.GetResp["statement"];
   ledgers: BalanceController.GetResp["ledgers"];
+  balance: BalanceController.GetResp["balance"];
 }) => {
-  const { date, statement, ledgers } = props;
-
-  const ledger_debit = R.sumBy(ledgers, (x) => x.debit);
-  const ledger_credit = R.sumBy(ledgers, (x) => x.credit);
-
-  const statement_debit = statement?.totalDebit ?? 0;
-  const statement_credit = statement?.totalCredit ?? 0;
-
-  const sum_debit = ledger_debit + statement_debit;
-  const sum_credit = ledger_credit + statement_credit;
+  const { date, statement, ledgers, balance } = props;
 
   return (
     <Table compact="very" selectable unstackable celled>
@@ -87,17 +83,17 @@ const BalanceTable = (props: {
           <TableHeaderCell>{date}</TableHeaderCell>
           <TableHeaderCell> </TableHeaderCell>
           <TableHeaderCell textAlign="right">
-            <CurrencyDisplay amount={sum_debit} />
+            <CurrencyDisplay amount={balance.debit} />
           </TableHeaderCell>
           <TableHeaderCell textAlign="right">
-            <CurrencyDisplay amount={sum_credit} />
+            <CurrencyDisplay amount={balance.credit} />
           </TableHeaderCell>
         </TableRow>
         <TableRow>
           <TableHeaderCell>{date}</TableHeaderCell>
           <TableHeaderCell>debit - credit</TableHeaderCell>
           <TableHeaderCell textAlign="right">
-            <CurrencyDisplay amount={sum_debit - sum_credit} />
+            <CurrencyDisplay amount={balance.balance} />
           </TableHeaderCell>
           <TableHeaderCell textAlign="right"> </TableHeaderCell>
         </TableRow>
