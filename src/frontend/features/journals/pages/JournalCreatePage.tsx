@@ -1,8 +1,16 @@
+import { useContext, useState } from "react";
 import type { DateText } from "../../../../core/types.js";
-import type { Journal } from "../../../../index.js";
+import { type Journal, JournalApi } from "../../../../index.js";
+import { MyFetch } from "../../../fetchers/index.js";
+import { DataSourceContext } from "../../../providers/DataSourceContext.js";
 import { JournalForm } from "../components/JournalForm.js";
 
 export const JournalCreatePage = () => {
+  const dataSource = useContext(DataSourceContext);
+
+  const [error, setError] = useState<Error | null>(null);
+  const [result, setResult] = useState<object | null>(null);
+
   const now = new Date();
 
   const pad = (n: number) => `${n}`.padStart(2, "0");
@@ -32,13 +40,37 @@ export const JournalCreatePage = () => {
   };
 
   const onSubmit = async (data: Journal) => {
-    console.log(data);
+    try {
+      const path = `${JournalApi.path}/transaction`;
+      const resp = await MyFetch.doPost(dataSource, path, data);
+      const json = await resp.json();
+
+      setResult(json);
+      setError(null);
+    } catch (e) {
+      setResult(null);
+      setError(e as Error);
+    }
   };
 
   return (
     <>
       <h1>Journal: create</h1>
       <JournalForm defaultValue={defaultValue} onSubmit={onSubmit} />
+
+      {error && (
+        <>
+          <h3>error</h3>
+          <pre>{error.message}</pre>
+        </>
+      )}
+
+      {result && (
+        <>
+          <h3>success</h3>
+          <pre>{JSON.stringify(result, null, 2)}</pre>
+        </>
+      )}
     </>
   );
 };

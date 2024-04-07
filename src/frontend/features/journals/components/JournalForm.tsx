@@ -179,6 +179,7 @@ export const JournalForm = (props: {
             {...register("brief", {
               required: "brief is required",
             })}
+            autoComplete="off"
           />
           <ErrorMessage
             errors={errors}

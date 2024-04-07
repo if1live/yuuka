@@ -25,3 +25,5 @@ export const fetcherWithApp = (app: Hono) => {
   };
   return fetcherWithFunc(myfetch);
 };
+
+export * as MyFetch from "./MyFetch.js";
