@@ -77,25 +77,59 @@ describe("JournalService#scenario", () => {
       assert.deepStrictEqual(found, journal);
     });
 
+    it("update: not changed", async () => {
+      const result = await JournalService.update(db, journal);
+      assert.strictEqual(result, 0);
+
+      const found = await JournalService.read(db, id);
+      assert.deepStrictEqual(found, journal);
+    });
+
     it("update: account", async () => {
       const payload: Journal = {
         ...journal,
         brief: "updated",
       };
       const result = await JournalService.update(db, payload);
+      assert.strictEqual(result, 2);
 
-      // TODO:
-      // const found = await JournalService.read(db, id);
-      // assert.deepStrictEqual(found, payload);
+      const found = await JournalService.read(db, id);
+      assert.deepStrictEqual(found, payload);
     });
 
-    it("update: ledger", async () => {});
+    it("update: ledger", async () => {
+      const payload: Journal = {
+        ...journal,
+        lines_credit: [{ _tag: "credit", code: 103, credit: 300 }],
+      };
+      const result = await JournalService.update(db, payload);
+      assert.strictEqual(result, 2);
+
+      const found = await JournalService.read(db, id);
+      assert.deepStrictEqual(found, payload);
+    });
 
     it("delete", async () => {
       const result = await JournalService.remove(db, id);
+      assert.strictEqual(result.account.numDeletedRows, 1n);
+      assert.strictEqual(result.ledger.numDeletedRows, 3n);
 
       const found = await JournalService.read(db, id);
       assert.strictEqual(found, undefined);
+    });
+  });
+
+  describe("update: not-found", () => {
+    it("fail", async () => {
+      const id = faker.string.alphanumeric(8);
+      const journal: Journal = {
+        id,
+        date: "2021-02-03",
+        brief: "brief",
+        lines_debit: [],
+        lines_credit: [],
+      };
+      expect(async () => JournalService.update(db, journal)).rejects.toThrow();
     });
   });
 });
