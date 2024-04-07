@@ -1,6 +1,6 @@
 import type { Session } from "@supabase/supabase-js";
 import { Hono } from "hono";
-import { AccountApp, JournalApp, LedgerApp } from "../../index.js";
+import { AccountApi, JournalApi, LedgerApi } from "../../index.js";
 import type { MyKysely } from "../../index.js";
 import type { DataSourceValue } from "./DataSourceContext.js";
 
@@ -18,8 +18,8 @@ export const createApp = (db: MyKysely) => {
     await next();
   });
 
-  app.route(AccountApp.path, AccountApp.app);
-  app.route(JournalApp.path, JournalApp.app);
-  app.route(LedgerApp.path, LedgerApp.app);
+  app.route(AccountApi.path, AccountApi.app);
+  app.route(JournalApi.path, JournalApi.app);
+  app.route(LedgerApi.path, LedgerApi.app);
   return app;
 };

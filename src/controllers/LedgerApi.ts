@@ -20,4 +20,4 @@ app.get("/list", async (c) => {
   return c.json(resp);
 });
 
-export const path = "/ledger" as const;
+export const path = "/api/ledger" as const;

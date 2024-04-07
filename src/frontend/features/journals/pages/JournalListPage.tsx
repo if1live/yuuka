@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import { JournalController } from "../../../../controllers/mod.js";
-import { JournalApp } from "../../../../index.js";
+import { JournalApi } from "../../../../index.js";
 import type { Journal } from "../../../../journals/models/Journal.js";
 import { JournalList } from "../components/JournalList.js";
 
@@ -11,7 +11,7 @@ export const JournalListPage = () => {
   const req = JournalController.ListReq.parse(params);
   const qs = new URLSearchParams(req);
 
-  const endpoint = `${JournalApp.path}/list`;
+  const endpoint = `${JournalApi.path}/list`;
   const url = `${endpoint}?${qs}`;
 
   const { data, error, isLoading } = useSWR(url);

@@ -6,9 +6,9 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
 import {
-  AccountApp,
-  JournalApp,
-  LedgerApp,
+  AccountApi,
+  JournalApi,
+  LedgerApi,
   SampleApp,
 } from "./controllers/index.js";
 import type { MyDatabase } from "./rdbms/types.js";
@@ -54,6 +54,6 @@ app.get("/", async (c) => {
 });
 
 app.route(SampleApp.path, SampleApp.app);
-app.route(AccountApp.path, AccountApp.app);
-app.route(LedgerApp.path, LedgerApp.app);
-app.route(JournalApp.path, JournalApp.app);
+app.route(AccountApi.path, AccountApi.app);
+app.route(LedgerApi.path, LedgerApi.app);
+app.route(JournalApi.path, JournalApi.app);

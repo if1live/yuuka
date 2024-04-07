@@ -56,4 +56,4 @@ app.delete("/transaction/:id", async (c) => {
   return c.json(resp);
 });
 
-export const path = "/journal" as const;
+export const path = "/api/journal" as const;

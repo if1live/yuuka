@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "semantic-ui-react";
 import useSWR from "swr";
-import { LedgerApp } from "../../../../controllers/index.js";
+import { LedgerApi } from "../../../../controllers/index.js";
 import { LedgerController } from "../../../../controllers/mod.js";
 import {
   AccountLink,
@@ -26,7 +26,7 @@ export const LedgerReadPage = () => {
   qs.append("startDate", `${req.startDate}`);
   qs.append("endDate", `${req.endDate}`);
 
-  const url = `${LedgerApp.path}/list?${qs}`;
+  const url = `${LedgerApi.path}/list?${qs}`;
   const { data, error, isLoading } = useSWR(url);
   const resp = data as LedgerController.ListResp;
 

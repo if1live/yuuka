@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import useSWR from "swr";
 import { JournalController } from "../../../../controllers/mod.js";
-import { Journal, JournalApp } from "../../../../index.js";
+import { Journal, JournalApi } from "../../../../index.js";
 import { JournalList } from "../components/JournalList.js";
 
 export const JournalReadPage = () => {
@@ -10,7 +10,7 @@ export const JournalReadPage = () => {
   const req = JournalController.GetReq.parse(params);
   const qs = new URLSearchParams(req);
 
-  const url = `${JournalApp.path}/transaction/${req.id}`;
+  const url = `${JournalApi.path}/transaction/${req.id}`;
   const { data, error, isLoading } = useSWR(url);
   const resp = data as JournalController.GetResp;
 

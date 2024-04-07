@@ -1,11 +1,11 @@
 import type { PropsWithChildren } from "react";
 import useSWR from "swr";
-import { AccountApp } from "../../controllers/index.js";
+import { AccountApi } from "../../controllers/index.js";
 import type { AccountController } from "../../controllers/mod.js";
 import { MasterDataContext, type MasterDataRoot } from "./MasterDataContext.js";
 
 export const MasterDataProvider = (props: PropsWithChildren) => {
-  const endpoint = `${AccountApp.path}/list`;
+  const endpoint = `${AccountApi.path}/list`;
   const { data, error, isLoading } = useSWR(endpoint);
   const resp = data as AccountController.ListResp;
 
