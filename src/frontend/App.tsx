@@ -11,6 +11,7 @@ import {
 import { Container, Image } from "semantic-ui-react";
 import { supabase } from "./constants.js";
 import { DataSourceProvider } from "./providers/DataSourceProvider.js";
+import { MasterDataProvider } from "./providers/MasterDataProvider.js";
 import { BookRouter } from "./routes/BookRoute.js";
 import { JournalRouter } from "./routes/JournalRoute.js";
 import { LedgerRouter } from "./routes/LedgerRoute.js";
@@ -68,7 +69,9 @@ export const App = () => {
 
   return (
     <DataSourceProvider session={session}>
-      <RouterProvider router={router} />
+      <MasterDataProvider>
+        <RouterProvider router={router} />
+      </MasterDataProvider>
     </DataSourceProvider>
   );
 };

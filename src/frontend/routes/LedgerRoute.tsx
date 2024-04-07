@@ -1,8 +1,6 @@
 import { Route, Routes } from "react-router-dom";
-/*
-import { LedgerReadPage } from "../features/ledgers/pages/LedgerReadPage";
-import { LedgerRootPage } from "../features/ledgers/pages/LedgerRootPage";
-*/
+import { LedgerReadPage } from "../features/ledgers/pages/LedgerReadPage.js";
+import { LedgerRootPage } from "../features/ledgers/pages/LedgerRootPage.js";
 
 export const LedgerRouter = () => (
   <Routes>
@@ -13,11 +11,3 @@ export const LedgerRouter = () => (
     />
   </Routes>
 );
-
-const LedgerReadPage = () => {
-  return <div>LedgerReadPage</div>;
-};
-
-const LedgerRootPage = () => {
-  return <div>LedgerRootPage</div>;
-};

@@ -10,12 +10,22 @@ const re_date = /^(\d{4})-(\d{2})-(\d{2})$/;
 
 export const dateSchema = z.custom<DateText>((value) => {
   if (typeof value !== "string") {
-    throw new Error("must be a string");
+    throw new Error("must be a string", {
+      cause: {
+        value,
+        type: typeof value,
+      },
+    });
   }
 
   const m = re_date.exec(value);
   if (!m) {
-    throw new Error("invalid date format");
+    throw new Error("invalid date format", {
+      cause: {
+        value,
+        type: typeof value,
+      },
+    });
   }
 
   return value;
