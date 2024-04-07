@@ -1,26 +1,34 @@
-import * as React from "react";
-import { useState } from "react";
-import { Image } from "semantic-ui-react";
+import {
+  Route,
+  RouterProvider,
+  createHashRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
+import { DataSourceProvider } from "./providers/DataSourceProvider.js";
+import { BookRouter } from "./routes/BookRoute.js";
+import { JournalRouter } from "./routes/JournalRoute.js";
+import { LedgerRouter } from "./routes/LedgerRoute.js";
+import { Root } from "./routes/Root.js";
 
-export const App = () => {
-  const [count, setCount] = useState(0);
+const router = createHashRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Root />}>
+      <Route path="/journal/*" element={<JournalRouter />} />
+      <Route path="/ledger/*" element={<LedgerRouter />} />
+      <Route path="/book/*" element={<BookRouter />} />
+    </Route>,
+  ),
+  {
+    // hash router에서는 없어야 제대로 작동한다.
+    // browser router 쓸때는 basename 붙어야 작동한다.
+    // github pages 기준으로는 어차피 정적 파일밖에 안되니까 hash router로 선택
+    // index.html을 404.html로 복사하는 편법을 쓰면 browser router 쓸 수 있긴하더라
+    // basename: "/yuuka",
+  },
+);
 
-  return (
-    <>
-      <Image src="/yuuka/yuuka-plain.jpg" />
-
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  );
-};
+export const App = () => (
+  <DataSourceProvider>
+    <RouterProvider router={router} />
+  </DataSourceProvider>
+);
