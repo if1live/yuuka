@@ -8,7 +8,7 @@ import {
 } from "../../../src/tables/index.js";
 
 describe("AccountTransactionRepository", () => {
-  const db = KyselyHelper.fromEmpty({});
+  const { db } = KyselyHelper.fromEmpty({});
 
   const txid = faker.string.alphanumeric(8);
 

@@ -17,7 +17,7 @@ describe("LedgerService", () => {
     lines_credit: [{ _tag: "credit", code: 101_002, credit: 200 }],
   };
 
-  const db = KyselyHelper.fromEmpty({});
+  const { db } = KyselyHelper.fromEmpty({});
 
   beforeAll(async () => {
     await KyselyHelper.createSchema(db);

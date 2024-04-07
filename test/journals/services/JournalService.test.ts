@@ -46,7 +46,7 @@ describe("JournalService#prepare", () => {
 });
 
 describe("JournalService#scenario", () => {
-  const db = KyselyHelper.fromEmpty({});
+  const { db } = KyselyHelper.fromEmpty({});
 
   beforeAll(async () => {
     await KyselyHelper.createSchema(db);

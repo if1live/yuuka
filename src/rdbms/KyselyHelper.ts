@@ -40,13 +40,14 @@ export const SQL = await initSqlJs({
 type MyConfig = Omit<KyselyConfig, "dialect">;
 
 export const fromBuffer = <T = MyDatabase>(buffer: Buffer, opts: MyConfig) => {
-  const database = new SQL.Database(buffer);
-  const dialect = new SqlJsDialect({ database });
-  return new Kysely<T>({
+  const sqlite = new SQL.Database(buffer);
+  const dialect = new SqlJsDialect({ database: sqlite });
+  const db = new Kysely<T>({
     ...opts,
     plugins: [new CamelCasePlugin()],
     dialect,
   });
+  return { db, sqlite };
 };
 
 // 유닛테스트 같은 목적으로 사용할 수 있다.
