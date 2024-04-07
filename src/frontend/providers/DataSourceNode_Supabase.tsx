@@ -4,6 +4,7 @@ import { Button, ButtonGroup, ButtonOr } from "semantic-ui-react";
 import type { Database } from "sql.js";
 import type { MyKysely } from "../../index.js";
 import { fromSqlite } from "../../rdbms/loader.js";
+import { LocalStore } from "./LocalStore.js";
 import { RemoteStore } from "./RemoteStore.js";
 import { type DataSourceNodeProps, createApp } from "./dataSourceNodes.js";
 
@@ -14,18 +15,14 @@ const load_remote: LoadFn = async (session: Session) => {
   const db = fromSqlite(sqlite, {});
 
   // remote 가져온걸 브라우저에 덮어쓰기
-  throw new Error("TODO");
-  // return { db, sqlite };
+  await LocalStore.save(sqlite);
+  return { db, sqlite };
 };
 
 const load_browser: LoadFn = async (session: Session) => {
-  /*
   const sqlite = await LocalStore.load();
-  const dialect = DataSourceValue.createDialect(sqlite);
-  const db = DataSourceValue.createKysely(dialect);
+  const db = fromSqlite(sqlite, {});
   return { db, sqlite };
-  */
-  throw new Error("TODO");
 };
 
 const LoadButton = (
