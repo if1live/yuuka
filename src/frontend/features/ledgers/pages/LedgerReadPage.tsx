@@ -3,15 +3,13 @@ import * as R from "remeda";
 import {
   Table,
   TableBody,
-  TableCell,
   TableFooter,
   TableHeader,
   TableHeaderCell,
   TableRow,
 } from "semantic-ui-react";
 import useSWR from "swr";
-import { LedgerApi } from "../../../../controllers/index.js";
-import { LedgerController } from "../../../../controllers/mod.js";
+import { LedgerApi, LedgerController } from "../../../../index.js";
 import {
   AccountLink,
   CurrencyDisplay,

@@ -1,8 +1,7 @@
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
-import { JournalController } from "../../../../controllers/mod.js";
-import { JournalApi } from "../../../../index.js";
-import type { Journal } from "../../../../journals/models/Journal.js";
+import { JournalApi, JournalController } from "../../../../index.js";
+import type { Journal } from "../../../../index.js";
 import { JournalList } from "../components/JournalList.js";
 
 // TODO: 노가다 코딩 줄이는 방법? swr에서 표준화 시켜야할듯?

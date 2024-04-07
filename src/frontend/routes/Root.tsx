@@ -22,6 +22,10 @@ export const Root = () => {
             ledger
           </Menu.Item>
 
+          <Menu.Item as={Link} to="/balance" active={checkActive("/balance")}>
+            balance
+          </Menu.Item>
+
           <Menu.Item as={Link} to="/book" active={checkActive("/book")}>
             book
           </Menu.Item>

@@ -7,6 +7,7 @@ import { logger } from "hono/logger";
 import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
 import {
   AccountApi,
+  BalanceApi,
   JournalApi,
   LedgerApi,
   SampleApp,
@@ -57,3 +58,4 @@ app.route(SampleApp.path, SampleApp.app);
 app.route(AccountApi.path, AccountApi.app);
 app.route(LedgerApi.path, LedgerApi.app);
 app.route(JournalApi.path, JournalApi.app);
+app.route(BalanceApi.path, BalanceApi.app);

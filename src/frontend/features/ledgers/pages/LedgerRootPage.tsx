@@ -8,8 +8,7 @@ import {
   TableBody,
   TableHeader,
 } from "semantic-ui-react";
-import { Account } from "../../../../accounts/models/Account.js";
-import { AccountCategory } from "../../../../accounts/models/AccountCategory.js";
+import { Account, AccountCategory } from "../../../../index.js";
 import { AccountLink } from "../../../components/index.js";
 import { convertDateToRange } from "../../../helpers/index.js";
 import { MasterDataContext } from "../../../providers/MasterDataContext.js";

@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-type YearText = `${number}${number}${number}${number}`;
-type MonthText = `${number}${number}`;
-type DayText = `${number}${number}`;
+export type YearText = `${number}${number}${number}${number}`;
+export type MonthText = `${number}${number}`;
+export type DayText = `${number}${number}`;
 
 // 2012-03-04 를 type-safe하게 다루고 싶다
 export type DateText = `${YearText}-${MonthText}-${DayText}`;

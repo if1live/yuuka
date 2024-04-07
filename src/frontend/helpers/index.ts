@@ -1,4 +1,4 @@
-const convertDateToYMD = (date: Date): string => {
+export const convertDateToYMD = (date: Date): string => {
   return date.toISOString().split("T")[0] ?? "";
 };
 

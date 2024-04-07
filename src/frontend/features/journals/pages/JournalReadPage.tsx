@@ -1,8 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { Button } from "semantic-ui-react";
 import useSWR from "swr";
-import { JournalController } from "../../../../controllers/mod.js";
-import { Journal, JournalApi } from "../../../../index.js";
+import { Journal, JournalApi, JournalController } from "../../../../index.js";
 import { JournalList } from "../components/JournalList.js";
 
 export const JournalReadPage = () => {

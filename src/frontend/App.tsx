@@ -12,6 +12,7 @@ import { Container, Image } from "semantic-ui-react";
 import { supabase } from "./constants.js";
 import { DataSourceProvider } from "./providers/DataSourceProvider.js";
 import { MasterDataProvider } from "./providers/MasterDataProvider.js";
+import { BalanceRouter } from "./routes/BalanceRoute.js";
 import { BookRouter } from "./routes/BookRoute.js";
 import { JournalRouter } from "./routes/JournalRoute.js";
 import { LedgerRouter } from "./routes/LedgerRoute.js";
@@ -22,6 +23,7 @@ const router = createHashRouter(
     <Route path="/" element={<Root />}>
       <Route path="/journal/*" element={<JournalRouter />} />
       <Route path="/ledger/*" element={<LedgerRouter />} />
+      <Route path="/balance/*" element={<BalanceRouter />} />
       <Route path="/book/*" element={<BookRouter />} />
     </Route>,
   ),
