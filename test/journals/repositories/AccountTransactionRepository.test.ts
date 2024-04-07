@@ -35,14 +35,14 @@ describe("AccountTransactionRepository", () => {
     await db.destroy();
   });
 
-  it("findById: exists", async () => {
-    const entry = await AccountTransactionRepository.findById(db, txid);
+  it("findByIdOrThrow: exists", async () => {
+    const entry = await AccountTransactionRepository.findByIdOrThrow(db, txid);
     assert.strictEqual(entry.lines.length, 2);
   });
 
-  it("findById: not exists", async () => {
+  it("findByIdOrThrow: not exists", async () => {
     expect(() =>
-      AccountTransactionRepository.findById(db, "invalid"),
+      AccountTransactionRepository.findByIdOrThrow(db, "invalid"),
     ).rejects.toThrow();
   });
 

@@ -7,7 +7,7 @@ import { JournalLine } from "../models/JournalLine.js";
 export const findById = async (
   db: MyKysely,
   txid: string,
-): Promise<Journal> => {
+): Promise<Journal | undefined> => {
   const rows = await db
     .selectFrom(AccountTransactionTable.name)
     .innerJoin("ledgerTransaction", (join) =>
@@ -18,11 +18,13 @@ export const findById = async (
     .execute();
 
   if (rows.length <= 0) {
-    throw new Error("not found");
+    return;
   }
 
   const [first, _drop] = rows;
-  if (!first) throw new Error("not found");
+  if (!first) {
+    return;
+  }
 
   const lines = rows
     .map(JournalLine.fromRow)
@@ -35,6 +37,19 @@ export const findById = async (
     date: first.date,
     lines,
   };
+};
+
+export const findByIdOrThrow = async (
+  db: MyKysely,
+  txid: string,
+): Promise<Journal> => {
+  const found = await findById(db, txid);
+  if (!found) {
+    throw new Error("Journal not found", {
+      cause: { txid },
+    });
+  }
+  return found;
 };
 
 export const findByDateRange = async (
