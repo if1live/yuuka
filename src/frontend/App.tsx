@@ -1,9 +1,15 @@
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import type { Session } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
 import {
   Route,
   RouterProvider,
   createHashRouter,
   createRoutesFromElements,
 } from "react-router-dom";
+import { Container, Image } from "semantic-ui-react";
+import { supabase } from "./constants.js";
 import { DataSourceProvider } from "./providers/DataSourceProvider.js";
 import { BookRouter } from "./routes/BookRoute.js";
 import { JournalRouter } from "./routes/JournalRoute.js";
@@ -27,8 +33,42 @@ const router = createHashRouter(
   },
 );
 
-export const App = () => (
-  <DataSourceProvider>
-    <RouterProvider router={router} />
-  </DataSourceProvider>
-);
+// 어차피 혼자 쓸건데 항상 인증된걸 기준으로 하는게 나을듯
+export const App = () => {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (!session) {
+    return (
+      <Container text>
+        <h1>project: yuuka</h1>
+        <Image src="/yuuka/yuuka-plain.jpg" />
+
+        <Auth
+          supabaseClient={supabase}
+          appearance={{ theme: ThemeSupa }}
+          providers={[]}
+        />
+      </Container>
+    );
+  }
+
+  return (
+    <DataSourceProvider session={session}>
+      <RouterProvider router={router} />
+    </DataSourceProvider>
+  );
+};

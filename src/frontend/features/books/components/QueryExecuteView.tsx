@@ -24,6 +24,16 @@ export const QueryExecuteView = (props: {
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
   const [error, setError] = useState<Error | null>(null);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<{ query: string }>({
+    defaultValues: {
+      query: "SELECT * FROM account LIMIT 10",
+    },
+  });
+
   const onSubmit = (data: { query: string }) => {
     setLoading(true);
     try {
@@ -39,22 +49,10 @@ export const QueryExecuteView = (props: {
     setLoading(false);
   };
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<{ query: string }>({
-    defaultValues: {
-      query: "SELECT * FROM account LIMIT 10",
-    },
-  });
-
   if (loading) return <p>loading...</p>;
 
   return (
     <>
-      <h1>book</h1>
-
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormField>
           <label>sql</label>
