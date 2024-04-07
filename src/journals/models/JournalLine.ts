@@ -15,18 +15,18 @@ const credit_schema = z.object({
 
 const schema = z.union([debit_schema, credit_schema]);
 
-type JournalLine_Debit = z.infer<typeof debit_schema>;
-type JournalLine_Credit = z.infer<typeof credit_schema>;
+export type JournalLine_Debit = z.infer<typeof debit_schema>;
+export type JournalLine_Credit = z.infer<typeof credit_schema>;
 
 export type JournalLine = JournalLine_Debit | JournalLine_Credit;
 
-const validate_debit = (line: JournalLine_Debit): JournalLine => {
+const validate_debit = (line: JournalLine_Debit): JournalLine_Debit => {
   if (line.debit <= 0) throw new Error("debit is not positive");
 
   return line;
 };
 
-const validate_credit = (line: JournalLine_Credit): JournalLine => {
+const validate_credit = (line: JournalLine_Credit): JournalLine_Credit => {
   if (line.credit <= 0) throw new Error("credit is not positive");
 
   return line;
@@ -84,7 +84,12 @@ const fromRow = (x: LedgerTransactionTable.Row): JournalLine => {
 
 export const JournalLine = {
   schema,
+  debit_schema,
+  credit_schema,
+
   validate,
+  validate_debit,
+  validate_credit,
   compare,
   filter_debit,
   filter_credit,

@@ -1,6 +1,9 @@
 import { assert, describe, it } from "vitest";
 import { Journal } from "../../../src/journals/models/Journal.js";
-import type { JournalLine } from "../../../src/journals/models/JournalLine.js";
+import type {
+  JournalLine_Credit,
+  JournalLine_Debit,
+} from "../../../src/journals/models/JournalLine.js";
 
 describe("Journal", () => {
   const skel = {
@@ -10,33 +13,45 @@ describe("Journal", () => {
   };
 
   it("ok", () => {
-    const lines: JournalLine[] = [
+    const lines_debit: JournalLine_Debit[] = [
       { _tag: "debit", code: 853000, debit: 7740 },
       { _tag: "debit", code: 854000, debit: 7740 },
+    ];
+    const lines_credit: JournalLine_Credit[] = [
       { _tag: "credit", code: 102101, credit: 15480 },
     ];
-    const entry: Journal = { ...skel, lines };
-    const actual = Journal.validate(entry);
 
-    // 명시적인 journal entry line으로 바뀌어야한다.
-    for (const x of actual.lines) {
-      assert(x._tag === "debit" || x._tag === "credit");
-    }
+    const entry: Journal = {
+      ...skel,
+      lines_debit,
+      lines_credit,
+    };
+    const actual = Journal.validate(entry);
+    assert.ok(actual);
   });
 
   it("fail: empty line", () => {
-    const lines: JournalLine[] = [];
-    const entry: Journal = { ...skel, lines };
+    const entry: Journal = {
+      ...skel,
+      lines_credit: [],
+      lines_debit: [],
+    };
 
     assert.throws(() => Journal.validate(entry));
   });
 
   it("fail: credit !== debit", () => {
-    const lines: JournalLine[] = [
+    const lines_debit: JournalLine_Debit[] = [
       { _tag: "debit", code: 853000, debit: 1 },
+    ];
+    const lines_credit: JournalLine_Credit[] = [
       { _tag: "credit", code: 102101, credit: 2 },
     ];
-    const entry: Journal = { ...skel, lines };
+    const entry: Journal = {
+      ...skel,
+      lines_credit,
+      lines_debit,
+    };
     assert.throws(() => Journal.validate(entry));
   });
 });

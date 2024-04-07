@@ -7,36 +7,30 @@ const schema = z.object({
   id: z.string(),
   date: z.string(),
   brief: z.string(),
-  lines: z.array(JournalLine.schema).min(2),
+  lines_debit: z.array(JournalLine.debit_schema).min(1),
+  lines_credit: z.array(JournalLine.credit_schema).min(1),
 });
 
 export type Journal = z.infer<typeof schema>;
 
 const validate = (journal: Journal): Journal => {
-  const lines = journal.lines.map(JournalLine.validate);
-  if (lines.length === 0) throw new Error("lines is empty");
+  const lines_debit = journal.lines_debit.map(JournalLine.validate_debit);
+  const lines_credit = journal.lines_credit.map(JournalLine.validate_credit);
 
-  const lines_credit = [];
-  const lines_debit = [];
-  for (const line of lines) {
-    if (line._tag === "debit") {
-      lines_debit.push(line);
-    }
-    if (line._tag === "credit") {
-      lines_credit.push(line);
-    }
-  }
+  if (lines_debit.length === 0) throw new Error("lines_debit is empty");
+  if (lines_credit.length === 0) throw new Error("lines_credit is empty");
 
-  const credit = R.sumBy(lines_credit, (x) => x.credit);
   const debit = R.sumBy(lines_debit, (x) => x.debit);
+  const credit = R.sumBy(lines_credit, (x) => x.credit);
 
-  if (credit !== debit) {
-    throw new Error(`credit(${credit}) !== debit(${debit})`);
+  if (debit !== credit) {
+    throw new Error(`debit(${debit}) !== credit(${credit})`);
   }
 
   return {
     ...journal,
-    lines,
+    lines_debit,
+    lines_credit,
   };
 };
 
@@ -58,16 +52,19 @@ const toCSV = (entry: Journal): unknown[][] => {
   const cells_metadata = [month, day, entry.id, entry.brief];
   const cells_padding = Array(cells_metadata.length).fill("");
 
-  const rows = entry.lines.map((line, idx) => {
-    const cells_amount =
-      line._tag === "debit"
-        ? [line.code, line.debit, ""]
-        : [line.code, "", line.credit];
-
+  const rows_debit = entry.lines_debit.map((line, idx) => {
+    const cells_amount = [line.code, line.debit, ""];
     return idx === 0
       ? [...cells_metadata, ...cells_amount]
       : [...cells_padding, ...cells_amount];
   });
+
+  const rows_credit = entry.lines_credit.map((line) => {
+    const cells_amount = [line.code, "", line.credit];
+    return [...cells_padding, ...cells_amount];
+  });
+
+  const rows = [...rows_debit, ...rows_credit];
   return rows;
 };
 

@@ -13,10 +13,8 @@ describe("LedgerService", () => {
     id: "1",
     brief: "brief",
     date: "2024-03-01",
-    lines: [
-      { _tag: "debit", code: 101_001, debit: 100 },
-      { _tag: "debit", code: 101_002, debit: 200 },
-    ],
+    lines_debit: [{ _tag: "debit", code: 101_001, debit: 100 }],
+    lines_credit: [{ _tag: "credit", code: 101_002, credit: 200 }],
   };
 
   const db = KyselyHelper.fromEmpty({});

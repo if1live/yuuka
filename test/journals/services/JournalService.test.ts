@@ -11,11 +11,11 @@ describe("JournalService#prepare", () => {
     id: "1",
     date: "2021-02-03",
     brief: "brief",
-    lines: [
+    lines_debit: [
       { _tag: "debit", code: 101, debit: 100 },
       { _tag: "debit", code: 102, debit: 200 },
-      { _tag: "credit", code: 103, credit: 100 },
     ],
+    lines_credit: [{ _tag: "credit", code: 103, credit: 100 }],
   };
   const actual = JournalService.prepare(journal);
 
@@ -62,11 +62,11 @@ describe("JournalService#scenario", () => {
       id,
       date: "2021-02-03",
       brief: "brief",
-      lines: [
+      lines_debit: [
         { _tag: "debit", code: 101, debit: 100 },
         { _tag: "debit", code: 102, debit: 200 },
-        { _tag: "credit", code: 103, credit: 100 },
       ],
+      lines_credit: [{ _tag: "credit", code: 103, credit: 100 }],
     };
 
     it("insert", async () => {

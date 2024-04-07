@@ -30,12 +30,15 @@ export const findById = async (
     .map(JournalLine.fromRow)
     .map(JournalLine.validate)
     .sort(JournalLine.compare);
+  const lines_debit = JournalLine.filter_debit(lines);
+  const lines_credit = JournalLine.filter_credit(lines);
 
   return {
     id: first.txid,
     brief: first.brief,
     date: first.date,
-    lines,
+    lines_debit,
+    lines_credit,
   };
 };
 
@@ -82,12 +85,15 @@ export const findByDateRange = async (
       .map(JournalLine.fromRow)
       .map(JournalLine.validate)
       .sort(JournalLine.compare);
+    const lines_debit = JournalLine.filter_debit(lines);
+    const lines_credit = JournalLine.filter_credit(lines);
 
     return {
       id: key,
       brief: first.brief,
       date: first.date,
-      lines,
+      lines_debit,
+      lines_credit,
     };
   });
   return entries;

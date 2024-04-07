@@ -24,28 +24,31 @@ export const prepare = (
     brief: input.brief,
   };
 
-  const ledgers = input.lines.map((line): LedgerTransactionTable.NewRow => {
-    switch (line._tag) {
-      case "credit":
-        return {
-          txid: input.id,
-          code: line.code,
-          tag: LedgerTransactionTable.creditTag,
-          amount: line.credit,
-        };
-      case "debit":
-        return {
-          txid: input.id,
-          code: line.code,
-          tag: LedgerTransactionTable.debitTag,
-          amount: line.debit,
-        };
-    }
-  });
+  const ledgers_debit = input.lines_debit.map(
+    (line): LedgerTransactionTable.NewRow => {
+      return {
+        txid: input.id,
+        code: line.code,
+        tag: LedgerTransactionTable.debitTag,
+        amount: line.debit,
+      };
+    },
+  );
+
+  const ledgers_credit = input.lines_credit.map(
+    (line): LedgerTransactionTable.NewRow => {
+      return {
+        txid: input.id,
+        code: line.code,
+        tag: LedgerTransactionTable.creditTag,
+        amount: line.credit,
+      };
+    },
+  );
 
   return {
     accounts: [account],
-    ledgers,
+    ledgers: [...ledgers_debit, ...ledgers_credit],
   };
 };
 

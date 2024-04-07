@@ -28,22 +28,18 @@ describe("JournalLoader", () => {
     assert.equal(actaul.date, skel.date);
     assert.equal(actaul.id, skel.txid);
     assert.equal(actaul.brief, skel.brief);
-    assert.equal(actaul.lines.length, 3);
 
-    const line1 = actaul.lines[0];
-    if (line1?._tag === "debit") {
-      assert.equal(line1.code, 853000);
-      assert.equal(line1.debit, 7740);
-    } else {
-      assert.fail("line1._tag is not debit");
-    }
+    assert.equal(actaul.lines_debit.length, 2);
+    assert.equal(actaul.lines_credit.length, 1);
 
-    const line3 = actaul.lines[2];
-    if (line3?._tag === "credit") {
-      assert.equal(line3.code, 102101);
-      assert.equal(line3.credit, 15480);
-    } else {
-      assert.fail("line3._tag is not credit");
-    }
+    const line1 = actaul.lines_debit[0];
+    assert.ok(line1);
+    assert.equal(line1.code, 853000);
+    assert.equal(line1.debit, 7740);
+
+    const line3 = actaul.lines_credit[0];
+    assert.ok(line3);
+    assert.equal(line3.code, 102101);
+    assert.equal(line3.credit, 15480);
   });
 });

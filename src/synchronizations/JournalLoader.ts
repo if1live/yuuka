@@ -4,7 +4,7 @@ import * as csv from "csv/sync";
 import * as R from "remeda";
 import { z } from "zod";
 import type { Journal } from "../journals/models/Journal.js";
-import type { JournalLine } from "../journals/models/JournalLine.js";
+import { JournalLine } from "../journals/models/JournalLine.js";
 import { parseFileName } from "./helpers.js";
 
 const journalItemSchema = z.object({
@@ -111,11 +111,15 @@ const convert = (records: [JournalItemRecord, ...JournalItemRecord[]]) => {
     throw new Error("invalid record");
   });
 
+  const lines_debit = JournalLine.filter_debit(lines);
+  const lines_credit = JournalLine.filter_credit(lines);
+
   const entry: Journal = {
     date: first.date,
     id: first.txid,
     brief: first.brief,
-    lines,
+    lines_debit,
+    lines_credit,
   };
   return entry;
 };

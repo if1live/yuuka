@@ -37,7 +37,8 @@ describe("AccountTransactionRepository", () => {
 
   it("findByIdOrThrow: exists", async () => {
     const entry = await AccountTransactionRepository.findByIdOrThrow(db, txid);
-    assert.strictEqual(entry.lines.length, 2);
+    assert.strictEqual(entry.lines_debit.length, 1);
+    assert.strictEqual(entry.lines_credit.length, 1);
   });
 
   it("findByIdOrThrow: not exists", async () => {
