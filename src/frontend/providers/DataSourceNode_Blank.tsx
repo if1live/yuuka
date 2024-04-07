@@ -4,7 +4,7 @@ import { fromBuffer, prepareSqlJs } from "../../rdbms/loader.js";
 import { type DataSourceNodeProps, createApp } from "./dataSourceNodes.js";
 
 export const DataSourceNode_Blank = (props: DataSourceNodeProps) => {
-  const { setDataSource, setError } = props;
+  const { setDataSource, setError, session } = props;
 
   const load = async () => {
     try {
@@ -14,7 +14,13 @@ export const DataSourceNode_Blank = (props: DataSourceNodeProps) => {
       await KyselyHelper.createSchema(db);
 
       const app = createApp(db);
-      setDataSource({ _tag: "sandbox", sqlite, db, app });
+      setDataSource({
+        _tag: "sandbox",
+        sqlite,
+        db,
+        app,
+        session,
+      });
     } catch (e) {
       setError(e as Error);
     }

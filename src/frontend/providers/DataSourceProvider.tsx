@@ -40,6 +40,7 @@ export const DataSourceProvider = (
     const childProps = {
       setDataSource,
       setError,
+      session,
     } as const;
 
     return (
@@ -47,7 +48,7 @@ export const DataSourceProvider = (
         <h1>project: yuuka</h1>
         <Image src="/yuuka/yuuka-plain.jpg" />
 
-        <DataSourceNode_Supabase {...childProps} session={session} />
+        <DataSourceNode_Supabase {...childProps} />
         <DataSourceNode_Api {...childProps} />
         <DataSourceNode_DragAndDrop {...childProps} />
         <DataSourceNode_Blank {...childProps} />

@@ -16,7 +16,7 @@ const loadUserId = async () => {
 
 export const SupabaseUploadForm = () => {
   const dataSource = useContext(DataSourceContext);
-  const session = dataSource._tag === "supabase" ? dataSource.session : null;
+  const { session } = dataSource;
 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<object | null>(null);

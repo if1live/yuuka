@@ -6,7 +6,7 @@ import { type DataSourceNodeProps, createApp } from "./dataSourceNodes.js";
 export const DataSourceNode_DragAndDrop = (props: DataSourceNodeProps) => {
   const fileTypes = ["sqlite", "db"];
 
-  const { setDataSource, setError } = props;
+  const { setDataSource, setError, session } = props;
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -20,7 +20,13 @@ export const DataSourceNode_DragAndDrop = (props: DataSourceNodeProps) => {
       const SQL = await prepareSqlJs();
       const { sqlite, db } = fromBuffer(SQL, buffer, {});
       const app = createApp(db);
-      setDataSource({ _tag: "sandbox", sqlite, db, app });
+      setDataSource({
+        _tag: "sandbox",
+        sqlite,
+        db,
+        app,
+        session,
+      });
     } catch (e) {
       setError(e as Error);
     }

@@ -61,11 +61,7 @@ const LoadButton = (
   );
 };
 
-export const DataSourceNode_Supabase = (
-  props: DataSourceNodeProps & {
-    session: Session;
-  },
-) => {
+export const DataSourceNode_Supabase = (props: DataSourceNodeProps) => {
   const deleteLocal = async () => {
     await LocalStore.del();
   };

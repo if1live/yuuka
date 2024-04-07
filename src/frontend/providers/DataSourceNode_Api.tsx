@@ -3,12 +3,16 @@ import { Button, Form, FormField } from "semantic-ui-react";
 import type { DataSourceNodeProps } from "./dataSourceNodes.js";
 
 export const DataSourceNode_Api = (props: DataSourceNodeProps) => {
-  const { setDataSource, setError } = props;
+  const { setDataSource, setError, session } = props;
 
   const [endpoint, setEndpoint] = useState("http://127.0.0.1:3000");
 
   const handleSubmit = async () => {
-    setDataSource({ _tag: "api", endpoint });
+    setDataSource({
+      _tag: "api",
+      endpoint,
+      session,
+    });
   };
 
   return (

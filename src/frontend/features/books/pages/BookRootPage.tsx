@@ -18,21 +18,12 @@ export const BookRootPage = () => {
     <>
       <h1>book</h1>
 
-      {dataSource._tag === "supabase" ? (
-        <>
-          <h2>supabase</h2>
-          <SupabaseUploadForm />
+      <h2>supabase</h2>
+      <SupabaseUploadForm />
 
-          <ButtonGroup>
-            <SupabaseSignOutButton />
-          </ButtonGroup>
-        </>
-      ) : (
-        <>
-          <h2>{dataSource._tag}</h2>
-          <p>todo</p>
-        </>
-      )}
+      <ButtonGroup>
+        <SupabaseSignOutButton />
+      </ButtonGroup>
 
       <h3>actions</h3>
       <ul>

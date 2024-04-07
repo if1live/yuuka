@@ -1,10 +1,8 @@
 import type { Session } from "@supabase/supabase-js";
 import type { Hono } from "hono";
-import { CamelCasePlugin, type Dialect, Kysely } from "kysely";
-import { SqlJsDialect } from "kysely-wasm";
 import { createContext } from "react";
 import type { Database as SqliteDatabase } from "sql.js";
-import type { MyDatabase, MyKysely } from "../../index.js";
+import type { MyKysely } from "../../index.js";
 
 /**
  * sqlite 파일을 브라우저에 집어넣고 돌리기
@@ -15,6 +13,7 @@ type DataSourceValue_Sandbox = {
   sqlite: SqliteDatabase;
   db: MyKysely;
   app: Hono;
+  session: Session;
 };
 
 /**
@@ -36,6 +35,7 @@ type DataSourceValue_Supabase = {
 type DataSourceValue_Api = {
   _tag: "api";
   endpoint: string;
+  session: Session;
 };
 
 export type DataSourceValue =
@@ -46,25 +46,7 @@ export type DataSourceValue =
 const defaultValue: DataSourceValue = {
   _tag: "api",
   endpoint: "://127.0.0.1:3000",
+  session: {} as Session,
 };
 
 export const DataSourceContext = createContext<DataSourceValue>(defaultValue);
-
-const createDialect = (database: SqliteDatabase) => {
-  return new SqlJsDialect({ database });
-};
-
-const createKysely = (dialect: Dialect) => {
-  const db = new Kysely<MyDatabase>({
-    dialect,
-    plugins: [new CamelCasePlugin()],
-    // log: ["error", "query"],
-  });
-  return db;
-};
-
-export const DataSourceValue = {
-  defaultValue,
-  createKysely,
-  createDialect,
-};
