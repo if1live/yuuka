@@ -1,4 +1,4 @@
-export * as SampleRouter from "./SampleRouter.js";
-export * as JournalRouter from "./JournalRouter.js";
-export * as LedgerRouter from "./LedgerRouter.js";
-export * as AccountRouter from "./AccountRouter.js";
+export * as SampleApp from "./SampleApp.js";
+export * as JournalApp from "./JournalApp.js";
+export * as LedgerApp from "./LedgerApp.js";
+export * as AccountApp from "./AccountApp.js";

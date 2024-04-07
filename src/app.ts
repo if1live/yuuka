@@ -6,10 +6,10 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
 import {
-  AccountRouter,
-  JournalRouter,
-  LedgerRouter,
-  SampleRouter,
+  AccountApp,
+  JournalApp,
+  LedgerApp,
+  SampleApp,
 } from "./controllers/index.js";
 import type { MyDatabase } from "./rdbms/types.js";
 
@@ -53,7 +53,7 @@ app.get("/", async (c) => {
   return c.redirect("/account");
 });
 
-app.route(SampleRouter.path, SampleRouter.app);
-app.route(AccountRouter.path, AccountRouter.app);
-app.route(LedgerRouter.path, LedgerRouter.app);
-app.route(JournalRouter.path, JournalRouter.app);
+app.route(SampleApp.path, SampleApp.app);
+app.route(AccountApp.path, AccountApp.app);
+app.route(LedgerApp.path, LedgerApp.app);
+app.route(JournalApp.path, JournalApp.app);

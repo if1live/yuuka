@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { AccountRouter, JournalRouter, LedgerRouter } from "../../index.js";
+import { AccountApp, JournalApp, LedgerApp } from "../../index.js";
 import type { MyKysely } from "../../index.js";
 import type { DataSourceValue } from "./DataSourceContext.js";
 
@@ -16,8 +16,8 @@ export const createApp = (db: MyKysely) => {
     await next();
   });
 
-  app.route(AccountRouter.path, AccountRouter.app);
-  app.route(JournalRouter.path, JournalRouter.app);
-  app.route(LedgerRouter.path, LedgerRouter.app);
+  app.route(AccountApp.path, AccountApp.app);
+  app.route(JournalApp.path, JournalApp.app);
+  app.route(LedgerApp.path, LedgerApp.app);
   return app;
 };
