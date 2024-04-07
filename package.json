@@ -22,6 +22,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
+    "@supabase/auth-ui-react": "^0.4.7",
+    "@supabase/auth-ui-shared": "^0.1.8",
+    "@supabase/supabase-js": "^2.42.0",
     "csv": "^6.3.8",
     "hono": "^4.2.2",
     "kysely": "^0.27.3",
@@ -29,8 +33,14 @@
     "liquidjs": "^10.10.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-drag-drop-files": "^2.3.10",
+    "react-hook-form": "^7.51.2",
+    "react-router-dom": "^6.22.3",
     "remeda": "^1.57.2",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.5",
     "sql.js": "^1.10.2",
+    "swr": "^2.2.5",
     "true-myth": "^7.1.0",
     "type-fest": "^4.15.0",
     "zod": "^3.22.4"
