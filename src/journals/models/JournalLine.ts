@@ -1,16 +1,22 @@
+import { z } from "zod";
 import { LedgerTransactionTable } from "../../tables/index.js";
 
-type JournalLine_Debit = {
-  _tag: "debit";
-  code: number;
-  debit: number;
-};
+const debit_schema = z.object({
+  _tag: z.literal("debit"),
+  code: z.number(),
+  debit: z.number(),
+});
 
-type JournalLine_Credit = {
-  _tag: "credit";
-  code: number;
-  credit: number;
-};
+const credit_schema = z.object({
+  _tag: z.literal("credit"),
+  code: z.number(),
+  credit: z.number(),
+});
+
+const schema = z.union([debit_schema, credit_schema]);
+
+type JournalLine_Debit = z.infer<typeof debit_schema>;
+type JournalLine_Credit = z.infer<typeof credit_schema>;
 
 export type JournalLine = JournalLine_Debit | JournalLine_Credit;
 
@@ -77,6 +83,7 @@ const fromRow = (x: LedgerTransactionTable.Row): JournalLine => {
 };
 
 export const JournalLine = {
+  schema,
   validate,
   compare,
   filter_debit,

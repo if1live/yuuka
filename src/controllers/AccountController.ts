@@ -1,29 +1,23 @@
+import { z } from "zod";
 import {
   AccountGroupRepository,
   AccountRepository,
 } from "../accounts/repositories/index.js";
-import { engine } from "../instances.js";
-import { createControllerApp } from "./helpers.js";
+import type { MyRequest } from "../networks/types.js";
 
-export const app = createControllerApp();
+export const ListReq = z.object({});
+export type ListReq = z.infer<typeof ListReq>;
 
-app.get("/", async (c) => {
-  const html = await engine.renderFile("accounts/account_index", {});
-  return c.html(html);
-});
-
-app.get("/list", async (c) => {
-  const { db } = c.env;
+export const list = async (req: MyRequest<ListReq>) => {
+  const db = req.db;
 
   const [accountGroups, accounts] = await Promise.all([
     AccountGroupRepository.loadAll(db),
     AccountRepository.loadAll(db),
   ]);
 
-  return c.json({
+  return {
     accountGroups,
     accounts,
-  });
-});
-
-export const path = "/account" as const;
+  };
+};

@@ -1,13 +1,16 @@
 import * as R from "remeda";
 import { Result } from "true-myth";
+import { z } from "zod";
 import { JournalLine } from "./JournalLine.js";
 
-export interface Journal {
-  id: string;
-  date: string;
-  brief: string;
-  lines: JournalLine[];
-}
+const schema = z.object({
+  id: z.string(),
+  date: z.string(),
+  brief: z.string(),
+  lines: z.array(JournalLine.schema),
+});
+
+export type Journal = z.infer<typeof schema>;
 
 const validate = (journal: Journal): Journal => {
   const lines = journal.lines.map(JournalLine.validate);
@@ -69,6 +72,7 @@ const toCSV = (entry: Journal): unknown[][] => {
 };
 
 export const Journal = {
+  schema,
   validate,
   safeValidate,
   toCSV,

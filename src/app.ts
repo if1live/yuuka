@@ -6,12 +6,11 @@ import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
 import {
-  AccountController,
-  JournalController,
-  LedgerController,
-  SampleController,
+  AccountRouter,
+  JournalRouter,
+  LedgerRouter,
+  SampleRouter,
 } from "./controllers/index.js";
-import { KyselyHelper } from "./rdbms/index.js";
 import type { MyDatabase } from "./rdbms/types.js";
 
 export const app = new Hono();
@@ -54,7 +53,7 @@ app.get("/", async (c) => {
   return c.redirect("/account");
 });
 
-app.route(SampleController.path, SampleController.app);
-app.route(AccountController.path, AccountController.app);
-app.route(LedgerController.path, LedgerController.app);
-app.route(JournalController.path, JournalController.app);
+app.route(SampleRouter.path, SampleRouter.app);
+app.route(AccountRouter.path, AccountRouter.app);
+app.route(LedgerRouter.path, LedgerRouter.app);
+app.route(JournalRouter.path, JournalRouter.app);

@@ -1,7 +1,7 @@
 import { engine } from "../instances.js";
-import { createControllerApp } from "./helpers.js";
+import { createHonoApp } from "./helpers.js";
 
-export const app = createControllerApp();
+export const app = createHonoApp();
 
 app.get("/", async (c) => {
   const html = await engine.renderFile("index", { name: "foo" });
