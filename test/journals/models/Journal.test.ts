@@ -10,7 +10,7 @@ describe("Journal", () => {
     id: "1",
     date: "2024-03-01",
     brief: "마트에서 식비/주류 네이버페이로",
-  };
+  } as const;
 
   it("ok", () => {
     const lines_debit: JournalLine_Debit[] = [

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { dateSchema } from "../core/types.js";
 import { Journal } from "../journals/models/Journal.js";
 import { AccountTransactionRepository } from "../journals/repositories/index.js";
 import { JournalService } from "../journals/services/index.js";
@@ -6,10 +7,10 @@ import type { MyRequest } from "../networks/types.js";
 
 export const ListReq = z.object({
   /** start 포함 */
-  startDate: z.string(),
+  startDate: dateSchema,
 
   /** end 미포함 */
-  endDate: z.string(),
+  endDate: dateSchema,
 });
 export type ListReq = z.infer<typeof ListReq>;
 
@@ -21,6 +22,7 @@ export const list = async (req: MyRequest<ListReq>) => {
   });
   return entries;
 };
+export type ListResp = Awaited<ReturnType<typeof list>>;
 
 export const GetReq = z.object({
   id: z.string(),
@@ -32,6 +34,7 @@ export const get = async (req: MyRequest<GetReq>) => {
   const found = await AccountTransactionRepository.findById(req.db, id);
   return found;
 };
+export type GetResp = Awaited<ReturnType<typeof get>>;
 
 export const CreateReq = Journal.schema;
 export type CreateReq = z.infer<typeof CreateReq>;
@@ -46,6 +49,7 @@ export const create = async (req: MyRequest<CreateReq>) => {
 
   return journal;
 };
+export type CreateResp = Awaited<ReturnType<typeof create>>;
 
 export const UpdateReq = Journal.schema;
 export type UpdateReq = z.infer<typeof UpdateReq>;
@@ -59,6 +63,7 @@ export const update = async (req: MyRequest<UpdateReq>) => {
   });
   return journal;
 };
+export type UpdateResp = Awaited<ReturnType<typeof update>>;
 
 export const RemoveReq = z.object({
   id: z.string(),
@@ -74,3 +79,4 @@ export const remove = async (req: MyRequest<RemoveReq>) => {
   });
   return id;
 };
+export type RemoveResp = Awaited<ReturnType<typeof remove>>;

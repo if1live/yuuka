@@ -1,5 +1,6 @@
 import * as R from "remeda";
 import { Account } from "../../accounts/models/Account.js";
+import type { DateText } from "../../core/types.js";
 import { JournalLine } from "../../journals/models/JournalLine.js";
 import type { MyKysely } from "../../rdbms/types.js";
 import {
@@ -14,7 +15,10 @@ import {
 export const load = async (
   db: MyKysely,
   code: number,
-  range: { start: string; end: string },
+  range: {
+    start: DateText;
+    end: DateText;
+  },
 ) => {
   const groupCode = Account.toGroup(code);
   const isGroup = groupCode * 1000 === code;

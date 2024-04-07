@@ -2,12 +2,13 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import * as csv from "csv/sync";
 import { z } from "zod";
+import { dateSchema } from "../core/types.js";
 import type { AccountStatementTable } from "../tables/index.js";
 import { parseFileName } from "./helpers.js";
 
 const accountStatementSchema = z.object({
   code: z.coerce.number(),
-  date: z.string(),
+  date: dateSchema,
   closingBalance: z.coerce.number(),
   totalDebit: z.coerce.number(),
   totalCredit: z.coerce.number(),

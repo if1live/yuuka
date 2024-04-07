@@ -21,3 +21,4 @@ export const list = async (req: MyRequest<ListReq>) => {
     accounts,
   };
 };
+export type ListResp = Awaited<ReturnType<typeof list>>;

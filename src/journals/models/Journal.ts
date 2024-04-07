@@ -1,11 +1,12 @@
 import * as R from "remeda";
 import { Result } from "true-myth";
 import { z } from "zod";
+import { dateSchema } from "../../core/types.js";
 import { JournalLine } from "./JournalLine.js";
 
 const schema = z.object({
   id: z.string(),
-  date: z.string(),
+  date: dateSchema,
   brief: z.string(),
   lines_debit: z.array(JournalLine.debit_schema).min(1),
   lines_credit: z.array(JournalLine.credit_schema).min(1),

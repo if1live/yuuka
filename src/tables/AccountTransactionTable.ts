@@ -1,5 +1,6 @@
 import type { Insertable, Kysely, Selectable, Updateable } from "kysely";
 import type { SnakeCase } from "type-fest";
+import type { DateText } from "../core/types.js";
 
 const kyselyName = "accountTransaction";
 const nativeName: SnakeCase<typeof kyselyName> = "account_transaction";
@@ -8,7 +9,7 @@ export const name = kyselyName;
 // TODO: 타입 유도? columns
 export interface Table {
   txid: string;
-  date: string;
+  date: DateText;
   brief: string;
 }
 

@@ -1,3 +1,4 @@
+import type { DateText } from "../../core/types.js";
 import type { MyKysely } from "../../rdbms/types.js";
 import { AccountStatementTable } from "../../tables/index.js";
 
@@ -14,7 +15,7 @@ export const insertBulk = async (
 export const loadByCodeAndDate = async (
   db: MyKysely,
   code: number,
-  date: string,
+  date: DateText,
 ) => {
   const found = await db
     .selectFrom(AccountStatementTable.name)
@@ -25,7 +26,7 @@ export const loadByCodeAndDate = async (
   return found;
 };
 
-export const loadByDate = async (db: MyKysely, date: string) => {
+export const loadByDate = async (db: MyKysely, date: DateText) => {
   const founds = await db
     .selectFrom(AccountStatementTable.name)
     .selectAll()

@@ -1,4 +1,5 @@
 import * as R from "remeda";
+import type { DateText } from "../../core/types.js";
 import type { MyKysely } from "../../rdbms/types.js";
 import { AccountTransactionTable } from "../../tables/index.js";
 import type { Journal } from "../models/Journal.js";
@@ -57,7 +58,10 @@ export const findByIdOrThrow = async (
 
 export const findByDateRange = async (
   db: MyKysely,
-  range: { start: string; end: string },
+  range: {
+    start: DateText;
+    end: DateText;
+  },
 ): Promise<Journal[]> => {
   const rows = await db
     .selectFrom(AccountTransactionTable.name)
