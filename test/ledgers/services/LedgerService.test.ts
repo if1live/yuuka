@@ -6,7 +6,7 @@ import {
 } from "../../../src/journals/repositories/index.js";
 import { JournalService } from "../../../src/journals/services/index.js";
 import { LedgerService } from "../../../src/ledgers/services/index.js";
-import { KyselyHelper } from "../../../src/rdbms/index.js";
+import { TestDatabase } from "../../TestDatabase.js";
 
 describe("LedgerService", () => {
   const journal: Journal = {
@@ -17,10 +17,10 @@ describe("LedgerService", () => {
     lines_credit: [{ _tag: "credit", code: 101_002, credit: 200 }],
   };
 
-  const { db } = KyselyHelper.fromEmpty({});
+  const db = TestDatabase.empty({});
 
   beforeAll(async () => {
-    await KyselyHelper.createSchema(db);
+    await TestDatabase.synchronize(db);
 
     const data = JournalService.prepare(journal);
     await AccountTransactionRepository.insertBulk(db, data.accounts);

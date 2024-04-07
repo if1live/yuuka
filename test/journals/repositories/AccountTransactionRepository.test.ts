@@ -1,19 +1,19 @@
 import { faker } from "@faker-js/faker";
 import { assert, afterAll, beforeAll, describe, expect, it } from "vitest";
 import { AccountTransactionRepository } from "../../../src/journals/repositories/index.js";
-import { KyselyHelper } from "../../../src/rdbms/index.js";
 import {
   AccountTransactionTable,
   LedgerTransactionTable,
 } from "../../../src/tables/index.js";
+import { TestDatabase } from "../../TestDatabase.js";
 
 describe("AccountTransactionRepository", () => {
-  const { db } = KyselyHelper.fromEmpty({});
+  const db = TestDatabase.empty({});
 
   const txid = faker.string.alphanumeric(8);
 
   beforeAll(async () => {
-    await KyselyHelper.createSchema(db);
+    await TestDatabase.synchronize(db);
 
     const entry: AccountTransactionTable.NewRow = {
       txid,

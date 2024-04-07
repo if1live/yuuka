@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FileUploader } from "react-drag-drop-files";
-import { KyselyHelper } from "../../index.js";
+import { fromBuffer, prepareSqlJs } from "../../rdbms/loader.js";
 import { type DataSourceNodeProps, createApp } from "./dataSourceNodes.js";
 
 export const DataSourceNode_DragAndDrop = (props: DataSourceNodeProps) => {
@@ -16,7 +16,9 @@ export const DataSourceNode_DragAndDrop = (props: DataSourceNodeProps) => {
     try {
       const arrayBuffer = await file.arrayBuffer();
       const buffer = new Uint8Array(arrayBuffer);
-      const { sqlite, db } = KyselyHelper.fromBuffer(buffer, {});
+
+      const SQL = await prepareSqlJs();
+      const { sqlite, db } = fromBuffer(SQL, buffer, {});
       const app = createApp(db);
       setDataSource({ _tag: "sandbox", sqlite, db, app });
     } catch (e) {

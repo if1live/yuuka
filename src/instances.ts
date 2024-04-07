@@ -18,7 +18,8 @@ const derivePath_vite = () => {
   return "";
 };
 
-const viewPath = import.meta.env ? derivePath_vite() : await derivePath_node();
+// const viewPath = import.meta.env ? derivePath_vite() : await derivePath_node();
+const viewPath = derivePath_vite();
 
 export const engine = new Liquid({
   root: viewPath,

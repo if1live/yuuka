@@ -3,8 +3,8 @@ import { faker } from "@faker-js/faker";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import type { Journal } from "../../../src/journals/models/Journal.js";
 import { JournalService } from "../../../src/journals/services/index.js";
-import { KyselyHelper } from "../../../src/rdbms/index.js";
 import { LedgerTransactionTable } from "../../../src/tables/index.js";
+import { TestDatabase } from "../../TestDatabase.js";
 
 describe("JournalService#prepare", () => {
   const journal: Journal = {
@@ -46,10 +46,10 @@ describe("JournalService#prepare", () => {
 });
 
 describe("JournalService#scenario", () => {
-  const { db } = KyselyHelper.fromEmpty({});
+  const db = TestDatabase.empty({});
 
   beforeAll(async () => {
-    await KyselyHelper.createSchema(db);
+    await TestDatabase.synchronize(db);
   });
 
   afterAll(async () => {
