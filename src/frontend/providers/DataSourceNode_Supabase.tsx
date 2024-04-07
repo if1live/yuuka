@@ -67,7 +67,7 @@ export const DataSourceNode_Supabase = (
   },
 ) => {
   const deleteLocal = async () => {
-    // TODO: await LocalStore.del();
+    await LocalStore.del();
   };
 
   return (

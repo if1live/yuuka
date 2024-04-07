@@ -1,9 +1,9 @@
 import type { Session } from "@supabase/supabase-js";
 import { type PropsWithChildren, useState } from "react";
-import { Button, ButtonGroup, Image } from "semantic-ui-react";
+import { Image } from "semantic-ui-react";
 import { Container } from "semantic-ui-react";
 import { SWRConfig } from "swr";
-import { supabase } from "../constants.js";
+import { SupabaseSignOutButton } from "../features/books/components/SupabaseSignOutButton.js";
 import { fetcherWithApp, fetcherWithHttp } from "../fetchers/index.js";
 import {
   DataSourceContext,
@@ -22,10 +22,6 @@ export const DataSourceProvider = (
   const { session } = props;
   const [dataSource, setDataSource] = useState<DataSourceValue | null>(null);
   const [error, setError] = useState<Error | null>(null);
-
-  const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-  };
 
   if (error) {
     console.error(error);
@@ -58,9 +54,7 @@ export const DataSourceProvider = (
 
         <hr />
 
-        <Button type="button" onClick={signOut} negative>
-          sign out
-        </Button>
+        <SupabaseSignOutButton />
 
         <hr />
 

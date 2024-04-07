@@ -1,7 +1,9 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Button } from "semantic-ui-react";
+import { ButtonGroup } from "semantic-ui-react";
 import { DataSourceContext } from "../../../providers/DataSourceContext.js";
+import { SupabaseSignOutButton } from "../components/SupabaseSignOutButton.js";
+import { SupabaseUploadForm } from "../components/SupabaseUploadForm.js";
 
 export const BookRootPage = () => {
   const dataSource = useContext(DataSourceContext);
@@ -12,16 +14,27 @@ export const BookRootPage = () => {
   if (!sqlite) return <p>no sqlite</p>;
   if (!db) return <p>no db</p>;
 
-  const save = async () => {
-    // TODO: await LocalStore.save(sqlite);
-    console.log("TODO: save");
-  };
-
   return (
     <>
       <h1>book</h1>
-      <Button onClick={save}>save</Button>
 
+      {dataSource._tag === "supabase" ? (
+        <>
+          <h2>supabase</h2>
+          <SupabaseUploadForm />
+
+          <ButtonGroup>
+            <SupabaseSignOutButton />
+          </ButtonGroup>
+        </>
+      ) : (
+        <>
+          <h2>{dataSource._tag}</h2>
+          <p>todo</p>
+        </>
+      )}
+
+      <h3>actions</h3>
       <ul>
         <li>
           <Link to="/book/tables">tables</Link>
