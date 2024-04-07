@@ -1,11 +1,14 @@
 import * as React from "react";
 import { useState } from "react";
+import { Image } from "semantic-ui-react";
 
 export const App = () => {
   const [count, setCount] = useState(0);
 
   return (
     <>
+      <Image src="/yuuka/yuuka-plain.jpg" />
+
       <h1>Vite + React</h1>
       <div className="card">
         <button type="button" onClick={() => setCount((count) => count + 1)}>
