@@ -11,6 +11,7 @@ import {
   sql,
 } from "kysely";
 import * as R from "remeda";
+import type { Journal } from "../src/index.js";
 import { JournalService } from "../src/journals/services/index.js";
 import { KyselyHelper } from "../src/rdbms/index.js";
 import type { MyDatabase, MyKysely } from "../src/rdbms/types.js";
@@ -35,13 +36,26 @@ const financialReportsPath = path.resolve(rootPath, "..", financialReportsDir);
 
 // TODO: journal은 가변데이터가 가까운데 어디에서 취급하지?
 // TODO: 하드코딩 줄일 방법?
+const journalFiles = ["journal_2024_03.csv", "journal_2024_04.csv"];
 const journalPath = path.join(financialReportsPath, "journals");
-const journalContext = R.pipe(
-  await JournalLoader.read(journalPath, "journal_2024_03.csv"),
-  (x) => JournalLoader.convert(x),
-);
+const journalEntries: Journal[] = [];
+for (const f of journalFiles) {
+  const result = await JournalLoader.read(journalPath, f);
+  const context = JournalLoader.convert(result);
+  journalEntries.push(...context.entries);
+}
 
+const accountStatementFiles = [
+  "AccountStatement_2024_03.csv",
+  "AccountStatement_2024_04.csv",
+];
+const accountStatements = [];
 const accountStatementPath = path.join(financialReportsPath, "accounts");
+for (const f of accountStatementFiles) {
+  const result = await AccountStatementLoader.read(accountStatementPath, f);
+  const context = AccountStatementLoader.convert(result);
+  accountStatements.push(...context.entries);
+}
 const accountStatementContext = R.pipe(
   await AccountStatementLoader.read(
     accountStatementPath,
@@ -99,7 +113,7 @@ const insertBulk_account = async (db: MyKysely) => {
 };
 
 const insertBulk_journal = async (db: MyKysely) => {
-  const results = journalContext.entries.map((x) => JournalService.prepare(x));
+  const results = journalEntries.map((x) => JournalService.prepare(x));
   const rows_account = results.flatMap((x) => x.accounts);
   const rows_ledger = results.flatMap((x) => x.ledgers);
 

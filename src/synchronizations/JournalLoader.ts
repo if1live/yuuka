@@ -88,7 +88,9 @@ const group = (records: JournalItemRecord[]) => {
   return result;
 };
 
-const convert = (records: [JournalItemRecord, ...JournalItemRecord[]]) => {
+const convert = (
+  records: [JournalItemRecord, ...JournalItemRecord[]],
+): Journal => {
   const [first, ...rest] = records;
 
   const lines = records.map((record): JournalLine => {
@@ -133,7 +135,7 @@ type RecordContext = {
 const convertRoot = (context: RecordContext) => {
   const { records } = context;
   const groups = group(records);
-  const entries = R.map(Object.values(groups), convert);
+  const entries = Object.values(groups).map(convert);
   return {
     ymd: context.ymd,
     entries,
