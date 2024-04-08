@@ -49,20 +49,13 @@ const accountStatementFiles = [
   "AccountStatement_2024_03.csv",
   "AccountStatement_2024_04.csv",
 ];
-const accountStatements = [];
+const accountStatements: AccountStatementTable.NewRow[] = [];
 const accountStatementPath = path.join(financialReportsPath, "accounts");
 for (const f of accountStatementFiles) {
   const result = await AccountStatementLoader.read(accountStatementPath, f);
   const context = AccountStatementLoader.convert(result);
   accountStatements.push(...context.entries);
 }
-const accountStatementContext = R.pipe(
-  await AccountStatementLoader.read(
-    accountStatementPath,
-    "AccountStatement_2024_03.csv",
-  ),
-  (x) => AccountStatementLoader.convert(x),
-);
 
 const sheetPath = path.join(financialReportsPath, "sheets");
 const masterdata_account = R.pipe(
@@ -134,7 +127,7 @@ const insertBulk_journal = async (db: MyKysely) => {
 };
 
 const insertBulk_accountStatement = async (db: MyKysely) => {
-  const rows = accountStatementContext.entries;
+  const rows = accountStatements;
   return await db
     .insertInto(AccountStatementTable.name)
     .values(rows)
