@@ -99,7 +99,7 @@ const LedgerReadView = (props: {
   // TODO: account tag 보고 기록하기. 비용은 initial 항목이 없어야한다!
   const initial_debit: Ledger = {
     ...initial_skel,
-    debit: statement.totalDebit + statement.closingBalance,
+    debit: statement.totalDebit,
   };
   const initial_credit: Ledger = {
     ...initial_skel,
