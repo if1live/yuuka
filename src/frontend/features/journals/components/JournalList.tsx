@@ -1,4 +1,4 @@
-import { Table } from "@mantine/core";
+import { Table, Text } from "@mantine/core";
 import * as R from "remeda";
 import type { Journal } from "../../../../journals/models/Journal.js";
 import { CurrencyDisplay } from "../../../components/index.js";
@@ -55,11 +55,11 @@ export const JournalList = (props: {
             <Table.Th>
               {sum_debit !== sum_credit ? "unbalanced!" : null}
             </Table.Th>
-            <Table.Th align="right">
-              <CurrencyDisplay amount={sum_debit} />
+            <Table.Th>
+              <CurrencyDisplay amount={sum_debit} fw={500} />
             </Table.Th>
-            <Table.Th align="right">
-              <CurrencyDisplay amount={sum_credit} />
+            <Table.Th>
+              <CurrencyDisplay amount={sum_credit} fw={500} />
             </Table.Th>
           </Table.Tr>
         </Table.Tfoot>

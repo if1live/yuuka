@@ -196,7 +196,7 @@ export const JournalForm = (props: {
                     </select>
                   </Table.Td>
                   <Table.Td>
-                    <input
+                    <Input
                       type="number"
                       {...register(`lines_debit.${idx}.debit`, {
                         valueAsNumber: true,
@@ -205,9 +205,9 @@ export const JournalForm = (props: {
                   </Table.Td>
                   <Table.Td>
                     <Button
-                      type="button"
-                      size="mini"
                       onClick={() => removeLine_debit(line.code)}
+                      variant="light"
+                      color="red"
                     >
                       del
                     </Button>
@@ -241,8 +241,7 @@ export const JournalForm = (props: {
                     </select>
                   </Table.Td>
                   <Table.Td>
-                    <input
-                      type="number"
+                    <Input
                       {...register(`lines_credit.${idx}.credit`, {
                         valueAsNumber: true,
                       })}
@@ -250,9 +249,9 @@ export const JournalForm = (props: {
                   </Table.Td>
                   <Table.Td>
                     <Button
-                      type="button"
-                      size="mini"
                       onClick={() => removeLine_credit(line.code)}
+                      variant="light"
+                      color="red"
                     >
                       del
                     </Button>

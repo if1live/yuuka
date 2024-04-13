@@ -148,25 +148,25 @@ const LedgerReadView = (props: {
           <Table.Tr>
             <Table.Th> </Table.Th>
             <Table.Th> </Table.Th>
-            <Table.Th align="right">
-              <CurrencyDisplay amount={sum_debit} />
+            <Table.Th>
+              <CurrencyDisplay amount={sum_debit} fw={500} />
             </Table.Th>
             <Table.Th> </Table.Th>
             <Table.Th> </Table.Th>
-            <Table.Th align="right">
-              <CurrencyDisplay amount={sum_credit} />
+            <Table.Th>
+              <CurrencyDisplay amount={sum_credit} fw={500} />
             </Table.Th>
           </Table.Tr>
           <Table.Tr>
             <Table.Th> </Table.Th>
             <Table.Th>debit - credit</Table.Th>
-            <Table.Th align="right">
-              <CurrencyDisplay amount={sum_debit - sum_credit} />
+            <Table.Th>
+              <CurrencyDisplay amount={sum_debit - sum_credit} fw={500} />
             </Table.Th>
             <Table.Th> </Table.Th>
             <Table.Th>credit - debit</Table.Th>
-            <Table.Th align="right">
-              <CurrencyDisplay amount={sum_credit - sum_debit} />
+            <Table.Th>
+              <CurrencyDisplay amount={sum_credit - sum_debit} fw={500} />
             </Table.Th>
           </Table.Tr>
         </Table.Tfoot>

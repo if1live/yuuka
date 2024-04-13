@@ -74,20 +74,20 @@ const BalanceTable = (props: {
         <Table.Tr>
           <Table.Th>{date}</Table.Th>
           <Table.Th> </Table.Th>
-          <Table.Th align="right">
+          <Table.Th>
             <CurrencyDisplay amount={balance.debit} />
           </Table.Th>
-          <Table.Th align="right">
+          <Table.Th>
             <CurrencyDisplay amount={balance.credit} />
           </Table.Th>
         </Table.Tr>
         <Table.Tr>
           <Table.Th>{date}</Table.Th>
           <Table.Th>debit - credit</Table.Th>
-          <Table.Th align="right">
+          <Table.Th>
             <CurrencyDisplay amount={balance.balance} />
           </Table.Th>
-          <Table.Th align="right"> </Table.Th>
+          <Table.Th> </Table.Th>
         </Table.Tr>
       </Table.Tfoot>
     </Table>
@@ -104,10 +104,10 @@ const StatementRow = (props: {
     <Table.Tr>
       <Table.Td>{statement.date}</Table.Td>
       <Table.Td>{statement.date}</Table.Td>
-      <Table.Td align="right">
+      <Table.Td>
         {debit > 0 ? <CurrencyDisplay amount={debit} /> : null}
       </Table.Td>
-      <Table.Td align="right">
+      <Table.Td>
         {credit > 0 ? <CurrencyDisplay amount={credit} /> : null}
       </Table.Td>
     </Table.Tr>
@@ -122,10 +122,10 @@ const LedgerRow = (props: {
     <Table.Tr>
       <Table.Td>{ledger.date}</Table.Td>
       <Table.Td>{ledger.brief}</Table.Td>
-      <Table.Td align="right">
+      <Table.Td>
         {ledger.debit > 0 ? <CurrencyDisplay amount={ledger.debit} /> : null}
       </Table.Td>
-      <Table.Td align="right">
+      <Table.Td>
         {ledger.credit > 0 ? <CurrencyDisplay amount={ledger.credit} /> : null}
       </Table.Td>
     </Table.Tr>

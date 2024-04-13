@@ -87,22 +87,18 @@ const JournalLineRow = (props: {
     <Table.Tr>
       <Table.Td>{displayDate ? entry.date : null}</Table.Td>
 
-      <Table.Td className={cellClassName} style={style}>
+      <Table.Td>
         {isFirstRow ? <JournalLink id={entry.id} label={entry.brief} /> : null}
         {isSecondRow && error ? error.message : null}
       </Table.Td>
 
-      <Table.Td className={cellClassName} style={style}>
+      <Table.Td>
         <AccountLink code={code} />
       </Table.Td>
 
-      <Table.Td className={cellClassName} style={style} align="right">
-        {debit ? <CurrencyDisplay amount={debit} /> : null}
-      </Table.Td>
+      <Table.Td>{debit ? <CurrencyDisplay amount={debit} /> : null}</Table.Td>
 
-      <Table.Td className={cellClassName} style={style} align="right">
-        {credit ? <CurrencyDisplay amount={credit} /> : null}
-      </Table.Td>
+      <Table.Td>{credit ? <CurrencyDisplay amount={credit} /> : null}</Table.Td>
     </Table.Tr>
   );
 };
