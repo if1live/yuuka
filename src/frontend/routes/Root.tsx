@@ -12,15 +12,19 @@ export const Root = () => {
         <Anchor component={Link} to="/">
           yuuka
         </Anchor>
+        {" | "}
         <Anchor component={Link} to="/journal">
           journal
         </Anchor>
+        {" | "}
         <Anchor component={Link} to="/ledger">
           ledger
         </Anchor>
+        {" | "}
         <Anchor component={Link} to="/balance">
           balance
         </Anchor>
+        {" | "}
         <Anchor component={Link} to="/book">
           book
         </Anchor>
