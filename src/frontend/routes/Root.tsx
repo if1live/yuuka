@@ -18,11 +18,11 @@ export const Root = () => {
 
       <div
         style={{
-          paddingTop: "20px",
-          paddingBottom: "60px",
+          // 페이지 아래에 공백을 넣고 싶다.
+          paddingBottom: "120px",
         }}
       >
-        <Container>
+        <Container fluid>
           <Outlet />
         </Container>
       </div>
