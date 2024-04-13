@@ -1,4 +1,4 @@
-import { Container, MantineProvider } from "@mantine/core";
+import { Container, Image, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
@@ -31,7 +31,7 @@ const ContentApp = () => {
     return (
       <Container>
         <h1>project: yuuka</h1>
-        <img src="/yuuka/yuuka-plain.jpg" alt="yuuka" />
+        <Image src="/yuuka/yuuka-plain.jpg" />
 
         <Auth
           supabaseClient={supabase}

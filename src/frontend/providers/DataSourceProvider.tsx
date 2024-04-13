@@ -1,4 +1,4 @@
-import { Container } from "@mantine/core";
+import { Container, Image } from "@mantine/core";
 import type { Session } from "@supabase/supabase-js";
 import { type PropsWithChildren, useState } from "react";
 import { SWRConfig } from "swr";
@@ -45,7 +45,7 @@ export const DataSourceProvider = (
     return (
       <Container>
         <h1>project: yuuka</h1>
-        <img src="/yuuka/yuuka-plain.jpg" alt="yuuka" />
+        <Image src="/yuuka/yuuka-plain.jpg" alt="yuuka" />
 
         <DataSourceNode_Supabase {...childProps} />
         <DataSourceNode_Api {...childProps} />
