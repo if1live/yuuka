@@ -1,4 +1,4 @@
-import { Table } from "@mantine/core";
+import { Anchor, Table } from "@mantine/core";
 import { Link } from "react-router-dom";
 import * as R from "remeda";
 
@@ -23,7 +23,9 @@ export const JournalRootPage = () => {
     <>
       <h1>Journal</h1>
 
-      <Link to="/journal/action/create">create</Link>
+      <Anchor component={Link} to="/journal/action/create">
+        create
+      </Anchor>
 
       <Table>
         <Table.Thead>
@@ -46,7 +48,9 @@ export const JournalRootPage = () => {
                 <Table.Td>{startDate}</Table.Td>
                 <Table.Td>{endDate}</Table.Td>
                 <Table.Td>
-                  <Link to={url}>journal</Link>
+                  <Anchor component={Link} to={url}>
+                    journal
+                  </Anchor>
                 </Table.Td>
               </Table.Tr>
             );

@@ -1,4 +1,4 @@
-import { Table } from "@mantine/core";
+import { Table, Text } from "@mantine/core";
 import { Journal } from "../../../../journals/models/Journal.js";
 import {
   AccountLink,
@@ -85,7 +85,7 @@ const JournalLineRow = (props: {
 
   return (
     <Table.Tr>
-      <Table.Td>{displayDate ? entry.date : null}</Table.Td>
+      <Table.Td>{displayDate ? <Text>{entry.date}</Text> : null}</Table.Td>
 
       <Table.Td>
         {isFirstRow ? <JournalLink id={entry.id} label={entry.brief} /> : null}

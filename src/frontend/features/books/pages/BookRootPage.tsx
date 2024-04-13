@@ -1,4 +1,4 @@
-import { Group } from "@mantine/core";
+import { Anchor, Group } from "@mantine/core";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { DataSourceContext } from "../../../providers/DataSourceContext.js";
@@ -30,10 +30,14 @@ export const BookRootPage = () => {
       <h3>actions</h3>
       <ul>
         <li>
-          <Link to="/book/tables">tables</Link>
+          <Anchor component={Link} to="/book/tables">
+            tables
+          </Anchor>
         </li>
         <li>
-          <Link to="/book/query">query</Link>
+          <Anchor component={Link} to="/book/query">
+            query
+          </Anchor>
         </li>
       </ul>
     </>

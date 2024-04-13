@@ -1,3 +1,4 @@
+import { Anchor } from "@mantine/core";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Account } from "../../accounts/models/Account.js";
@@ -31,9 +32,9 @@ export const AccountLink = (props: {
   const minor = group?.minor ?? "unknown";
 
   return (
-    <Link to={url}>
+    <Anchor component={Link} to={url}>
       [{code}] {major} {">"} {minor} {">"} {account?.name}
-    </Link>
+    </Anchor>
   );
 };
 
@@ -44,5 +45,9 @@ export const JournalLink = (props: {
   const { id, label } = props;
   const text = label ?? id;
   const url = `/journal/transaction/${id}`;
-  return <Link to={url}>{text}</Link>;
+  return (
+    <Anchor component={Link} to={url}>
+      {text}
+    </Anchor>
+  );
 };

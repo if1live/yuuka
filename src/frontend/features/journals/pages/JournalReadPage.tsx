@@ -1,3 +1,4 @@
+import { Anchor } from "@mantine/core";
 import { Link, useParams } from "react-router-dom";
 import useSWR from "swr";
 import { Journal, JournalApi, JournalController } from "../../../../index.js";
@@ -39,7 +40,9 @@ const JournalReadView = (props: {
       {result.isErr ? <h2>error: {result.error.message}</h2> : null}
       <JournalList entries={[entry]} />
 
-      <Link to={`/journal/entry/${id}/edit`}>edit</Link>
+      <Anchor component={Link} to={`/journal/entry/${id}/edit`}>
+        edit
+      </Anchor>
     </>
   );
 };

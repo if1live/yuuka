@@ -1,4 +1,4 @@
-import { Button, Input, Table } from "@mantine/core";
+import { Anchor, Button, Input, Table } from "@mantine/core";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import type { AccountGroup, DateText } from "../../../../index.js";
@@ -111,7 +111,9 @@ const BalanceTable = (props: {
               <Table.Td>{minor}</Table.Td>
               <Table.Td>{account.code}</Table.Td>
               <Table.Td>
-                <Link to={url}>{account.name}</Link>
+                <Anchor component={Link} to={url}>
+                  {account.name}
+                </Anchor>
               </Table.Td>
               <Table.Td>
                 <CurrencyDisplay amount={-1} />

@@ -1,4 +1,4 @@
-import { Container } from "@mantine/core";
+import { Anchor, Container } from "@mantine/core";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
 export const Root = () => {
@@ -9,11 +9,21 @@ export const Root = () => {
   return (
     <>
       <Container>
-        <Link to="/">yuuka</Link>
-        <Link to="/journal">journal</Link>
-        <Link to="/ledger">ledger</Link>
-        <Link to="/balance">balance</Link>
-        <Link to="/book">book</Link>
+        <Anchor component={Link} to="/">
+          yuuka
+        </Anchor>
+        <Anchor component={Link} to="/journal">
+          journal
+        </Anchor>
+        <Anchor component={Link} to="/ledger">
+          ledger
+        </Anchor>
+        <Anchor component={Link} to="/balance">
+          balance
+        </Anchor>
+        <Anchor component={Link} to="/book">
+          book
+        </Anchor>
       </Container>
 
       <div
