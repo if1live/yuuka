@@ -1,4 +1,4 @@
-import { Button } from "semantic-ui-react";
+import { Button } from "@mantine/core";
 import type { Database } from "sql.js";
 
 const downloadArrayBuffer = (

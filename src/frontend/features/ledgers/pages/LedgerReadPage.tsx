@@ -1,13 +1,6 @@
+import { Table } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import * as R from "remeda";
-import {
-  Table,
-  TableBody,
-  TableFooter,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-} from "semantic-ui-react";
 import useSWR from "swr";
 import { LedgerApi, LedgerController } from "../../../../index.js";
 import {
@@ -119,23 +112,23 @@ const LedgerReadView = (props: {
         <AccountLink code={code} startDate={startDate} endDate={endDate} />
       </h1>
 
-      <Table selectable celled compact="very" unstackable>
-        <TableHeader>
-          <TableRow>
-            <TableHeaderCell>일자</TableHeaderCell>
-            <TableHeaderCell>적요</TableHeaderCell>
-            <TableHeaderCell>금액</TableHeaderCell>
-            <TableHeaderCell>일자</TableHeaderCell>
-            <TableHeaderCell>적요</TableHeaderCell>
-            <TableHeaderCell>금액</TableHeaderCell>
-          </TableRow>
-        </TableHeader>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>일자</Table.Th>
+            <Table.Th>적요</Table.Th>
+            <Table.Th>금액</Table.Th>
+            <Table.Th>일자</Table.Th>
+            <Table.Th>적요</Table.Th>
+            <Table.Th>금액</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
 
-        <TableBody>
-          <TableRow>
+        <Table.Tbody>
+          <Table.Tr>
             <LedgerBlock ledger={initial_debit} prev={undefined} />
             <LedgerBlock ledger={initial_credit} prev={undefined} />
-          </TableRow>
+          </Table.Tr>
           {rows.map((row, i) => {
             const { debit, credit } = row;
 
@@ -143,40 +136,40 @@ const LedgerReadView = (props: {
             const key = `${debit?.id ?? ""}-${credit?.id ?? ""}-${i}`;
 
             return (
-              <TableRow key={key}>
+              <Table.Tr key={key}>
                 <LedgerBlock ledger={debit} prev={prev?.debit} />
                 <LedgerBlock ledger={credit} prev={prev?.credit} />
-              </TableRow>
+              </Table.Tr>
             );
           })}
-        </TableBody>
+        </Table.Tbody>
 
-        <TableFooter>
-          <TableRow>
-            <TableHeaderCell> </TableHeaderCell>
-            <TableHeaderCell> </TableHeaderCell>
-            <TableHeaderCell textAlign="right">
+        <Table.Tfoot>
+          <Table.Tr>
+            <Table.Th> </Table.Th>
+            <Table.Th> </Table.Th>
+            <Table.Th align="right">
               <CurrencyDisplay amount={sum_debit} />
-            </TableHeaderCell>
-            <TableHeaderCell> </TableHeaderCell>
-            <TableHeaderCell> </TableHeaderCell>
-            <TableHeaderCell textAlign="right">
+            </Table.Th>
+            <Table.Th> </Table.Th>
+            <Table.Th> </Table.Th>
+            <Table.Th align="right">
               <CurrencyDisplay amount={sum_credit} />
-            </TableHeaderCell>
-          </TableRow>
-          <TableRow>
-            <TableHeaderCell> </TableHeaderCell>
-            <TableHeaderCell>debit - credit</TableHeaderCell>
-            <TableHeaderCell textAlign="right">
+            </Table.Th>
+          </Table.Tr>
+          <Table.Tr>
+            <Table.Th> </Table.Th>
+            <Table.Th>debit - credit</Table.Th>
+            <Table.Th align="right">
               <CurrencyDisplay amount={sum_debit - sum_credit} />
-            </TableHeaderCell>
-            <TableHeaderCell> </TableHeaderCell>
-            <TableHeaderCell>credit - debit</TableHeaderCell>
-            <TableHeaderCell textAlign="right">
+            </Table.Th>
+            <Table.Th> </Table.Th>
+            <Table.Th>credit - debit</Table.Th>
+            <Table.Th align="right">
               <CurrencyDisplay amount={sum_credit - sum_debit} />
-            </TableHeaderCell>
-          </TableRow>
-        </TableFooter>
+            </Table.Th>
+          </Table.Tr>
+        </Table.Tfoot>
       </Table>
     </>
   );
@@ -197,9 +190,9 @@ const LedgerBlock = (props: {
 const LedgerBlock_None = () => {
   return (
     <>
-      <Table.Cell />
-      <Table.Cell />
-      <Table.Cell />
+      <Table.Td />
+      <Table.Td />
+      <Table.Td />
     </>
   );
 };
@@ -215,13 +208,13 @@ const LedgerBlock_Exists = (props: {
   const displayDate = ledger.date !== prev?.date;
   return (
     <>
-      <Table.Cell>{displayDate ? ledger.date : null}</Table.Cell>
-      <Table.Cell>
+      <Table.Td>{displayDate ? ledger.date : null}</Table.Td>
+      <Table.Td>
         <JournalLink id={ledger.id} label={ledger.brief} />
-      </Table.Cell>
-      <Table.Cell textAlign="right">
+      </Table.Td>
+      <Table.Td align="right">
         <CurrencyDisplay amount={amount} />
-      </Table.Cell>
+      </Table.Td>
     </>
   );
 };

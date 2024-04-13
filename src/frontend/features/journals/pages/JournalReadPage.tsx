@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom";
-import { Button } from "semantic-ui-react";
 import useSWR from "swr";
 import { Journal, JournalApi, JournalController } from "../../../../index.js";
 import { JournalList } from "../components/JournalList.js";
@@ -40,9 +39,7 @@ const JournalReadView = (props: {
       {result.isErr ? <h2>error: {result.error.message}</h2> : null}
       <JournalList entries={[entry]} />
 
-      <Button as={Link} to={`/journal/entry/${id}/edit`}>
-        edit
-      </Button>
+      <Link to={`/journal/entry/${id}/edit`}>edit</Link>
     </>
   );
 };

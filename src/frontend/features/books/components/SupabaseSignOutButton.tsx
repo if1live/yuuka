@@ -1,4 +1,4 @@
-import { Button } from "semantic-ui-react";
+import { Button } from "@mantine/core";
 import { supabase } from "../../../constants.js";
 
 export const SupabaseSignOutButton = () => {
@@ -7,7 +7,7 @@ export const SupabaseSignOutButton = () => {
   };
 
   return (
-    <Button onClick={signOut} negative>
+    <Button onClick={signOut} color="red">
       sign out
     </Button>
   );

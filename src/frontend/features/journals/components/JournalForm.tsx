@@ -1,20 +1,8 @@
 import { ErrorMessage } from "@hookform/error-message";
+import { Button, Group, Input, Table } from "@mantine/core";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as R from "remeda";
-import {
-  Button,
-  ButtonGroup,
-  ButtonOr,
-  Form,
-  FormField,
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-} from "semantic-ui-react";
 import {
   Journal,
   type JournalLine,
@@ -140,10 +128,9 @@ export const JournalForm = (props: {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormField>
-          <label>date</label>
-          <input
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Input.Wrapper label="date">
+          <Input
             type="date"
             {...register("date", {
               onChange: (e) => {
@@ -157,11 +144,10 @@ export const JournalForm = (props: {
               },
             })}
           />
-        </FormField>
+        </Input.Wrapper>
 
-        <FormField>
-          <label>id</label>
-          <input
+        <Input.Wrapper label="id">
+          <Input
             {...register("id", {
               required: "id is required",
             })}
@@ -171,11 +157,10 @@ export const JournalForm = (props: {
             name="id"
             render={({ message }) => <p>{message}</p>}
           />
-        </FormField>
+        </Input.Wrapper>
 
-        <FormField>
-          <label>brief</label>
-          <input
+        <Input.Wrapper label="brief">
+          <Input
             {...register("brief", {
               required: "brief is required",
             })}
@@ -186,18 +171,18 @@ export const JournalForm = (props: {
             name="brief"
             render={({ message }) => <p>{message}</p>}
           />
-        </FormField>
+        </Input.Wrapper>
 
-        <Table compact="very" color="blue">
+        <Table color="blue">
           <DebitTableHeader />
-          <TableBody>
+          <Table.Tbody>
             {values.lines_debit.map((line, idx) => {
               const key = `${line._tag}-${line.code}`;
               const accounts = filterAvailableAccountCodes(line);
 
               return (
-                <TableRow key={key}>
-                  <TableCell>
+                <Table.Tr key={key}>
+                  <Table.Td>
                     <select
                       {...register(`lines_debit.${idx}.code`, {
                         valueAsNumber: true,
@@ -209,16 +194,16 @@ export const JournalForm = (props: {
                         </option>
                       ))}
                     </select>
-                  </TableCell>
-                  <TableCell>
+                  </Table.Td>
+                  <Table.Td>
                     <input
                       type="number"
                       {...register(`lines_debit.${idx}.debit`, {
                         valueAsNumber: true,
                       })}
                     />
-                  </TableCell>
-                  <TableCell>
+                  </Table.Td>
+                  <Table.Td>
                     <Button
                       type="button"
                       size="mini"
@@ -226,23 +211,23 @@ export const JournalForm = (props: {
                     >
                       del
                     </Button>
-                  </TableCell>
-                </TableRow>
+                  </Table.Td>
+                </Table.Tr>
               );
             })}
-          </TableBody>
+          </Table.Tbody>
         </Table>
 
-        <Table compact="very" color="red">
+        <Table color="red">
           <CreditTableHeader />
-          <TableBody>
+          <Table.Tbody>
             {values.lines_credit.map((line, idx) => {
               const key = `${line._tag}-${line.code}`;
               const accounts = filterAvailableAccountCodes(line);
 
               return (
-                <TableRow key={key}>
-                  <TableCell>
+                <Table.Tr key={key}>
+                  <Table.Td>
                     <select
                       {...register(`lines_credit.${idx}.code`, {
                         valueAsNumber: true,
@@ -254,16 +239,16 @@ export const JournalForm = (props: {
                         </option>
                       ))}
                     </select>
-                  </TableCell>
-                  <TableCell>
+                  </Table.Td>
+                  <Table.Td>
                     <input
                       type="number"
                       {...register(`lines_credit.${idx}.credit`, {
                         valueAsNumber: true,
                       })}
                     />
-                  </TableCell>
-                  <TableCell>
+                  </Table.Td>
+                  <Table.Td>
                     <Button
                       type="button"
                       size="mini"
@@ -271,28 +256,26 @@ export const JournalForm = (props: {
                     >
                       del
                     </Button>
-                  </TableCell>
-                </TableRow>
+                  </Table.Td>
+                </Table.Tr>
               );
             })}
-          </TableBody>
+          </Table.Tbody>
         </Table>
 
-        <FormField>
+        <Input.Wrapper>
           <DebitCreditTableActions
             debit={addLine_debit}
             credit={addLine_credit}
             swap={swapLines}
             reset={resetLines}
           />
-        </FormField>
+        </Input.Wrapper>
 
-        <FormField>
-          <Button type="submit" disabled={!valid}>
-            submit
-          </Button>
-        </FormField>
-      </Form>
+        <Button type="submit" disabled={!valid}>
+          submit
+        </Button>
+      </form>
 
       <JournalList entries={[values]} />
 
@@ -303,23 +286,23 @@ export const JournalForm = (props: {
 };
 
 const DebitTableHeader = () => (
-  <TableHeader>
-    <TableRow>
-      <TableHeaderCell>code</TableHeaderCell>
-      <TableHeaderCell>debit</TableHeaderCell>
-      <TableHeaderCell>actions</TableHeaderCell>
-    </TableRow>
-  </TableHeader>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>code</Table.Th>
+      <Table.Th>debit</Table.Th>
+      <Table.Th>actions</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
 );
 
 const CreditTableHeader = () => (
-  <TableHeader>
-    <TableRow>
-      <TableHeaderCell>code</TableHeaderCell>
-      <TableHeaderCell>credit</TableHeaderCell>
-      <TableHeaderCell>actions</TableHeaderCell>
-    </TableRow>
-  </TableHeader>
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>code</Table.Th>
+      <Table.Th>credit</Table.Th>
+      <Table.Th>actions</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
 );
 
 const DebitCreditTableActions = (props: {
@@ -328,21 +311,18 @@ const DebitCreditTableActions = (props: {
   swap: () => void;
   reset: () => void;
 }) => (
-  <ButtonGroup size="mini">
+  <Group>
     <Button type="button" onClick={props.debit}>
       debit
     </Button>
-    <ButtonOr />
     <Button type="button" onClick={props.credit}>
       credit
     </Button>
-    <ButtonOr />
     <Button type="button" onClick={props.swap}>
       swap
     </Button>
-    <ButtonOr />
     <Button type="button" onClick={props.reset}>
       reset
     </Button>
-  </ButtonGroup>
+  </Group>
 );

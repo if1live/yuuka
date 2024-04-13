@@ -1,7 +1,7 @@
+import { Button, Input } from "@mantine/core";
 import { sql } from "kysely";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Form, FormField } from "semantic-ui-react";
 import type { Database } from "sql.js";
 import { QueryRunner } from "../../../../rdbms/index.js";
 import type { MyKysely } from "../../../../rdbms/types.js";
@@ -53,20 +53,18 @@ export const QueryExecuteView = (props: {
 
   return (
     <>
-      <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormField>
-          <label>sql</label>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Input.Wrapper label="sql">
           <input
             {...register("query", {
               required: "query is required",
             })}
             autoComplete="off"
           />
-        </FormField>
-        <FormField>
-          <Button type="submit">execute</Button>
-        </FormField>
-      </Form>
+        </Input.Wrapper>
+
+        <Button type="submit">execute</Button>
+      </form>
 
       {error ? (
         <p>{error.message}</p>

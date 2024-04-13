@@ -1,13 +1,6 @@
+import { Input, Table } from "@mantine/core";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
 import * as R from "remeda";
-import {
-  Form,
-  FormField,
-  Table,
-  TableBody,
-  TableHeader,
-} from "semantic-ui-react";
 import { Account, AccountCategory } from "../../../../index.js";
 import { AccountLink } from "../../../components/index.js";
 import { convertDateToRange } from "../../../helpers/index.js";
@@ -36,39 +29,37 @@ const LedgerRootView = (props: {
   return (
     <>
       <h2>date range</h2>
-      <Form>
-        <FormField>
-          <label>start date</label>
-          <input
+      <form>
+        <Input.Wrapper label="start date">
+          <Input
             type="date"
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
-        </FormField>
+        </Input.Wrapper>
 
-        <FormField>
-          <label>end date</label>
-          <input
+        <Input.Wrapper label="end date">
+          <Input
             type="date"
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
           />
-        </FormField>
-      </Form>
+        </Input.Wrapper>
+      </form>
 
-      <Table selectable compact="very">
-        <TableHeader>
-          <Table.Row>
-            <Table.HeaderCell>대분류</Table.HeaderCell>
-            <Table.HeaderCell>소분류</Table.HeaderCell>
-            <Table.HeaderCell>계정코드</Table.HeaderCell>
-            <Table.HeaderCell>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>대분류</Table.Th>
+            <Table.Th>소분류</Table.Th>
+            <Table.Th>계정코드</Table.Th>
+            <Table.Th>
               계정과목: {startDate} ~ {endDate}
-            </Table.HeaderCell>
-          </Table.Row>
-        </TableHeader>
+            </Table.Th>
+          </Table.Tr>
+        </Table.Thead>
 
-        <TableBody>
+        <Table.Tbody>
           {accounts.map((x) => {
             const groupCode = Account.toGroup(x.code);
             const tag = groupMap.get(groupCode);
@@ -85,21 +76,21 @@ const LedgerRootView = (props: {
             // TODO: 상위 분류에 따라서 구분해서 보여주고 싶다
 
             return (
-              <Table.Row key={x.code}>
-                <Table.Cell>{major}</Table.Cell>
-                <Table.Cell>{minor}</Table.Cell>
-                <Table.Cell>{isTagAccount ? groupCode : x.code}</Table.Cell>
-                <Table.Cell>
+              <Table.Tr key={x.code}>
+                <Table.Td>{major}</Table.Td>
+                <Table.Td>{minor}</Table.Td>
+                <Table.Td>{isTagAccount ? groupCode : x.code}</Table.Td>
+                <Table.Td>
                   <AccountLink
                     code={x.code}
                     startDate={startDate}
                     endDate={endDate}
                   />
-                </Table.Cell>
-              </Table.Row>
+                </Table.Td>
+              </Table.Tr>
             );
           })}
-        </TableBody>
+        </Table.Tbody>
       </Table>
     </>
   );

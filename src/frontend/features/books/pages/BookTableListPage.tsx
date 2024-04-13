@@ -1,14 +1,6 @@
+import { Button, Table } from "@mantine/core";
 import { sql } from "kysely";
 import { useContext } from "react";
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-} from "semantic-ui-react";
 import type { Database } from "sql.js";
 import type { MyDatabase, MyKysely } from "../../../../index.js";
 import { QueryRunner } from "../../../../rdbms/index.js";
@@ -55,29 +47,29 @@ export const BookTableListPage = () => {
   const rowCountMap = new Map(entries_row);
 
   return (
-    <Table celled compact="very">
-      <TableHeader>
-        <TableRow>
-          <TableHeaderCell>name</TableHeaderCell>
-          <TableHeaderCell>count</TableHeaderCell>
-          <TableHeaderCell>etc</TableHeaderCell>
-        </TableRow>
-      </TableHeader>
+    <Table>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>name</Table.Th>
+          <Table.Th>count</Table.Th>
+          <Table.Th>etc</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
 
-      <TableBody>
+      <Table.Tbody>
         {tables.map((t) => (
-          <TableRow key={t.name}>
-            <TableCell>{t.name}</TableCell>
-            <TableCell>{rowCountMap.get(t.name) ?? 0}</TableCell>
-            <TableCell>
+          <Table.Tr key={t.name}>
+            <Table.Td>{t.name}</Table.Td>
+            <Table.Td>{rowCountMap.get(t.name) ?? 0}</Table.Td>
+            <Table.Td>
               <details>
                 <summary>sql</summary>
                 {t.sql ?? ""}
               </details>
-            </TableCell>
-          </TableRow>
+            </Table.Td>
+          </Table.Tr>
         ))}
-      </TableBody>
+      </Table.Tbody>
     </Table>
   );
 };

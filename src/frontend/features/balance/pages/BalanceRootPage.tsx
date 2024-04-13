@@ -1,16 +1,6 @@
+import { Button, Input, Table } from "@mantine/core";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Button,
-  Form,
-  FormField,
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-} from "semantic-ui-react";
 import type { AccountGroup, DateText } from "../../../../index.js";
 import { Account, AccountCategory } from "../../../../index.js";
 import { CurrencyDisplay } from "../../../components/CurrencyDisplay.js";
@@ -63,20 +53,19 @@ export const BalanceRootPage = () => {
       <h1>balance</h1>
 
       <h2>date</h2>
-      <Form>
-        <FormField>
-          <label>date</label>
-          <input
+      <form>
+        <Input.Wrapper label="date">
+          <Input
             type="date"
             value={inputDate}
             onChange={(e) => setInputDate(e.target.value as DateText)}
           />
-        </FormField>
+        </Input.Wrapper>
 
         <Button type="button" loading={loading} onClick={handleRefresh}>
           refresh
         </Button>
-      </Form>
+      </form>
 
       {items_asset.length ? (
         <BalanceTable items={items_asset} date={date} />
@@ -99,38 +88,38 @@ const BalanceTable = (props: {
 }) => {
   const { items, date } = props;
   return (
-    <Table celled compact="very" selectable attached>
-      <TableHeader>
-        <TableRow>
-          <TableHeaderCell>대분류</TableHeaderCell>
-          <TableHeaderCell>소분류</TableHeaderCell>
-          <TableHeaderCell>계정코드</TableHeaderCell>
-          <TableHeaderCell>이름</TableHeaderCell>
-          <TableHeaderCell>잔액: {date}</TableHeaderCell>
-        </TableRow>
-      </TableHeader>
+    <Table>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>대분류</Table.Th>
+          <Table.Th>소분류</Table.Th>
+          <Table.Th>계정코드</Table.Th>
+          <Table.Th>이름</Table.Th>
+          <Table.Th>잔액: {date}</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
 
-      <TableBody>
+      <Table.Tbody>
         {items.map(({ account, group }) => {
           const major = AccountCategory.toKorean(group.major);
           const minor = group.minor;
           const url = `/balance/${account.code}/${date}`;
 
           return (
-            <TableRow key={account.code}>
-              <TableCell>{major}</TableCell>
-              <TableCell>{minor}</TableCell>
-              <TableCell>{account.code}</TableCell>
-              <TableCell>
+            <Table.Tr key={account.code}>
+              <Table.Td>{major}</Table.Td>
+              <Table.Td>{minor}</Table.Td>
+              <Table.Td>{account.code}</Table.Td>
+              <Table.Td>
                 <Link to={url}>{account.name}</Link>
-              </TableCell>
-              <TableCell>
+              </Table.Td>
+              <Table.Td>
                 <CurrencyDisplay amount={-1} />
-              </TableCell>
-            </TableRow>
+              </Table.Td>
+            </Table.Tr>
           );
         })}
-      </TableBody>
+      </Table.Tbody>
     </Table>
   );
 };

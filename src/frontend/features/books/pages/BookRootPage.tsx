@@ -1,6 +1,6 @@
+import { Group } from "@mantine/core";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { ButtonGroup } from "semantic-ui-react";
 import { DataSourceContext } from "../../../providers/DataSourceContext.js";
 import { SQLiteSaveButton } from "../components/SQLiteSaveButton.js";
 import { SupabaseSignOutButton } from "../components/SupabaseSignOutButton.js";
@@ -22,10 +22,10 @@ export const BookRootPage = () => {
       <h2>supabase</h2>
       <SupabaseUploadForm />
 
-      <ButtonGroup>
+      <Group>
         <SQLiteSaveButton sqlite={sqlite} />
         <SupabaseSignOutButton />
-      </ButtonGroup>
+      </Group>
 
       <h3>actions</h3>
       <ul>

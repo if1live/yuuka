@@ -1,7 +1,6 @@
+import { Container } from "@mantine/core";
 import type { Session } from "@supabase/supabase-js";
 import { type PropsWithChildren, useState } from "react";
-import { Image } from "semantic-ui-react";
-import { Container } from "semantic-ui-react";
 import { SWRConfig } from "swr";
 import { SupabaseSignOutButton } from "../features/books/components/SupabaseSignOutButton.js";
 import { fetcherWithApp, fetcherWithHttp } from "../fetchers/index.js";
@@ -26,7 +25,7 @@ export const DataSourceProvider = (
   if (error) {
     console.error(error);
     return (
-      <Container text>
+      <Container>
         <h1>yuuka</h1>
 
         <p>error: {error.name}</p>
@@ -44,9 +43,9 @@ export const DataSourceProvider = (
     } as const;
 
     return (
-      <Container text>
+      <Container>
         <h1>project: yuuka</h1>
-        <Image src="/yuuka/yuuka-plain.jpg" />
+        <img src="/yuuka/yuuka-plain.jpg" alt="yuuka" />
 
         <DataSourceNode_Supabase {...childProps} />
         <DataSourceNode_Api {...childProps} />

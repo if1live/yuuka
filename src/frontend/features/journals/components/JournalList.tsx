@@ -1,13 +1,5 @@
+import { Table } from "@mantine/core";
 import * as R from "remeda";
-import {
-  Icon,
-  Table,
-  TableBody,
-  TableFooter,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-} from "semantic-ui-react";
 import type { Journal } from "../../../../journals/models/Journal.js";
 import { CurrencyDisplay } from "../../../components/index.js";
 import { JournalBlock } from "./JournalBlock.js";
@@ -31,18 +23,18 @@ export const JournalList = (props: {
 
   return (
     <>
-      <Table compact="very" selectable celled unstackable>
-        <TableHeader>
-          <TableRow>
-            <TableHeaderCell>date</TableHeaderCell>
-            <TableHeaderCell>brief</TableHeaderCell>
-            <TableHeaderCell>code</TableHeaderCell>
-            <TableHeaderCell>debit</TableHeaderCell>
-            <TableHeaderCell>credit</TableHeaderCell>
-          </TableRow>
-        </TableHeader>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>date</Table.Th>
+            <Table.Th>brief</Table.Th>
+            <Table.Th>code</Table.Th>
+            <Table.Th>debit</Table.Th>
+            <Table.Th>credit</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
 
-        <TableBody>
+        <Table.Tbody>
           {entries.map((entry, order) => {
             const prev = entries[order - 1];
             return (
@@ -54,23 +46,23 @@ export const JournalList = (props: {
               />
             );
           })}
-        </TableBody>
+        </Table.Tbody>
 
-        <TableFooter>
-          <TableRow negative>
-            <TableHeaderCell> </TableHeaderCell>
-            <TableHeaderCell> </TableHeaderCell>
-            <TableHeaderCell>
+        <Table.Tfoot>
+          <Table.Tr>
+            <Table.Th> </Table.Th>
+            <Table.Th> </Table.Th>
+            <Table.Th>
               {sum_debit !== sum_credit ? "unbalanced!" : null}
-            </TableHeaderCell>
-            <TableHeaderCell textAlign="right">
+            </Table.Th>
+            <Table.Th align="right">
               <CurrencyDisplay amount={sum_debit} />
-            </TableHeaderCell>
-            <TableHeaderCell textAlign="right">
+            </Table.Th>
+            <Table.Th align="right">
               <CurrencyDisplay amount={sum_credit} />
-            </TableHeaderCell>
-          </TableRow>
-        </TableFooter>
+            </Table.Th>
+          </Table.Tr>
+        </Table.Tfoot>
       </Table>
     </>
   );

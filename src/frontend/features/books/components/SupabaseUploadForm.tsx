@@ -1,5 +1,5 @@
+import { Button } from "@mantine/core";
 import { useContext, useState } from "react";
-import { Button } from "semantic-ui-react";
 import { supabase } from "../../../constants.js";
 import { DataSourceContext } from "../../../providers/DataSourceContext.js";
 import { RemoteStore } from "../../../providers/RemoteStore.js";

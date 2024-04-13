@@ -1,6 +1,6 @@
+import { Button } from "@mantine/core";
 import type { Session } from "@supabase/supabase-js";
 import { type PropsWithChildren, useEffect, useState } from "react";
-import { Button, ButtonGroup, ButtonOr } from "semantic-ui-react";
 import type { Database } from "sql.js";
 import type { MyKysely } from "../../index.js";
 import { fromSqlite } from "../../rdbms/loader.js";
@@ -55,7 +55,7 @@ const LoadButton = (
   };
 
   return (
-    <Button type="button" onClick={handleClick} loading={loading}>
+    <Button onClick={handleClick} loading={loading}>
       {props.children}
     </Button>
   );
@@ -69,19 +69,17 @@ export const DataSourceNode_Supabase = (props: DataSourceNodeProps) => {
   return (
     <>
       <h3>supabase</h3>
-      <ButtonGroup>
+      <Button.Group>
         <LoadButton {...props} load={load_remote}>
           remote
         </LoadButton>
-        <ButtonOr />
         <LoadButton {...props} load={load_browser}>
           browser
         </LoadButton>
-        <ButtonOr />
-        <Button type="button" onClick={deleteLocal} negative>
+        <Button type="button" onClick={deleteLocal} color="red">
           delete
         </Button>
-      </ButtonGroup>
+      </Button.Group>
     </>
   );
 };

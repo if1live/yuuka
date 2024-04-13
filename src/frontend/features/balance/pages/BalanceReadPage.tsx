@@ -1,13 +1,5 @@
+import { Table } from "@mantine/core";
 import { useParams } from "react-router-dom";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-} from "semantic-ui-react";
 import useSWR from "swr";
 import { BalanceApi, BalanceController } from "../../../../index.js";
 import type { DateText } from "../../../../index.js";
@@ -60,44 +52,44 @@ const BalanceTable = (props: {
   const { date, statement, ledgers, balance } = props;
 
   return (
-    <Table compact="very" selectable unstackable celled>
-      <TableHeader>
-        <TableRow>
-          <TableHeaderCell>date</TableHeaderCell>
-          <TableHeaderCell>brief</TableHeaderCell>
-          <TableHeaderCell>debit</TableHeaderCell>
-          <TableHeaderCell>credit</TableHeaderCell>
-        </TableRow>
-      </TableHeader>
+    <Table>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>date</Table.Th>
+          <Table.Th>brief</Table.Th>
+          <Table.Th>debit</Table.Th>
+          <Table.Th>credit</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
 
-      <TableBody>
+      <Table.Tbody>
         {statement ? <StatementRow statement={statement} /> : null}
 
         {ledgers.map((ledger) => (
           <LedgerRow key={ledger.id} ledger={ledger} />
         ))}
-      </TableBody>
+      </Table.Tbody>
 
-      <TableFooter>
-        <TableRow>
-          <TableHeaderCell>{date}</TableHeaderCell>
-          <TableHeaderCell> </TableHeaderCell>
-          <TableHeaderCell textAlign="right">
+      <Table.Tfoot>
+        <Table.Tr>
+          <Table.Th>{date}</Table.Th>
+          <Table.Th> </Table.Th>
+          <Table.Th align="right">
             <CurrencyDisplay amount={balance.debit} />
-          </TableHeaderCell>
-          <TableHeaderCell textAlign="right">
+          </Table.Th>
+          <Table.Th align="right">
             <CurrencyDisplay amount={balance.credit} />
-          </TableHeaderCell>
-        </TableRow>
-        <TableRow>
-          <TableHeaderCell>{date}</TableHeaderCell>
-          <TableHeaderCell>debit - credit</TableHeaderCell>
-          <TableHeaderCell textAlign="right">
+          </Table.Th>
+        </Table.Tr>
+        <Table.Tr>
+          <Table.Th>{date}</Table.Th>
+          <Table.Th>debit - credit</Table.Th>
+          <Table.Th align="right">
             <CurrencyDisplay amount={balance.balance} />
-          </TableHeaderCell>
-          <TableHeaderCell textAlign="right"> </TableHeaderCell>
-        </TableRow>
-      </TableFooter>
+          </Table.Th>
+          <Table.Th align="right"> </Table.Th>
+        </Table.Tr>
+      </Table.Tfoot>
     </Table>
   );
 };
@@ -109,16 +101,16 @@ const StatementRow = (props: {
   const debit = statement.totalDebit;
   const credit = statement.totalCredit;
   return (
-    <TableRow positive>
-      <TableCell>{statement.date}</TableCell>
-      <TableCell>{statement.date}</TableCell>
-      <TableCell textAlign="right">
+    <Table.Tr>
+      <Table.Td>{statement.date}</Table.Td>
+      <Table.Td>{statement.date}</Table.Td>
+      <Table.Td align="right">
         {debit > 0 ? <CurrencyDisplay amount={debit} /> : null}
-      </TableCell>
-      <TableCell textAlign="right">
+      </Table.Td>
+      <Table.Td align="right">
         {credit > 0 ? <CurrencyDisplay amount={credit} /> : null}
-      </TableCell>
-    </TableRow>
+      </Table.Td>
+    </Table.Tr>
   );
 };
 
@@ -127,15 +119,15 @@ const LedgerRow = (props: {
 }) => {
   const { ledger } = props;
   return (
-    <TableRow>
-      <TableCell>{ledger.date}</TableCell>
-      <TableCell>{ledger.brief}</TableCell>
-      <TableCell textAlign="right">
+    <Table.Tr>
+      <Table.Td>{ledger.date}</Table.Td>
+      <Table.Td>{ledger.brief}</Table.Td>
+      <Table.Td align="right">
         {ledger.debit > 0 ? <CurrencyDisplay amount={ledger.debit} /> : null}
-      </TableCell>
-      <TableCell textAlign="right">
+      </Table.Td>
+      <Table.Td align="right">
         {ledger.credit > 0 ? <CurrencyDisplay amount={ledger.credit} /> : null}
-      </TableCell>
-    </TableRow>
+      </Table.Td>
+    </Table.Tr>
   );
 };

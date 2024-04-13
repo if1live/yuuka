@@ -1,4 +1,4 @@
-import { TableCell, TableRow } from "semantic-ui-react";
+import { Table } from "@mantine/core";
 import { Journal } from "../../../../journals/models/Journal.js";
 import {
   AccountLink,
@@ -81,27 +81,28 @@ const JournalLineRow = (props: {
 
   const cellClassName = isLastRow ? "last-row" : undefined;
   const style = isLastRow ? { borderBottom: "1px solid #ccc" } : undefined;
+  const isError = Boolean(error);
 
   return (
-    <TableRow error={Boolean(error)}>
-      <TableCell>{displayDate ? entry.date : null}</TableCell>
+    <Table.Tr>
+      <Table.Td>{displayDate ? entry.date : null}</Table.Td>
 
-      <TableCell className={cellClassName} style={style}>
+      <Table.Td className={cellClassName} style={style}>
         {isFirstRow ? <JournalLink id={entry.id} label={entry.brief} /> : null}
         {isSecondRow && error ? error.message : null}
-      </TableCell>
+      </Table.Td>
 
-      <TableCell className={cellClassName} style={style}>
+      <Table.Td className={cellClassName} style={style}>
         <AccountLink code={code} />
-      </TableCell>
+      </Table.Td>
 
-      <TableCell className={cellClassName} style={style} textAlign="right">
+      <Table.Td className={cellClassName} style={style} align="right">
         {debit ? <CurrencyDisplay amount={debit} /> : null}
-      </TableCell>
+      </Table.Td>
 
-      <TableCell className={cellClassName} style={style} textAlign="right">
+      <Table.Td className={cellClassName} style={style} align="right">
         {credit ? <CurrencyDisplay amount={credit} /> : null}
-      </TableCell>
-    </TableRow>
+      </Table.Td>
+    </Table.Tr>
   );
 };

@@ -1,5 +1,5 @@
+import { Container } from "@mantine/core";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Container, Menu, MenuMenu } from "semantic-ui-react";
 
 export const Root = () => {
   const loc = useLocation();
@@ -8,29 +8,13 @@ export const Root = () => {
 
   return (
     <>
-      <Menu fiexed="top" size="small">
-        <Container>
-          <Menu.Item as={Link} to="/" header>
-            yuuka
-          </Menu.Item>
-
-          <Menu.Item as={Link} to="/journal" active={checkActive("/journal")}>
-            journal
-          </Menu.Item>
-
-          <Menu.Item as={Link} to="/ledger" active={checkActive("/ledger")}>
-            ledger
-          </Menu.Item>
-
-          <Menu.Item as={Link} to="/balance" active={checkActive("/balance")}>
-            balance
-          </Menu.Item>
-
-          <Menu.Item as={Link} to="/book" active={checkActive("/book")}>
-            book
-          </Menu.Item>
-        </Container>
-      </Menu>
+      <Container>
+        <Link to="/">yuuka</Link>
+        <Link to="/journal">journal</Link>
+        <Link to="/ledger">ledger</Link>
+        <Link to="/balance">balance</Link>
+        <Link to="/book">book</Link>
+      </Container>
 
       <div
         style={{

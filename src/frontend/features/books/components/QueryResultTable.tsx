@@ -1,11 +1,4 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-} from "semantic-ui-react";
+import { Table } from "@mantine/core";
 
 export const QueryResultTable = (props: {
   columns: string[];
@@ -15,20 +8,20 @@ export const QueryResultTable = (props: {
 
   return (
     <>
-      <Table celled compact="very">
-        <TableHeader>
-          <TableRow>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
             {columns.map((column) => (
-              <TableHeaderCell key={column}>{column}</TableHeaderCell>
+              <Table.Th key={column}>{column}</Table.Th>
             ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {rows.map((row, i) => {
             const key = `row-${i}`;
             return <QueryResultRow key={key} columns={columns} row={row} />;
           })}
-        </TableBody>
+        </Table.Tbody>
       </Table>
       <p>rows: {rows.length}</p>
     </>
@@ -42,13 +35,13 @@ const QueryResultRow = (props: {
   const { columns, row } = props;
 
   return (
-    <TableRow>
+    <Table.Tr>
       {columns.map((column) => (
-        <TableCell key={column}>
+        <Table.Td key={column}>
           <DataValueCell value={row[column]} />
-        </TableCell>
+        </Table.Td>
       ))}
-    </TableRow>
+    </Table.Tr>
   );
 };
 

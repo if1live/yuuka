@@ -1,14 +1,6 @@
+import { Table } from "@mantine/core";
 import { Link } from "react-router-dom";
 import * as R from "remeda";
-import {
-  Button,
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableHeaderCell,
-  TableRow,
-} from "semantic-ui-react";
 
 export const JournalRootPage = () => {
   type Range = {
@@ -31,19 +23,17 @@ export const JournalRootPage = () => {
     <>
       <h1>Journal</h1>
 
-      <Button as={Link} to="/journal/action/create">
-        create
-      </Button>
+      <Link to="/journal/action/create">create</Link>
 
-      <Table selectable celled compact="very">
-        <TableHeader>
-          <TableRow>
-            <TableHeaderCell>start date</TableHeaderCell>
-            <TableHeaderCell>end date</TableHeaderCell>
-            <TableHeaderCell>journal</TableHeaderCell>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>start date</Table.Th>
+            <Table.Th>end date</Table.Th>
+            <Table.Th>journal</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
           {ranges.map((range, i) => {
             const { startDate, endDate } = range;
             const url = `/journal/list/${startDate}/${endDate}`;
@@ -52,16 +42,16 @@ export const JournalRootPage = () => {
               startDate <= now.toISOString() && now.toISOString() < endDate;
 
             return (
-              <TableRow key={range.startDate} positive={current}>
-                <TableCell>{startDate}</TableCell>
-                <TableCell>{endDate}</TableCell>
-                <TableCell>
+              <Table.Tr key={range.startDate}>
+                <Table.Td>{startDate}</Table.Td>
+                <Table.Td>{endDate}</Table.Td>
+                <Table.Td>
                   <Link to={url}>journal</Link>
-                </TableCell>
-              </TableRow>
+                </Table.Td>
+              </Table.Tr>
             );
           })}
-        </TableBody>
+        </Table.Tbody>
       </Table>
     </>
   );

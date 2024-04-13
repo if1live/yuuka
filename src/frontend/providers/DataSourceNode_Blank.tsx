@@ -1,4 +1,4 @@
-import { Button } from "semantic-ui-react";
+import { Button } from "@mantine/core";
 import { KyselyHelper } from "../../rdbms/index.js";
 import { fromBuffer, prepareSqlJs } from "../../rdbms/loader.js";
 import { type DataSourceNodeProps, createApp } from "./dataSourceNodes.js";
