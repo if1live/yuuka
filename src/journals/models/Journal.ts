@@ -44,7 +44,7 @@ const safeValidate = (journal: Journal): Result<Journal, Error> => {
 };
 
 // TODO: csv 규격 생성은 다른곳으로 넘기는게 좋을듯
-const toCSV = (entry: Journal): unknown[][] => {
+const toMat = (entry: Journal): unknown[][] => {
   // month,day,txid,brief,code,debit,credit
   const datetime = entry.date.split("-");
   const month = Number.parseInt(datetime[1] ?? "0");
@@ -73,5 +73,5 @@ export const Journal = {
   schema,
   validate,
   safeValidate,
-  toCSV,
+  toMat,
 };

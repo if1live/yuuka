@@ -1,5 +1,6 @@
 import { ErrorMessage } from "@hookform/error-message";
 import { Button, Group, Input, Table } from "@mantine/core";
+import * as csv from "csv/browser/esm/sync";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as R from "remeda";
@@ -109,8 +110,9 @@ export const JournalForm = (props: {
   };
 
   const displayCSV = (entry: Journal) => {
-    const mat = Journal.toCSV(entry);
-    return mat.map((x) => x.join(",")).join("\n");
+    const mat = Journal.toMat(entry);
+    const text = csv.stringify(mat);
+    return text;
   };
 
   const filterAvailableAccountCodes = (line: JournalLine) => {
@@ -310,18 +312,18 @@ const DebitCreditTableActions = (props: {
   swap: () => void;
   reset: () => void;
 }) => (
-  <Group>
-    <Button type="button" onClick={props.debit}>
+  <Button.Group>
+    <Button type="button" onClick={props.debit} variant="default">
       debit
     </Button>
-    <Button type="button" onClick={props.credit}>
+    <Button type="button" onClick={props.credit} variant="default">
       credit
     </Button>
-    <Button type="button" onClick={props.swap}>
+    <Button type="button" onClick={props.swap} variant="default">
       swap
     </Button>
-    <Button type="button" onClick={props.reset}>
+    <Button type="button" onClick={props.reset} color="red">
       reset
     </Button>
-  </Group>
+  </Button.Group>
 );
