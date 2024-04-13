@@ -23,6 +23,9 @@ dependencies:
   '@supabase/supabase-js':
     specifier: ^2.42.0
     version: 2.42.0
+  '@toss/assert':
+    specifier: ^1.2.0
+    version: 1.2.0
   csv:
     specifier: ^6.3.8
     version: 6.3.8
@@ -1320,6 +1323,19 @@ packages:
       - utf-8-validate
     dev: false
 
+  /@toss/assert@1.2.0:
+    resolution: {integrity: sha512-wUh/0NMPqe7aNojPVD4hnmU4LueQ9lu8yb/A2jZkMNw88wIw5djaASsPfC4hwaIOwLD2RLe8u4+Q5e0YoRkvAQ==}
+    dependencies:
+      '@toss/utils': 1.5.0
+    dev: false
+
+  /@toss/utils@1.5.0:
+    resolution: {integrity: sha512-zIZoth29c0IGXenFo34dB97CSaGurCtuQ2GRPxcqvj1CfBB/cxEu0GVGFLv/Dg74fNxrkBnv7sbLkrZ6egpzwA==}
+    dependencies:
+      '@babel/runtime': 7.24.4
+      date-fns: 2.30.0
+    dev: false
+
   /@types/babel__core@7.20.5:
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
     dependencies:
@@ -1933,7 +1949,6 @@ packages:
     engines: {node: '>=0.11'}
     dependencies:
       '@babel/runtime': 7.24.4
-    dev: true
 
   /debug@4.3.4(supports-color@5.5.0):
     resolution: {integrity: sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==}

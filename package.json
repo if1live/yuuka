@@ -29,6 +29,7 @@
     "@supabase/auth-ui-react": "^0.4.7",
     "@supabase/auth-ui-shared": "^0.1.8",
     "@supabase/supabase-js": "^2.42.0",
+    "@toss/assert": "^1.2.0",
     "csv": "^6.3.8",
     "hono": "^4.2.2",
     "kysely": "^0.27.3",
