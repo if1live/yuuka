@@ -244,6 +244,7 @@ export const JournalForm = (props: {
                   </Table.Td>
                   <Table.Td>
                     <Input
+                      type="number"
                       {...register(`lines_credit.${idx}.credit`, {
                         valueAsNumber: true,
                       })}
