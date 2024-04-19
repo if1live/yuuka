@@ -106,8 +106,8 @@ const convertDateToRange = (
   date: Date,
 ): { startDate: string; endDate: string } => {
   const d = fromDate(date);
-  const startDate = setMonth(d, 1);
-  const endDate = addMonth(startDate, 1);
+  const startDate = setDay(d, 1);
+  const endDate = setDayAsLastDayOfMonth(startDate);
   return {
     startDate,
     endDate,

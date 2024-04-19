@@ -20,7 +20,7 @@ export const TrialBalanceTable = (props: {
   const credit_balance = R.sumBy(accounts, (x) => x.credit_balance);
 
   return (
-    <Table>
+    <Table withColumnBorders highlightOnHover>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>차변 잔액</Table.Th>
@@ -46,11 +46,7 @@ export const TrialBalanceTable = (props: {
                 ) : null}
               </Table.Td>
               <Table.Td>
-                <AccountLink
-                  code={account.code}
-                  startDate={startDate}
-                  endDate={endDate}
-                />
+                <AccountLink code={account.code} date={endDate} />
               </Table.Td>
               <Table.Td>
                 {account.credit_sum ? (

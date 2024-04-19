@@ -1,5 +1,5 @@
 import { ErrorMessage } from "@hookform/error-message";
-import { Button, Group, Input, Table } from "@mantine/core";
+import { Button, Group, Input, NativeSelect, Table } from "@mantine/core";
 import * as csv from "csv/browser/esm/sync";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
@@ -185,7 +185,7 @@ export const JournalForm = (props: {
               return (
                 <Table.Tr key={key}>
                   <Table.Td>
-                    <select
+                    <NativeSelect
                       {...register(`lines_debit.${idx}.code`, {
                         valueAsNumber: true,
                       })}
@@ -195,7 +195,7 @@ export const JournalForm = (props: {
                           [{x.code}] {x.name}
                         </option>
                       ))}
-                    </select>
+                    </NativeSelect>
                   </Table.Td>
                   <Table.Td>
                     <Input
@@ -230,7 +230,7 @@ export const JournalForm = (props: {
               return (
                 <Table.Tr key={key}>
                   <Table.Td>
-                    <select
+                    <NativeSelect
                       {...register(`lines_credit.${idx}.code`, {
                         valueAsNumber: true,
                       })}
@@ -240,7 +240,7 @@ export const JournalForm = (props: {
                           [{x.code}] {x.name}
                         </option>
                       ))}
-                    </select>
+                    </NativeSelect>
                   </Table.Td>
                   <Table.Td>
                     <Input

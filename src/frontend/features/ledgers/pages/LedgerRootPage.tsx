@@ -36,7 +36,7 @@ const LedgerRootView = (props: {
         </Input.Wrapper>
       </form>
 
-      <Table>
+      <Table highlightOnHover>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>대분류</Table.Th>
@@ -70,11 +70,7 @@ const LedgerRootView = (props: {
                 <Table.Td>{minor}</Table.Td>
                 <Table.Td>{isTagAccount ? groupCode : x.code}</Table.Td>
                 <Table.Td>
-                  <AccountLink
-                    code={x.code}
-                    startDate={date_first}
-                    endDate={date}
-                  />
+                  <AccountLink code={x.code} date={date} />
                 </Table.Td>
               </Table.Tr>
             );

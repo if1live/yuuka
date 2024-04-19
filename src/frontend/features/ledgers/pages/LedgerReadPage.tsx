@@ -1,17 +1,25 @@
-import { Table } from "@mantine/core";
-import { useParams } from "react-router-dom";
-import * as R from "remeda";
+import { Button, Input, NativeSelect, Select } from "@mantine/core";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
 import useSWR from "swr";
-import { LedgerApi, LedgerController } from "../../../../index.js";
-import {
-  AccountLink,
-  CurrencyDisplay,
-  JournalLink,
-} from "../../../components/index.js";
+import { DateOnly, LedgerApi, LedgerController } from "../../../../index.js";
+import { AccountLink } from "../../../components/index.js";
+import { createLedgerLink } from "../../../components/links.js";
+import { MasterDataContext } from "../../../providers/MasterDataContext.js";
+import { LedgerTable } from "../components/LedgerTable.js";
 
 export const LedgerReadPage = () => {
   const params = useParams();
-  const req = LedgerController.ListReq.parse(params);
+  const date = DateOnly.schema.parse(params.date);
+
+  // 잔액계산하려면 1일부터 필요하다
+  const date_start = DateOnly.setDay(date, 1);
+  const req = LedgerController.ListReq.parse({
+    code: Number(params.code),
+    startDate: date_start,
+    endDate: date,
+  });
   const qs = new URLSearchParams();
   qs.append("code", `${req.code}`);
   qs.append("startDate", `${req.startDate}`);
@@ -31,93 +39,65 @@ export const LedgerReadPage = () => {
   return <LedgerReadView req={req} resp={resp} />;
 };
 
-type Line = {
-  id: string;
-  brief: string;
-  date: string;
-
-  debit: number;
-  credit: number;
-  balance: number;
-};
-
 const LedgerReadView = (props: {
   req: LedgerController.ListReq;
   resp: LedgerController.ListResp;
 }) => {
   const { req, resp } = props;
 
+  const navigate = useNavigate();
+  const masterdata = useContext(MasterDataContext);
+
+  const accounts = masterdata.accounts;
   const { code, startDate, endDate } = req;
   const { lines } = resp;
 
-  const sum_debit = R.sumBy(lines, (line) => line.debit);
-  const sum_credit = R.sumBy(lines, (line) => line.credit);
+  const defaultValues = {
+    code,
+    date: endDate,
+  } as const;
+  type FieldValues = typeof defaultValues;
+
+  const { register, handleSubmit } = useForm({
+    defaultValues,
+  });
+
+  const onSubmit = (v: FieldValues) => {
+    const url = createLedgerLink(v);
+    navigate(url);
+  };
 
   return (
     <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Input.Wrapper label="code">
+          <NativeSelect
+            {...register("code", {
+              valueAsNumber: true,
+            })}
+          >
+            {accounts.map((x) => (
+              <option key={x.code} value={x.code}>
+                [{x.code}] {x.name}
+              </option>
+            ))}
+          </NativeSelect>
+        </Input.Wrapper>
+
+        <Input.Wrapper label="월">
+          <Input type="date" {...register("date")} />
+        </Input.Wrapper>
+
+        <Input.Wrapper>
+          <Button type="submit">조회</Button>
+        </Input.Wrapper>
+      </form>
+
       <h1>
-        <AccountLink code={code} startDate={startDate} endDate={endDate} />
+        <AccountLink code={code} date={endDate} />
       </h1>
 
-      <Table>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>일자</Table.Th>
-            <Table.Th>적요</Table.Th>
-            <Table.Th>debit</Table.Th>
-            <Table.Th>credit</Table.Th>
-            <Table.Th>balance</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-
-        <Table.Tbody>
-          {lines.map((line, i) => {
-            const { debit, credit, balance } = line;
-
-            const prev = lines[i - 1];
-            const displayDate = line.date !== prev?.date;
-
-            const key = line.id;
-
-            return (
-              <Table.Tr key={key}>
-                <Table.Td>{displayDate ? line.date : null}</Table.Td>
-                <Table.Td>
-                  <JournalLink id={line.id} label={line.brief} />
-                </Table.Td>
-                <Table.Td>
-                  {debit ? <CurrencyDisplay amount={debit} /> : null}
-                </Table.Td>
-                <Table.Td>
-                  {credit ? <CurrencyDisplay amount={credit} /> : null}
-                </Table.Td>
-                <Table.Td>
-                  <CurrencyDisplay amount={balance} />
-                </Table.Td>
-              </Table.Tr>
-            );
-          })}
-        </Table.Tbody>
-
-        <Table.Tfoot>
-          <Table.Tr>
-            <Table.Th> </Table.Th>
-            <Table.Th> </Table.Th>
-            <Table.Th>
-              <CurrencyDisplay amount={sum_debit} fw={500} />
-            </Table.Th>
-            <Table.Th>
-              <CurrencyDisplay amount={sum_credit} fw={500} />
-            </Table.Th>
-            <Table.Th>
-              <CurrencyDisplay
-                amount={lines[lines.length - 1]?.balance ?? 0}
-                fw={500}
-              />
-            </Table.Th>
-          </Table.Tr>
-        </Table.Tfoot>
-      </Table>
+      <LedgerTable lines={lines} />
     </>
   );
 };

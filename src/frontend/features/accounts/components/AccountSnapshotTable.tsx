@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import type { Account } from "../../../../accounts/models/Account.js";
 import { AccountCategory } from "../../../../accounts/models/AccountCategory.js";
 import type { AccountGroup } from "../../../../accounts/models/AccountGroup.js";
-import { DateOnly } from "../../../../core/DateOnly.js";
+import type { DateOnly } from "../../../../core/DateOnly.js";
 import { CurrencyDisplay } from "../../../components/CurrencyDisplay.js";
+import { createLedgerLink } from "../../../components/links.js";
 
 type Row = { account: Account; group: AccountGroup; balance: number };
 
@@ -15,7 +16,7 @@ export const AccountSnapshotTable = (props: {
   const { date, items } = props;
 
   return (
-    <Table>
+    <Table highlightOnHover>
       <Table.Thead>
         <Table.Tr>
           <Table.Th>대분류</Table.Th>
@@ -49,8 +50,10 @@ const AccountSnapshotTableRow = (props: {
   const major = AccountCategory.toKorean(group.major);
   const minor = group.minor;
 
-  const startDate = DateOnly.setDay(date, 1);
-  const url = `/ledger/account/${account.code}/${startDate}/${date}`;
+  const url = createLedgerLink({
+    code: account.code,
+    date,
+  });
 
   return (
     <Table.Tr key={account.code}>

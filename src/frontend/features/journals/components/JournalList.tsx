@@ -23,7 +23,7 @@ export const JournalList = (props: {
 
   return (
     <>
-      <Table>
+      <Table highlightOnHover>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>date</Table.Th>
