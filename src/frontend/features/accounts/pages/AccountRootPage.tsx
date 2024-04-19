@@ -6,14 +6,14 @@ export const AccountRootPage = () => {
   const now = new Date();
   const date = DateOnly.fromDate(now);
 
-  const url = `/account/snapshot/${date}`;
+  const url_snapshot = `/account/snapshot/${date}`;
 
   return (
     <Container>
       <h1>account</h1>
 
-      <Anchor component={Link} to={url}>
-        account
+      <Anchor component={Link} to={url_snapshot}>
+        account snapshot
       </Anchor>
     </Container>
   );

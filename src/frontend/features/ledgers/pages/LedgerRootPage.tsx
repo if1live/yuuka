@@ -1,4 +1,4 @@
-import { Input, Table } from "@mantine/core";
+import { Container, Input, Table } from "@mantine/core";
 import { useContext, useState } from "react";
 import * as R from "remeda";
 import { Account, AccountCategory, DateOnly } from "../../../../index.js";
@@ -8,40 +8,30 @@ import { MasterDataContext } from "../../../providers/MasterDataContext.js";
 // 장부 목록은 계정코드로 유도할수 있어서 http 요청이 필요 없다
 export const LedgerRootPage = () => {
   const now = new Date();
-  return <LedgerRootView now={now} />;
+  const date = R.pipe(DateOnly.fromDate(now), (x) =>
+    DateOnly.setDayAsLastDayOfMonth(x),
+  );
+  return <LedgerRootView date={date} />;
 };
 
 const LedgerRootView = (props: {
-  now: Date;
+  date: DateOnly;
 }) => {
   const { accountGroups, accounts } = useContext(MasterDataContext);
-  const { now } = props;
-
-  const initial = DateOnly.convertDateToRange(now);
-  const [startDate, setStartDate] = useState(initial.startDate);
-  const [endDate, setEndDate] = useState(initial.endDate);
+  const [date, setInputDate] = useState(props.date);
 
   const groupMap = new Map(accountGroups.map((x) => [x.code, x]));
-
-  const group = R.groupBy(accounts, (x) => Account.toGroup(x.code));
+  const date_first = DateOnly.setDay(date, 1);
 
   return (
-    <>
-      <h2>date range</h2>
+    <Container>
+      <h2>date</h2>
       <form>
-        <Input.Wrapper label="start date">
+        <Input.Wrapper label="date">
           <Input
             type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        </Input.Wrapper>
-
-        <Input.Wrapper label="end date">
-          <Input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
+            value={date}
+            onChange={(e) => setInputDate(e.target.value as DateOnly)}
           />
         </Input.Wrapper>
       </form>
@@ -53,7 +43,7 @@ const LedgerRootView = (props: {
             <Table.Th>소분류</Table.Th>
             <Table.Th>계정코드</Table.Th>
             <Table.Th>
-              계정과목: {startDate} ~ {endDate}
+              계정과목: {date_first} ~ {date}
             </Table.Th>
           </Table.Tr>
         </Table.Thead>
@@ -82,8 +72,8 @@ const LedgerRootView = (props: {
                 <Table.Td>
                   <AccountLink
                     code={x.code}
-                    startDate={startDate}
-                    endDate={endDate}
+                    startDate={date_first}
+                    endDate={date}
                   />
                 </Table.Td>
               </Table.Tr>
@@ -91,6 +81,6 @@ const LedgerRootView = (props: {
           })}
         </Table.Tbody>
       </Table>
-    </>
+    </Container>
   );
 };

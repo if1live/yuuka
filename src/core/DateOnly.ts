@@ -78,6 +78,7 @@ const setDay = (input: DateOnly, day: number) => {
 const setDayAsLastDayOfMonth = (input: DateOnly) => {
   return R.pipe(
     input,
+    (x) => DateOnly.setDay(x, 1),
     (x) => DateOnly.addMonth(x, 1),
     (x) => DateOnly.addDay(x, -1),
   );
