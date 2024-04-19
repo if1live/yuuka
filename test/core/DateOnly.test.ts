@@ -31,3 +31,38 @@ describe("DateOnly#split", () => {
     assert.strictEqual(actual.day, 9);
   });
 });
+
+describe("DateOnly#fromDate", () => {
+  const timezoneOffset = new Date().getTimezoneOffset();
+  const timezone_kst = -9 * 60;
+
+  it.skipIf(timezoneOffset !== timezone_kst)("UTC날짜 == KST날짜", () => {
+    const date = new Date("2024-04-19T12:00:00.000Z");
+    const actual = DateOnly.fromDate(date);
+    const expected: DateOnly = "2024-04-19";
+    assert.strictEqual(actual, expected);
+  });
+
+  it.skipIf(timezoneOffset !== timezone_kst)("UTC날짜 != KST날짜", () => {
+    const date = new Date("2024-04-19T23:00:00.000Z");
+    const actual = DateOnly.fromDate(date);
+    const expected: DateOnly = "2024-04-20";
+    assert.strictEqual(actual, expected);
+  });
+});
+
+describe("DateOnly#addDay", () => {
+  it("월의 경계를 안넘음", () => {
+    const input: DateOnly = "2024-04-19";
+    const actual = DateOnly.addDay(input, 1);
+    const expected: DateOnly = "2024-04-20";
+    assert.strictEqual(actual, expected);
+  });
+
+  it("월의 경계를 넘음", () => {
+    const input: DateOnly = "2024-04-30";
+    const actual = DateOnly.addDay(input, 1);
+    const expected: DateOnly = "2024-05-01";
+    assert.strictEqual(actual, expected);
+  });
+});

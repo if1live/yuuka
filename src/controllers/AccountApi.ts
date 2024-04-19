@@ -20,4 +20,12 @@ app.get("/list", async (c) => {
   return c.json(resp);
 });
 
+app.get("/snapshot", async (c) => {
+  const { db } = c.env;
+  const body = Controller.SnapshotReq.parse(c.req.query());
+  const req = new MyRequest(body, { db });
+  const resp = await Controller.snapshot(req);
+  return c.json(resp);
+});
+
 export const path = "/api/account" as const;

@@ -5,7 +5,7 @@ import { JournalListPage } from "../features/journals/pages/JournalListPage.js";
 import { JournalReadPage } from "../features/journals/pages/JournalReadPage.js";
 import { JournalRootPage } from "../features/journals/pages/JournalRootPage.js";
 
-export const JournalRouter = () => (
+export const JournalRoute = () => (
   <Routes>
     <Route index element={<JournalRootPage />} />
     <Route path="/list/:startDate/:endDate" element={<JournalListPage />} />

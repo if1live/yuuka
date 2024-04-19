@@ -1,9 +1,8 @@
 import { Input, Table } from "@mantine/core";
 import { useContext, useState } from "react";
 import * as R from "remeda";
-import { Account, AccountCategory } from "../../../../index.js";
+import { Account, AccountCategory, DateOnly } from "../../../../index.js";
 import { AccountLink } from "../../../components/index.js";
-import { convertDateToRange } from "../../../helpers/index.js";
 import { MasterDataContext } from "../../../providers/MasterDataContext.js";
 
 // 장부 목록은 계정코드로 유도할수 있어서 http 요청이 필요 없다
@@ -18,7 +17,7 @@ const LedgerRootView = (props: {
   const { accountGroups, accounts } = useContext(MasterDataContext);
   const { now } = props;
 
-  const initial = convertDateToRange(now);
+  const initial = DateOnly.convertDateToRange(now);
   const [startDate, setStartDate] = useState(initial.startDate);
   const [endDate, setEndDate] = useState(initial.endDate);
 

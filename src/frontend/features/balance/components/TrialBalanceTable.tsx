@@ -1,9 +1,9 @@
 import { Table } from "@mantine/core";
 import * as R from "remeda";
 import type { BalanceController } from "../../../../controllers/mod.js";
+import type { DateOnly } from "../../../../core/DateOnly.js";
 import { AccountLink } from "../../../components/AccountLink.js";
 import { CurrencyDisplay } from "../../../components/CurrencyDisplay.js";
-import type { DateOnly } from "../../../../core/DateOnly.js";
 
 type AccountBalance = BalanceController.TrialBalanceResp["accounts"][number];
 

@@ -4,19 +4,21 @@ import {
   createHashRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { BalanceRouter } from "./routes/BalanceRoute.js";
-import { BookRouter } from "./routes/BookRoute.js";
-import { JournalRouter } from "./routes/JournalRoute.js";
-import { LedgerRouter } from "./routes/LedgerRoute.js";
+import { AccountRoute } from "./routes/AccountRoute.js";
+import { BalanceRoute } from "./routes/BalanceRoute.js";
+import { BookRoute } from "./routes/BookRoute.js";
+import { JournalRoute } from "./routes/JournalRoute.js";
+import { LedgerRoute } from "./routes/LedgerRoute.js";
 import { Root } from "./routes/Root.js";
 
 const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
-      <Route path="/journal/*" element={<JournalRouter />} />
-      <Route path="/ledger/*" element={<LedgerRouter />} />
-      <Route path="/balance/*" element={<BalanceRouter />} />
-      <Route path="/book/*" element={<BookRouter />} />
+      <Route path="/account/*" element={<AccountRoute />} />
+      <Route path="/journal/*" element={<JournalRoute />} />
+      <Route path="/ledger/*" element={<LedgerRoute />} />
+      <Route path="/balance/*" element={<BalanceRoute />} />
+      <Route path="/book/*" element={<BookRoute />} />
     </Route>,
   ),
   {

@@ -1,4 +1,4 @@
-import { Button, SegmentedControl } from "@mantine/core";
+import { SegmentedControl } from "@mantine/core";
 import { useState } from "react";
 import * as R from "remeda";
 import type { BalanceController } from "../../../../controllers/mod.js";

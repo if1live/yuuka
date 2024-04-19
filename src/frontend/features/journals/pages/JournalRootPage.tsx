@@ -1,4 +1,4 @@
-import { Anchor, Table } from "@mantine/core";
+import { Anchor, Container, Table } from "@mantine/core";
 import { Link } from "react-router-dom";
 import * as R from "remeda";
 
@@ -8,8 +8,9 @@ export const JournalRootPage = () => {
     endDate: string;
   };
 
-  // TODO: 2025년은 나중에 생각
-  const year = 2024;
+  // TODO: 연도 선택?
+  const now = new Date();
+  const year = now.getFullYear();
 
   const ranges = R.range(1, 12).map((i): Range => {
     const startDate = `${year}-${i.toString().padStart(2, "0")}-01`;
@@ -17,10 +18,8 @@ export const JournalRootPage = () => {
     return { startDate, endDate };
   });
 
-  const now = new Date();
-
   return (
-    <>
+    <Container>
       <h1>Journal</h1>
 
       <Anchor component={Link} to="/journal/action/create">
@@ -57,6 +56,6 @@ export const JournalRootPage = () => {
           })}
         </Table.Tbody>
       </Table>
-    </>
+    </Container>
   );
 };

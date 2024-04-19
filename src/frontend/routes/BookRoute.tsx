@@ -3,7 +3,7 @@ import { BookQueryPage } from "../features/books/pages/BookQueryPage.js";
 import { BookRootPage } from "../features/books/pages/BookRootPage.js";
 import { BookTableListPage } from "../features/books/pages/BookTableListPage.js";
 
-export const BookRouter = () => (
+export const BookRoute = () => (
   <Routes>
     <Route index element={<BookRootPage />} />
     <Route path="/query" element={<BookQueryPage />} />

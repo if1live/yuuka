@@ -45,6 +45,13 @@ const split = (input: DateOnly) => {
   return { year, month, day };
 };
 
+const fromDate = (date: Date): DateOnly => {
+  const y = date.getFullYear();
+  const m = date.getMonth() + 1;
+  const d = date.getDate();
+  return combine({ year: y, month: m, day: d });
+};
+
 const combine = (input: { year: number; month: number; day: number }) => {
   const { year, month, day } = input;
   const m = month.toString().padStart(2, "0");
@@ -78,12 +85,33 @@ const addMonth = (input: DateOnly, v: number) => {
   });
 };
 
+const addDay = (input: DateOnly, v: number) => {
+  const date = new Date(input);
+  date.setDate(date.getDate() + v);
+  return fromDate(date);
+};
+
+const convertDateToRange = (
+  date: Date,
+): { startDate: string; endDate: string } => {
+  const d = fromDate(date);
+  const startDate = setMonth(d, 1);
+  const endDate = addMonth(startDate, 1);
+  return {
+    startDate,
+    endDate,
+  };
+};
+
 export const DateOnly = {
   schema,
+  fromDate,
   split,
   combine,
   setYear,
   setMonth,
   setDay,
   addMonth,
+  addDay,
+  convertDateToRange,
 };

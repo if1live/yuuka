@@ -3,9 +3,8 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Account } from "../../accounts/models/Account.js";
 import { AccountCategory } from "../../accounts/models/AccountCategory.js";
-import { convertDateToRange } from "../helpers/index.js";
+import { DateOnly } from "../../core/DateOnly.js";
 import { MasterDataContext } from "../providers/MasterDataContext.js";
-import type { DateOnly } from "../../core/DateOnly.js";
 
 // TODO: 상세 내용은 상황에 따라 자주 바뀔거같은데
 export const AccountLink = (props: {
@@ -22,7 +21,7 @@ export const AccountLink = (props: {
   const group = accountGroups.find((x) => x.code === groupCode);
 
   const now = new Date();
-  const initial = convertDateToRange(now);
+  const initial = DateOnly.convertDateToRange(now);
 
   const startDate = props.startDate ?? initial.startDate;
   const endDate = props.endDate ?? initial.endDate;
