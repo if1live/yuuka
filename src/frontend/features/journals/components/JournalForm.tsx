@@ -13,6 +13,16 @@ import {
 import { MasterDataContext } from "../../../providers/MasterDataContext.js";
 import { JournalList } from "./JournalList.js";
 
+type Preset = {
+  codes_debit: number[];
+  codes_credit: number[];
+};
+
+const preset_네이버페이_식비: Preset = {
+  codes_debit: [852000],
+  codes_credit: [102111],
+};
+
 export const JournalForm = (props: {
   defaultValue: Journal;
   onSubmit: (entry: Journal) => Promise<void>;
@@ -126,6 +136,20 @@ export const JournalForm = (props: {
       return true;
     });
     return accounts;
+  };
+
+  const setPreset = (preset: Preset) => {
+    const lines_debit = preset.codes_debit.map(
+      (code): JournalLine_Debit => ({ _tag: "debit", code, debit: 0 }),
+    );
+
+    const lines_credit = preset.codes_credit.map(
+      (code): JournalLine_Credit => ({ _tag: "credit", code, credit: 0 }),
+    );
+
+    setValue("lines_debit", lines_debit);
+    setValue("lines_credit", lines_credit);
+    setValue("brief", "");
   };
 
   return (
@@ -283,6 +307,16 @@ export const JournalForm = (props: {
 
       {/* 좀 무식한데 csv 접근을 열어둠 */}
       {valid ? <pre>{displayCSV(values)}</pre> : null}
+
+      <h2>Presets</h2>
+      <Group>
+        <Button
+          variant="default"
+          onClick={() => setPreset(preset_네이버페이_식비)}
+        >
+          preset: 네이버페이로 식비
+        </Button>
+      </Group>
     </>
   );
 };
