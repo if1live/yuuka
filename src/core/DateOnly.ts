@@ -1,4 +1,5 @@
 import { assert } from "@toss/assert";
+import * as R from "remeda";
 import { z } from "zod";
 
 export type YearText = `${number}${number}${number}${number}`;
@@ -74,7 +75,16 @@ const setDay = (input: DateOnly, day: number) => {
   return combine({ year, month, day });
 };
 
+const setDayAsLastDayOfMonth = (input: DateOnly) => {
+  return R.pipe(
+    input,
+    (x) => DateOnly.addMonth(x, 1),
+    (x) => DateOnly.addDay(x, -1),
+  );
+};
+
 const addMonth = (input: DateOnly, v: number) => {
+  assert(v >= 0);
   const data = split(input);
   const delta_year = Math.floor(v / 12);
   const delta_month = v % 12;
@@ -111,6 +121,7 @@ export const DateOnly = {
   setYear,
   setMonth,
   setDay,
+  setDayAsLastDayOfMonth,
   addMonth,
   addDay,
   convertDateToRange,

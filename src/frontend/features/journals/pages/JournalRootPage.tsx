@@ -1,6 +1,7 @@
 import { Anchor, Container, Table } from "@mantine/core";
 import { Link } from "react-router-dom";
 import * as R from "remeda";
+import { DateOnly } from "../../../../core/DateOnly.js";
 
 export const JournalRootPage = () => {
   type Range = {
@@ -13,8 +14,8 @@ export const JournalRootPage = () => {
   const year = now.getFullYear();
 
   const ranges = R.range(1, 12).map((i): Range => {
-    const startDate = `${year}-${i.toString().padStart(2, "0")}-01`;
-    const endDate = `${year}-${(i + 1).toString().padStart(2, "0")}-01`;
+    const startDate = DateOnly.combine({ year, month: i, day: 1 });
+    const endDate = DateOnly.setDayAsLastDayOfMonth(startDate);
     return { startDate, endDate };
   });
 

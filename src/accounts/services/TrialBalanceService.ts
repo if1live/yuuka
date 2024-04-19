@@ -33,7 +33,7 @@ const load = async (db: MyKysely, startDate: DateOnly, endDate: DateOnly) => {
     .selectFrom(AccountTransactionTable.name)
     .select("txid")
     .where("date", ">=", startDate)
-    .where("date", "<", endDate)
+    .where("date", "<=", endDate)
     .execute();
   const transactionIds = transactions.map((x) => x.txid);
 

@@ -29,7 +29,7 @@ export const trialBalance = async (req: MyRequest<TrialBalanceReq>) => {
   const { date } = req.body;
 
   const date_first = DateOnly.setDay(date, 1);
-  const date_end = DateOnly.addMonth(date_first, 1);
+  const date_end = DateOnly.setDayAsLastDayOfMonth(date_first);
   const results = await TrialBalanceService.report(db, date_first, date_end);
   return {
     date_first,

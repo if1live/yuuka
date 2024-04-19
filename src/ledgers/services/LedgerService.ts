@@ -62,7 +62,7 @@ export const load = async (
       lines.map((line) => line.txid),
     )
     .where("date", ">=", range.start)
-    .where("date", "<", range.end)
+    .where("date", "<=", range.end)
     .orderBy("date", "asc")
     .execute();
 

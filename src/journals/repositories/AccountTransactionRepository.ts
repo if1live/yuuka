@@ -70,7 +70,7 @@ export const findByDateRange = async (
     )
     .selectAll()
     .where("accountTransaction.date", ">=", range.start)
-    .where("accountTransaction.date", "<", range.end)
+    .where("accountTransaction.date", "<=", range.end)
     .orderBy("date asc")
     .execute();
 
