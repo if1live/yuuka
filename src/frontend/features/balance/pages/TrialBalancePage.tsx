@@ -40,8 +40,10 @@ const TrialBalanceTable = (props: {
   list: BalanceController.TrialBalanceResp;
 }) => {
   const { list } = props;
-  const debit_total = R.sumBy(list, (x) => x.debit_sum);
-  const credit_total = R.sumBy(list, (x) => x.credit_sum);
+  const debit_sum = R.sumBy(list, (x) => x.debit_sum);
+  const credit_sum = R.sumBy(list, (x) => x.credit_sum);
+  const debit_balance = R.sumBy(list, (x) => x.debit_balance);
+  const credit_balance = R.sumBy(list, (x) => x.credit_balance);
 
   return (
     <Table>
@@ -58,8 +60,12 @@ const TrialBalanceTable = (props: {
       <Table.Tbody>
         {list.map((item) => {
           return (
-            <Table.Tr>
-              <Table.Td> </Table.Td>
+            <Table.Tr key={item.code}>
+              <Table.Td>
+                {item.debit_balance ? (
+                  <CurrencyDisplay amount={item.debit_balance} />
+                ) : null}
+              </Table.Td>
               <Table.Td>
                 {item.debit_sum ? (
                   <CurrencyDisplay amount={item.debit_sum} />
@@ -73,21 +79,29 @@ const TrialBalanceTable = (props: {
                   <CurrencyDisplay amount={item.credit_sum} />
                 ) : null}
               </Table.Td>
-              <Table.Td> </Table.Td>
+              <Table.Td>
+                {item.credit_balance ? (
+                  <CurrencyDisplay amount={item.credit_balance} />
+                ) : null}
+              </Table.Td>
             </Table.Tr>
           );
         })}
 
         <Table.Tr>
-          <Table.Td>TODO</Table.Td>
           <Table.Td>
-            <CurrencyDisplay amount={debit_total} />
+            <CurrencyDisplay amount={debit_balance} />
+          </Table.Td>
+          <Table.Td>
+            <CurrencyDisplay amount={debit_sum} />
           </Table.Td>
           <Table.Td>합계</Table.Td>
           <Table.Td>
-            <CurrencyDisplay amount={credit_total} />
+            <CurrencyDisplay amount={credit_sum} />
           </Table.Td>
-          <Table.Td>TODO</Table.Td>
+          <Table.Td>
+            <CurrencyDisplay amount={credit_balance} />
+          </Table.Td>
         </Table.Tr>
       </Table.Tbody>
     </Table>
