@@ -2,7 +2,7 @@ import { Table } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import { BalanceApi, BalanceController } from "../../../../index.js";
-import type { DateText } from "../../../../index.js";
+import type { DateOnly } from "../../../../index.js";
 import { CurrencyDisplay } from "../../../components/CurrencyDisplay.js";
 
 export const BalanceReadPage = () => {
@@ -44,7 +44,7 @@ const BalanceReadView = (props: {
 };
 
 const BalanceTable = (props: {
-  date: DateText;
+  date: DateOnly;
   statement: BalanceController.GetResp["statement"];
   ledgers: BalanceController.GetResp["ledgers"];
   balance: BalanceController.GetResp["balance"];

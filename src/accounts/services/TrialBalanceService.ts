@@ -1,5 +1,5 @@
 import * as R from "remeda";
-import type { DateText } from "../../core/types.js";
+import type { DateOnly } from "../../core/types.js";
 import type { MyKysely } from "../../rdbms/types.js";
 import { creditTag, debitTag } from "../../tables/LedgerTransactionTable.js";
 import {
@@ -11,8 +11,8 @@ import { AccountRepository } from "../repositories/index.js";
 
 export const report = async (
   db: MyKysely,
-  startDate: DateText,
-  endDate: DateText,
+  startDate: DateOnly,
+  endDate: DateOnly,
 ) => {
   const data = await load(db, startDate, endDate);
 
@@ -24,7 +24,7 @@ export const report = async (
   });
 };
 
-const load = async (db: MyKysely, startDate: DateText, endDate: DateText) => {
+const load = async (db: MyKysely, startDate: DateOnly, endDate: DateOnly) => {
   // TODO: 대충 떄려박고 나중에 옮기긴다
   const accounts = await AccountRepository.loadAll(db);
 

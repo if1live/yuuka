@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { dateSchema } from "../core/types.js";
+import { DateOnly } from "../core/types.js";
 import { Journal } from "../journals/models/Journal.js";
 import { AccountTransactionRepository } from "../journals/repositories/index.js";
 import { JournalService } from "../journals/services/index.js";
@@ -7,10 +7,10 @@ import type { MyRequest } from "../networks/types.js";
 
 export const ListReq = z.object({
   /** start 포함 */
-  startDate: dateSchema,
+  startDate: DateOnly.schema,
 
   /** end 미포함 */
-  endDate: dateSchema,
+  endDate: DateOnly.schema,
 });
 export type ListReq = z.infer<typeof ListReq>;
 

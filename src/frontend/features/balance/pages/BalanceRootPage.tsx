@@ -1,7 +1,7 @@
 import { Anchor, Button, Input, Table } from "@mantine/core";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import type { AccountGroup, DateText } from "../../../../index.js";
+import type { AccountGroup, DateOnly } from "../../../../index.js";
 import { Account, AccountCategory } from "../../../../index.js";
 import { CurrencyDisplay } from "../../../components/CurrencyDisplay.js";
 import { convertDateToYMD } from "../../../helpers/index.js";
@@ -14,13 +14,13 @@ export const BalanceRootPage = () => {
   // 기본적으로는 오늘 기준으로 잔액만 있으면 되고
   // TODO: view/page 나누기
   const now = new Date();
-  const initial = convertDateToYMD(now) as DateText;
-  const [inputDate, setInputDate] = useState<DateText>(initial);
+  const initial = convertDateToYMD(now) as DateOnly;
+  const [inputDate, setInputDate] = useState<DateOnly>(initial);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [resp, setResp] = useState<object | null>(null);
-  const [date, setDate] = useState<DateText>("1970-01-01");
+  const [date, setDate] = useState<DateOnly>("1970-01-01");
 
   // 잔액은 고정된 상태를 표현하니까 statement로 연결할수 있는것만
   const items = Account.zip(masterdata.accounts, masterdata.accountGroups);
@@ -58,7 +58,7 @@ export const BalanceRootPage = () => {
           <Input
             type="date"
             value={inputDate}
-            onChange={(e) => setInputDate(e.target.value as DateText)}
+            onChange={(e) => setInputDate(e.target.value as DateOnly)}
           />
         </Input.Wrapper>
 
@@ -84,7 +84,7 @@ export const BalanceRootPage = () => {
 
 const BalanceTable = (props: {
   items: { account: Account; group: AccountGroup }[];
-  date: DateText;
+  date: DateOnly;
 }) => {
   const { items, date } = props;
   return (

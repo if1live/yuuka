@@ -1,15 +1,15 @@
 import { assert } from "@toss/assert";
 import { z } from "zod";
 import { AccountStatementRepository } from "../accounts/repositories/index.js";
-import { dateSchema } from "../core/types.js";
+import { DateOnly } from "../core/types.js";
 import { LedgerService } from "../ledgers/services/index.js";
 import type { MyRequest } from "../networks/types.js";
 import type { AccountStatementTable } from "../tables/index.js";
 
 export const ListReq = z.object({
   code: z.coerce.number(),
-  startDate: dateSchema,
-  endDate: dateSchema,
+  startDate: DateOnly.schema,
+  endDate: DateOnly.schema,
 });
 export type ListReq = z.infer<typeof ListReq>;
 

@@ -3,13 +3,13 @@ import path from "node:path";
 import * as csv from "csv/sync";
 import * as R from "remeda";
 import { z } from "zod";
-import { dateSchema } from "../core/types.js";
+import { DateOnly } from "../core/types.js";
 import type { Journal } from "../journals/models/Journal.js";
 import { JournalLine } from "../journals/models/JournalLine.js";
 import { parseFileName } from "./helpers.js";
 
 const journalItemSchema = z.object({
-  date: dateSchema,
+  date: DateOnly.schema,
   txid: z.string(),
   brief: z.string(),
   code: z.coerce.number(),

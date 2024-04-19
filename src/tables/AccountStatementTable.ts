@@ -1,6 +1,6 @@
 import type { Insertable, Kysely, Selectable, Updateable } from "kysely";
 import type { SnakeCase } from "type-fest";
-import type { DateText } from "../core/types.js";
+import type { DateOnly } from "../core/types.js";
 
 const kyselyName = "accountStatement";
 const nativeName: SnakeCase<typeof kyselyName> = "account_statement";
@@ -10,7 +10,7 @@ export interface Table {
   code: number;
 
   /** "2024-03-01"은 3월 1일 시작시점의 잔액 */
-  date: DateText;
+  date: DateOnly;
   closingBalance: number;
   totalCredit: number;
   totalDebit: number;

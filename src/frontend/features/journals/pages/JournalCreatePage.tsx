@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import type { DateText } from "../../../../core/types.js";
+import type { DateOnly } from "../../../../core/types.js";
 import { type Journal, JournalApi } from "../../../../index.js";
 import { MyFetch } from "../../../fetchers/index.js";
 import { DataSourceContext } from "../../../providers/DataSourceContext.js";
@@ -22,7 +22,7 @@ export const JournalCreatePage = () => {
   const s = pad(now.getSeconds());
 
   // 장부에 기록될떄는 KST만 있는게 읽기 쉽다.
-  const date = `${yyyy}-${mm}-${dd}` as DateText;
+  const date = `${yyyy}-${mm}-${dd}` as DateOnly;
 
   // id는 시간기준으로 자동발급해도 큰 문제 없을듯
   const id = `${yyyy - 2000}${mm}${dd}_${h}${m}${s}`;

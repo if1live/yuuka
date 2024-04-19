@@ -1,6 +1,6 @@
 import * as R from "remeda";
 import { Account } from "../../accounts/models/Account.js";
-import type { DateText } from "../../core/types.js";
+import type { DateOnly } from "../../core/types.js";
 import { JournalLine } from "../../journals/models/JournalLine.js";
 import type { MyKysely } from "../../rdbms/types.js";
 import {
@@ -16,8 +16,8 @@ export const load = async (
   db: MyKysely,
   code: number,
   range: {
-    start: DateText;
-    end: DateText;
+    start: DateOnly;
+    end: DateOnly;
   },
 ) => {
   const groupCode = Account.toGroup(code);

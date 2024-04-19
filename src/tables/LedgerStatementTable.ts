@@ -1,6 +1,6 @@
 import type { Insertable, Kysely, Selectable, Updateable } from "kysely";
 import type { SnakeCase } from "type-fest";
-import type { DateText } from "../core/types.js";
+import type { DateOnly } from "../core/types.js";
 
 const kyselyName = "ledgerStatement";
 const nativeName: SnakeCase<typeof kyselyName> = "ledger_statement";
@@ -8,7 +8,7 @@ export const name = kyselyName;
 
 export interface Table {
   code: number;
-  date: DateText;
+  date: DateOnly;
   closingBalance: number;
 }
 
