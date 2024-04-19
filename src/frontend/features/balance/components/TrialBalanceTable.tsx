@@ -1,15 +1,19 @@
 import { Table } from "@mantine/core";
 import * as R from "remeda";
 import type { BalanceController } from "../../../../controllers/mod.js";
+import { AccountLink } from "../../../components/AccountLink.js";
 import { CurrencyDisplay } from "../../../components/CurrencyDisplay.js";
-import { AccountLink } from "../../../components/misc.js";
+import type { DateOnly } from "../../../../core/DateOnly.js";
 
 type AccountBalance = BalanceController.TrialBalanceResp["accounts"][number];
 
 export const TrialBalanceTable = (props: {
   accounts: AccountBalance[];
+  startDate: DateOnly;
+  endDate: DateOnly;
 }) => {
-  const { accounts } = props;
+  const { accounts, startDate, endDate } = props;
+
   const debit_sum = R.sumBy(accounts, (x) => x.debit_sum);
   const credit_sum = R.sumBy(accounts, (x) => x.credit_sum);
   const debit_balance = R.sumBy(accounts, (x) => x.debit_balance);
@@ -42,7 +46,11 @@ export const TrialBalanceTable = (props: {
                 ) : null}
               </Table.Td>
               <Table.Td>
-                <AccountLink code={account.code} />
+                <AccountLink
+                  code={account.code}
+                  startDate={startDate}
+                  endDate={endDate}
+                />
               </Table.Td>
               <Table.Td>
                 {account.credit_sum ? (

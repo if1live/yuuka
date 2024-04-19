@@ -37,6 +37,11 @@ export const TrialBalanceReport = (props: {
 
   const [value, setValue] = useState("group");
 
+  const tableProps = {
+    startDate: date_first,
+    endDate: date_end,
+  };
+
   return (
     <>
       <h1>합계잔액시산표</h1>
@@ -51,10 +56,17 @@ export const TrialBalanceReport = (props: {
       />
 
       {value === "plain" ? (
-        <TrialBalanceTable accounts={convertBalance_AccountPlain(accounts)} />
+        <TrialBalanceTable
+          {...tableProps}
+          accounts={convertBalance_AccountPlain(accounts)}
+        />
       ) : null}
+
       {value === "group" ? (
-        <TrialBalanceTable accounts={convertBalance_AccountGroup(accounts)} />
+        <TrialBalanceTable
+          {...tableProps}
+          accounts={convertBalance_AccountGroup(accounts)}
+        />
       ) : null}
     </>
   );
