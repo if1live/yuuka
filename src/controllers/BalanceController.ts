@@ -3,12 +3,7 @@ import {
   BalanceService,
   TrialBalanceService,
 } from "../accounts/services/index.js";
-import {
-  DateOnly,
-  type DayText,
-  type MonthText,
-  type YearText,
-} from "../core/types.js";
+import { DateOnly } from "../core/types.js";
 import type { MyRequest } from "../networks/types.js";
 
 export const GetReq = z.object({
@@ -33,23 +28,13 @@ export const trialBalance = async (req: MyRequest<TrialBalanceReq>) => {
   const db = req.db;
   const { date } = req.body;
 
-  // TODO: 날짜 연산 더 필요한데
-  // 1일로 고정하는거
-  const ymd = date.split("-") as [YearText, MonthText, DayText];
-  const date_first = `${ymd[0]}-${ymd[1]}-01` as DateOnly;
-  // TODO: 날짜 연산 더 필요한데. 다음날 지정
-  const ts_base = new Date(date).getTime();
-  const ts_nextDay = ts_base + 24 * 60 * 60 * 1000;
-  const nextDayDate = ts_nextDay;
-  const date_nextDay = new Date(nextDayDate)
-    .toISOString()
-    .split("T")[0] as DateOnly;
-
-  const results = await TrialBalanceService.report(
-    db,
+  const date_first = DateOnly.setDay(date, 1);
+  const date_end = DateOnly.addMonth(date_first, 1);
+  const results = await TrialBalanceService.report(db, date_first, date_end);
+  return {
     date_first,
-    date_nextDay,
-  );
-  return results;
+    date_end,
+    accounts: results,
+  };
 };
 export type TrialBalanceResp = Awaited<ReturnType<typeof trialBalance>>;
