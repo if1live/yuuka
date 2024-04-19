@@ -19,16 +19,20 @@ export const prepare = (
   accounts: AccountTransactionTable.NewRow[];
   ledgers: LedgerTransactionTable.NewRow[];
 } => {
-  const account: AccountTransactionTable.NewRow = {
+  const skel = {
     txid: input.id,
     date: input.date,
+  } as const;
+
+  const account: AccountTransactionTable.NewRow = {
+    ...skel,
     brief: input.brief,
   };
 
   const ledgers_debit = input.lines_debit.map(
     (line): LedgerTransactionTable.NewRow => {
       return {
-        txid: input.id,
+        ...skel,
         code: line.code,
         tag: LedgerTransactionTable.debitTag,
         amount: line.debit,
@@ -39,7 +43,7 @@ export const prepare = (
   const ledgers_credit = input.lines_credit.map(
     (line): LedgerTransactionTable.NewRow => {
       return {
-        txid: input.id,
+        ...skel,
         code: line.code,
         tag: LedgerTransactionTable.creditTag,
         amount: line.credit,

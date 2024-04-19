@@ -5,7 +5,6 @@ import type { MyKysely } from "../../rdbms/types.js";
 import { creditTag, debitTag } from "../../tables/LedgerTransactionTable.js";
 import {
   type AccountStatementTable,
-  AccountTransactionTable,
   LedgerTransactionTable,
 } from "../../tables/index.js";
 import { Account } from "../models/Account.js";
@@ -91,23 +90,12 @@ const load = async (db: MyKysely, startDate: DateOnly, endDate: DateOnly) => {
   const accounts = await AccountRepository.loadAll(db);
   const accountGroups = await AccountGroupRepository.loadAll(db);
 
-  // TODO: join 잘 쓰면 한번에 될거같은데 일단은 간단하게 구현
-  const transactions = await db
-    .selectFrom(AccountTransactionTable.name)
-    .select("txid")
+  const ledgers = await db
+    .selectFrom(LedgerTransactionTable.name)
+    .selectAll()
     .where("date", ">=", startDate)
     .where("date", "<=", endDate)
     .execute();
-  const transactionIds = transactions.map((x) => x.txid);
-
-  const ledgers =
-    transactionIds.length > 0
-      ? await db
-          .selectFrom(LedgerTransactionTable.name)
-          .selectAll()
-          .where("txid", "in", transactionIds)
-          .execute()
-      : [];
 
   return {
     accounts,

@@ -1,5 +1,6 @@
 import type { Insertable, Kysely, Selectable, Updateable } from "kysely";
 import type { SnakeCase } from "type-fest";
+import type { DateOnly } from "../core/DateOnly.js";
 
 const kyselyName = "ledgerTransaction";
 const nativeName: SnakeCase<typeof kyselyName> = "ledger_transaction";
@@ -17,6 +18,7 @@ export type CreditTag = typeof creditTag;
 export interface Table {
   txid: string;
   code: number;
+  date: DateOnly;
   tag: DebitTag | CreditTag;
   amount: number;
 }
@@ -34,13 +36,13 @@ export const createSchema = async <T>(db: Kysely<T>) => {
   await db.schema
     .createTable(nativeName)
     .addColumn("txid", "text")
-    .addColumn("code", "integer")
-    .addColumn("tag", "integer")
-    .addColumn("amount", "integer")
+    .addColumn("code", "integer", (col) => col.notNull())
+    .addColumn("date", "text", (col) => col.notNull())
+    .addColumn("tag", "integer", (col) => col.notNull())
+    .addColumn("amount", "integer", (col) => col.notNull())
     .addPrimaryKeyConstraint("primary_key", [...primaryKeyFields])
     .execute();
 
-  /*
   // 계정 기준으로 검색
   await db.schema
     .createIndex(`${nativeName}_code_date`)
@@ -50,9 +52,8 @@ export const createSchema = async <T>(db: Kysely<T>) => {
 
   // 날짜 기준으로 검색할때
   await db.schema
-    .createIndex(`${nativeName}_date`)
+    .createIndex(`${nativeName}_date_code`)
     .on(nativeName)
-    .columns(["date"])
+    .columns(["date", "code"])
     .execute();
-  */
 };

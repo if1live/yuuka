@@ -30,4 +30,10 @@ export const createSchema = async <T>(db: Kysely<T>) => {
     .addColumn("brief", "text")
     .addPrimaryKeyConstraint("primary_key", [...primaryKeyFields])
     .execute();
+
+  await db.schema
+    .createIndex(`${nativeName}_date`)
+    .on(nativeName)
+    .columns(["date"])
+    .execute();
 };

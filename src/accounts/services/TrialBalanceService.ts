@@ -2,10 +2,7 @@ import * as R from "remeda";
 import type { DateOnly } from "../../core/types.js";
 import type { MyKysely } from "../../rdbms/types.js";
 import { creditTag, debitTag } from "../../tables/LedgerTransactionTable.js";
-import {
-  AccountTransactionTable,
-  LedgerTransactionTable,
-} from "../../tables/index.js";
+import { LedgerTransactionTable } from "../../tables/index.js";
 import type { Account } from "../models/Account.js";
 import { AccountRepository } from "../repositories/index.js";
 
@@ -28,23 +25,12 @@ const load = async (db: MyKysely, startDate: DateOnly, endDate: DateOnly) => {
   // TODO: 대충 떄려박고 나중에 옮기긴다
   const accounts = await AccountRepository.loadAll(db);
 
-  // TODO: join 잘 쓰면 한번에 될거같은데 일단은 간단하게 구현
-  const transactions = await db
-    .selectFrom(AccountTransactionTable.name)
-    .select("txid")
+  const ledgers = await db
+    .selectFrom(LedgerTransactionTable.name)
+    .selectAll()
     .where("date", ">=", startDate)
     .where("date", "<=", endDate)
     .execute();
-  const transactionIds = transactions.map((x) => x.txid);
-
-  const ledgers =
-    transactionIds.length > 0
-      ? await db
-          .selectFrom(LedgerTransactionTable.name)
-          .selectAll()
-          .where("txid", "in", transactionIds)
-          .execute()
-      : [];
 
   return {
     accounts,

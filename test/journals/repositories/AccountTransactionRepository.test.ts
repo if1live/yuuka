@@ -15,14 +15,15 @@ describe("AccountTransactionRepository", () => {
   beforeAll(async () => {
     await TestDatabase.synchronize(db);
 
+    const date = "2024-03-01" as const;
     const entry: AccountTransactionTable.NewRow = {
       txid,
-      date: "2024-03-01",
+      date,
       brief: faker.lorem.sentence(),
     };
     await db.insertInto(AccountTransactionTable.name).values(entry).execute();
 
-    const skel = { txid };
+    const skel = { txid, date };
     const { debitTag, creditTag } = LedgerTransactionTable;
     const lines: LedgerTransactionTable.NewRow[] = [
       { ...skel, code: 102, tag: debitTag, amount: 100 },
