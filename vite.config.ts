@@ -10,4 +10,7 @@ const baseUrl = process.env.VERCEL ? baseUrl_vercel : baseUrl_ghpage;
 export default defineConfig({
   plugins: [react(), visualizer()],
   base: baseUrl,
+  build: {
+    outDir: "dist/frontend",
+  },
 });
