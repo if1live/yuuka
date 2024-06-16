@@ -1,11 +1,12 @@
+import { assertNonEmptyArray } from "@toss/assert";
 import type { CompiledQuery } from "kysely";
 import * as R from "remeda";
-import type { BindParams, Database, QueryExecResult } from "sql.js";
+import type { BindParams, Database } from "sql.js";
 
 export type QueryRow<T> = T extends CompiledQuery<infer R> ? R : never;
 
 // QueryExecResult를 적당히 변환
-function exec<T>(
+export function executeQuery<T>(
   compiledQuery: CompiledQuery<T>,
   sqlite: Database,
 ): {
@@ -17,7 +18,8 @@ function exec<T>(
     compiledQuery.parameters as unknown as BindParams,
   );
 
-  const result = results[0] as QueryExecResult;
+  assertNonEmptyArray(results);
+  const result = results[0];
   const rows = result.values.map((value) => {
     const entries = R.zip(result.columns, value);
     return Object.fromEntries(entries) as T;
@@ -33,7 +35,7 @@ export function execute<T>(
   compiledQuery: CompiledQuery<T>,
   sqlite: Database,
 ): T[] {
-  const { rows } = exec(compiledQuery, sqlite);
+  const { rows } = executeQuery(compiledQuery, sqlite);
   return rows;
 }
 

@@ -1,20 +1,22 @@
-import { default as SQLite } from "better-sqlite3";
-import { CamelCasePlugin, Kysely, SqliteDialect } from "kysely";
+import { CamelCasePlugin, Kysely } from "kysely";
+import { SqlJsDialect } from "kysely-wasm";
+import initSqlJs from "sql.js";
 import { KyselyHelper } from "../src/index.js";
 import type { MyConfig } from "../src/rdbms/loader.js";
 import type { MyDatabase } from "../src/rdbms/types.js";
 
-// vitest 환경에서 sql.js 사용하면 wasm 경로 삽질해야되는데 귀찮아서 better-sqlite3 사용
+// vitest 환경에서는 node_modules 에서 잘 가져오더라
+const SQL = await initSqlJs({});
+
 export const fromEmpty = <T = MyDatabase>(opts: MyConfig) => {
-  const database = new SQLite(":memory:");
-  const dialect = new SqliteDialect({
-    database: database,
-  });
+  const sqlite = new SQL.Database([]);
+  const dialect = new SqlJsDialect({ database: sqlite });
   const db = new Kysely<T>({
     dialect,
     plugins: [new CamelCasePlugin()],
+    ...opts,
   });
-  return db;
+  return { db, sqlite };
 };
 
 export const TestDatabase = {
