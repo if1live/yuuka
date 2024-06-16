@@ -1,4 +1,5 @@
 import { Container } from "@mantine/core";
+import { nanoid } from "nanoid";
 import { useState } from "react";
 import type { DateOnly } from "../../../../core/DateOnly.js";
 import type { JournalEntry } from "../../../../ledgers/JournalEntry.js";
@@ -23,7 +24,7 @@ export const JournalEntryCreatePage = () => {
 
   const defaultValue: JournalEntry = {
     date,
-    brief: "",
+    brief: nanoid(),
     id: "",
     lines_debit: [
       { account: "Expenses:잡손실", _tag: "debit", debit: 0, commodity: "KRW" },

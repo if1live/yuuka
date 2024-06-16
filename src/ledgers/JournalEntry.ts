@@ -43,8 +43,22 @@ const safeValidate = (journal: JournalEntry): Result<JournalEntry, Error> => {
   }
 };
 
+const toLedger = (entry: JournalEntry) => {
+  const line_brief = `${entry.date} ${entry.brief}`;
+  const lines_debit = entry.lines_debit.map((line) => {
+    return `    ${line.account}    ${line.debit} ${line.commodity}`;
+  });
+  const lines_credit = entry.lines_credit.map((line) => {
+    return `    ${line.account}    -${line.credit} ${line.commodity}`;
+  });
+  const lines = [line_brief, ...lines_debit, ...lines_credit];
+  const text = lines.join("\n");
+  return text;
+};
+
 export const JournalEntry = {
   schema,
   validate,
   safeValidate,
+  toLedger,
 };

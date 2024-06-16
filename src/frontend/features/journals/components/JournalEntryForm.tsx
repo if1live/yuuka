@@ -19,6 +19,7 @@ import type {
 import { masterdata_preset } from "../../../hardcoding.js";
 import { MasterDataContext } from "../../../providers/MasterDataContext.js";
 import { JournalEntryList } from "./JournalEntryList.js";
+import { LedgerCodeView } from "./LedgerCodeView.js";
 
 type Preset = {
   accounts_debit: string[];
@@ -126,10 +127,6 @@ export const JournalEntryForm = (props: {
       (x) => x.account !== account,
     );
     setValue("lines_credit", lines_credit);
-  };
-
-  const displayLedger = (entry: JournalEntry) => {
-    return "TODO";
   };
 
   const filterAvailableAccounts = (line: JournalLine) => {
@@ -331,7 +328,12 @@ export const JournalEntryForm = (props: {
 
       <JournalEntryList entries={[values]} />
 
-      {valid ? <pre>{displayLedger(values)}</pre> : null}
+      {valid ? (
+        <>
+          <h2>ledger</h2>
+          <LedgerCodeView entry={values} />
+        </>
+      ) : null}
 
       <h2>Presets</h2>
       <Group>
