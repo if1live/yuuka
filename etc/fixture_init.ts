@@ -40,6 +40,8 @@ const journalFiles = [
   "journal_2024_03.csv",
   "journal_2024_04.csv",
   "journal_2024_05.csv",
+  "journal_2024_06.csv",
+  "journal_2024_07.csv",
 ];
 const journalPath = path.join(financialReportsPath, "journals");
 const journalEntries: Journal[] = [];
@@ -53,6 +55,8 @@ const accountStatementFiles = [
   "AccountStatement_2024_03.csv",
   "AccountStatement_2024_04.csv",
   "AccountStatement_2024_05.csv",
+  "AccountStatement_2024_06.csv",
+  "AccountStatement_2024_07.csv",
 ];
 const accountStatements: AccountStatementTable.NewRow[] = [];
 const accountStatementPath = path.join(financialReportsPath, "accounts");
