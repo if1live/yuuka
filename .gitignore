@@ -205,3 +205,4 @@ $RECYCLE.BIN/
 sqlite.db
 artifact
 stats.html
+*.ledger
