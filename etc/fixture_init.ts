@@ -213,7 +213,7 @@ const main_ledger = async () => {
     const ledgers_debit = result.ledgers.filter((x) => x.tag === 1);
     const ledgers_credit = result.ledgers.filter((x) => x.tag === 2);
 
-    const line_brief = `${account?.date} ${account?.brief}`;
+    const line_brief = `${account?.date} ${account?.brief.trim()}`;
     const lines_debit = ledgers_debit.map((x) => {
       const account = accountMap.get(x.code);
       return `    ${account}    ${x.amount} KRW`;
