@@ -6,6 +6,7 @@ import type { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { Router } from "./Router.js";
 import { supabase } from "./constants.js";
+import { MasterDataProvider } from "./providers/MasterDataProvider.js";
 
 // 어차피 혼자 쓸건데 항상 인증된걸 기준으로 하는게 나을듯
 const ContentApp = () => {
@@ -40,7 +41,11 @@ const ContentApp = () => {
     );
   }
 
-  return <Router />;
+  return (
+    <MasterDataProvider>
+      <Router />
+    </MasterDataProvider>
+  );
 };
 
 export const App = () => {

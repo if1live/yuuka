@@ -18,6 +18,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@hookform/error-message": "^2.0.1",
     "@mantine/core": "^7.10.2",
     "@mantine/hooks": "^7.10.2",
     "@supabase/auth-ui-react": "^0.4.7",

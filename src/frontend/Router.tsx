@@ -4,14 +4,14 @@ import {
   createHashRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { LedgerRoute } from "./routes/LedgerRoute.js";
+import { JournalRoute } from "./routes/JournalRoute.js";
 import { Root } from "./routes/Root.js";
 import { UserRoute } from "./routes/UserRoute.js";
 
 const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
-      <Route path="/ledger/*" element={<LedgerRoute />} />
+      <Route path="/journal/*" element={<JournalRoute />} />
       <Route path="/user/*" element={<UserRoute />} />
     </Route>,
   ),

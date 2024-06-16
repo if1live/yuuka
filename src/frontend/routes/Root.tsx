@@ -13,8 +13,8 @@ export const Root = () => {
           yuuka
         </Anchor>
         {" | "}
-        <Anchor component={Link} to="/ledger">
-          ledger
+        <Anchor component={Link} to="/journal">
+          journal
         </Anchor>
         {" | "}
         <Anchor component={Link} to="/user">
