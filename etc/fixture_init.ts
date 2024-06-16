@@ -36,7 +36,11 @@ const financialReportsPath = path.resolve(rootPath, "..", financialReportsDir);
 
 // TODO: journal은 가변데이터가 가까운데 어디에서 취급하지?
 // TODO: 하드코딩 줄일 방법?
-const journalFiles = ["journal_2024_03.csv", "journal_2024_04.csv","journal_2024_05.csv"];
+const journalFiles = [
+  "journal_2024_03.csv",
+  "journal_2024_04.csv",
+  "journal_2024_05.csv",
+];
 const journalPath = path.join(financialReportsPath, "journals");
 const journalEntries: Journal[] = [];
 for (const f of journalFiles) {
@@ -171,10 +175,66 @@ const main_sqlite = async () => {
   await insertBulk(db);
 };
 
+const main_ledger = async () => {
+  // 내부 코드를 ledger 포맷에서 사용할 이름으로 맵핑
+  const accountMap = new Map<number, string>();
+  for (const item of MasterData.accountGroups) {
+    const majorMap = new Map([
+      ["asset", "Assets"],
+      ["liability", "Liabilities"],
+      ["equity", "Equity"],
+      ["revenue", "Income"],
+      ["expense", "Expenses"],
+    ]);
+    const prefix = majorMap.get(item.major);
+    const suffix = item.name;
+    const name = `${prefix}:${suffix}`;
+    const code = item.code * 1000;
+    accountMap.set(code, name);
+  }
+  for (const item of MasterData.accounts) {
+    if (item.code % 1000 !== 0) {
+      const group = Math.floor(item.code / 1000) * 1000;
+      const found = accountMap.get(group);
+      const name = `${found}:${item.name}`;
+      accountMap.set(item.code, name);
+    }
+  }
+
+  const blocks = [];
+
+  const results = journalEntries.map((x) => JournalService.prepare(x));
+  for (const result of results) {
+    const account = result.accounts[0];
+    const ledgers_debit = result.ledgers.filter((x) => x.tag === 1);
+    const ledgers_credit = result.ledgers.filter((x) => x.tag === 2);
+
+    const line_brief = `${account?.date} ${account?.brief}`;
+    const lines_debit = ledgers_debit.map((x) => {
+      const account = accountMap.get(x.code);
+      return `    ${account}    ${x.amount} KRW`;
+    });
+    const lines_credit = ledgers_credit.map((x) => {
+      const account = accountMap.get(x.code);
+      return `    ${account}    -${x.amount} KRW`;
+    });
+    const lines = [line_brief, ...lines_debit, ...lines_credit];
+    const text = lines.join("\n");
+    blocks.push(text);
+  }
+
+  const text = blocks.join("\n\n");
+  const filename = "main.ledger";
+  await fs.writeFile(filename, text);
+};
+
 const target = process.argv[process.argv.length - 1];
 switch (target) {
   case "sqlite":
     await main_sqlite();
+    break;
+  case "ledger":
+    await main_ledger();
     break;
   default:
     await main_sqlite();
