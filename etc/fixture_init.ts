@@ -36,7 +36,7 @@ const financialReportsPath = path.resolve(rootPath, "..", financialReportsDir);
 
 // TODO: journal은 가변데이터가 가까운데 어디에서 취급하지?
 // TODO: 하드코딩 줄일 방법?
-const journalFiles = ["journal_2024_03.csv", "journal_2024_04.csv"];
+const journalFiles = ["journal_2024_03.csv", "journal_2024_04.csv","journal_2024_05.csv"];
 const journalPath = path.join(financialReportsPath, "journals");
 const journalEntries: Journal[] = [];
 for (const f of journalFiles) {
@@ -48,6 +48,7 @@ for (const f of journalFiles) {
 const accountStatementFiles = [
   "AccountStatement_2024_03.csv",
   "AccountStatement_2024_04.csv",
+  "AccountStatement_2024_05.csv",
 ];
 const accountStatements: AccountStatementTable.NewRow[] = [];
 const accountStatementPath = path.join(financialReportsPath, "accounts");
