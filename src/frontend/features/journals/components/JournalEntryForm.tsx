@@ -1,5 +1,12 @@
 import { ErrorMessage } from "@hookform/error-message";
-import { Button, Group, Input, NativeSelect, Table } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Input,
+  InputWrapper,
+  NativeSelect,
+  Table,
+} from "@mantine/core";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as R from "remeda";
@@ -121,7 +128,7 @@ export const JournalEntryForm = (props: {
     setValue("lines_credit", lines_credit);
   };
 
-  const displayCSV = (entry: JournalEntry) => {
+  const displayLedger = (entry: JournalEntry) => {
     return "TODO";
   };
 
@@ -196,102 +203,118 @@ export const JournalEntryForm = (props: {
           />
         </Input.Wrapper>
 
-        <Table color="blue">
-          <DebitTableHeader />
-          <Table.Tbody>
-            {values.lines_debit.map((line, idx) => {
-              const key = `${line._tag}-${line.account}`;
-              const accounts = filterAvailableAccounts(line);
+        <h3>debit</h3>
+        {values.lines_debit.map((line, idx) => {
+          const key = `${line._tag}-${line.account}`;
+          const accounts = filterAvailableAccounts(line);
 
-              return (
-                <Table.Tr key={key}>
-                  <Table.Td>
-                    <NativeSelect {...register(`lines_debit.${idx}.account`)}>
-                      {accounts.map((x) => (
-                        <option key={x.name} value={x.name}>
-                          {x.name}
-                        </option>
-                      ))}
-                    </NativeSelect>
-                  </Table.Td>
-                  <Table.Td>
-                    <Input
-                      type="number"
-                      {...register(`lines_debit.${idx}.debit`, {
-                        valueAsNumber: true,
-                      })}
-                    />
-                  </Table.Td>
-                  <Table.Td>
-                    <Input
-                      {...register(`lines_debit.${idx}.commodity`, {
-                        maxLength: 3,
-                      })}
-                    />
-                  </Table.Td>
-                  <Table.Td>
-                    <Button
-                      onClick={() => removeLine_debit(line.account)}
-                      variant="light"
-                      color="red"
-                    >
-                      del
-                    </Button>
-                  </Table.Td>
-                </Table.Tr>
-              );
-            })}
-          </Table.Tbody>
-        </Table>
+          return (
+            <div key={key}>
+              <Input.Wrapper label="account">
+                <NativeSelect {...register(`lines_debit.${idx}.account`)}>
+                  {accounts.map((x) => (
+                    <option key={x.name} value={x.name}>
+                      {x.name}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </Input.Wrapper>
 
-        <Table color="red">
-          <CreditTableHeader />
-          <Table.Tbody>
-            {values.lines_credit.map((line, idx) => {
-              const key = `${line._tag}-${line.account}`;
-              const accounts = filterAvailableAccounts(line);
+              <Input.Wrapper label="debit">
+                <Input
+                  type="number"
+                  {...register(`lines_debit.${idx}.debit`, {
+                    valueAsNumber: true,
+                  })}
+                />
+              </Input.Wrapper>
 
-              return (
-                <Table.Tr key={key}>
-                  <Table.Td>
-                    <NativeSelect {...register(`lines_credit.${idx}.account`)}>
-                      {accounts.map((x) => (
-                        <option key={x.name} value={x.name}>
-                          {x.name}
-                        </option>
-                      ))}
-                    </NativeSelect>
-                  </Table.Td>
-                  <Table.Td>
-                    <Input
-                      type="number"
-                      {...register(`lines_credit.${idx}.credit`, {
-                        valueAsNumber: true,
-                      })}
-                    />
-                  </Table.Td>
-                  <Table.Td>
-                    <Input
-                      {...register(`lines_credit.${idx}.commodity`, {
-                        maxLength: 3,
-                      })}
-                    />
-                  </Table.Td>
-                  <Table.Td>
-                    <Button
-                      onClick={() => removeLine_credit(line.account)}
-                      variant="light"
-                      color="red"
-                    >
-                      del
-                    </Button>
-                  </Table.Td>
-                </Table.Tr>
-              );
-            })}
-          </Table.Tbody>
-        </Table>
+              <Input.Wrapper label="commodity">
+                <Input
+                  {...register(`lines_debit.${idx}.commodity`, {
+                    maxLength: 3,
+                  })}
+                />
+              </Input.Wrapper>
 
+              <Group>
+                <Button
+                  type="button"
+                  onClick={addLine_debit}
+                  variant="default"
+                  size="xs"
+                >
+                  debit
+                </Button>
+
+                <Button
+                  onClick={() => removeLine_debit(line.account)}
+                  variant="light"
+                  color="red"
+                  size="xs"
+                >
+                  del
+                </Button>
+              </Group>
+            </div>
+          );
+        })}
+
+        <h3>credit</h3>
+        {values.lines_credit.map((line, idx) => {
+          const key = `${line._tag}-${line.account}`;
+          const accounts = filterAvailableAccounts(line);
+
+          return (
+            <div key={key}>
+              <InputWrapper label="account">
+                <NativeSelect {...register(`lines_credit.${idx}.account`)}>
+                  {accounts.map((x) => (
+                    <option key={x.name} value={x.name}>
+                      {x.name}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </InputWrapper>
+              <InputWrapper label="credit">
+                <Input
+                  type="number"
+                  {...register(`lines_credit.${idx}.credit`, {
+                    valueAsNumber: true,
+                  })}
+                />
+              </InputWrapper>
+              <InputWrapper label="commodity">
+                <Input
+                  {...register(`lines_credit.${idx}.commodity`, {
+                    maxLength: 3,
+                  })}
+                />
+              </InputWrapper>
+              <Group>
+                <Button
+                  type="button"
+                  onClick={addLine_credit}
+                  variant="default"
+                  size="xs"
+                >
+                  credit
+                </Button>
+
+                <Button
+                  onClick={() => removeLine_credit(line.account)}
+                  variant="light"
+                  color="red"
+                  size="xs"
+                >
+                  del
+                </Button>
+              </Group>
+            </div>
+          );
+        })}
+
+        <h3>actions</h3>
         <Input.Wrapper>
           <DebitCreditTableActions
             debit={addLine_debit}
@@ -308,8 +331,7 @@ export const JournalEntryForm = (props: {
 
       <JournalEntryList entries={[values]} />
 
-      {/* 좀 무식한데 csv 접근을 열어둠 */}
-      {valid ? <pre>{displayCSV(values)}</pre> : null}
+      {valid ? <pre>{displayLedger(values)}</pre> : null}
 
       <h2>Presets</h2>
       <Group>
@@ -327,28 +349,6 @@ export const JournalEntryForm = (props: {
   );
 };
 
-const DebitTableHeader = () => (
-  <Table.Thead>
-    <Table.Tr>
-      <Table.Th>account</Table.Th>
-      <Table.Th>debit</Table.Th>
-      <Table.Th>commodity</Table.Th>
-      <Table.Th>actions</Table.Th>
-    </Table.Tr>
-  </Table.Thead>
-);
-
-const CreditTableHeader = () => (
-  <Table.Thead>
-    <Table.Tr>
-      <Table.Th>account</Table.Th>
-      <Table.Th>credit</Table.Th>
-      <Table.Th>commodity</Table.Th>
-      <Table.Th>actions</Table.Th>
-    </Table.Tr>
-  </Table.Thead>
-);
-
 const DebitCreditTableActions = (props: {
   debit: () => void;
   credit: () => void;
@@ -356,12 +356,6 @@ const DebitCreditTableActions = (props: {
   reset: () => void;
 }) => (
   <Button.Group>
-    <Button type="button" onClick={props.debit} variant="default">
-      debit
-    </Button>
-    <Button type="button" onClick={props.credit} variant="default">
-      credit
-    </Button>
     <Button type="button" onClick={props.swap} variant="default">
       swap
     </Button>
