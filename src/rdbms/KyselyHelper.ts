@@ -23,5 +23,5 @@ export const exportFile = async (database: Database, fp: string) => {
 };
 
 export const createSchema = async <T>(db: Kysely<T>) => {
-  await AccountTable.createSchema(db);
+  await AccountTable.defineSchema_sqlite(db).execute();
 };

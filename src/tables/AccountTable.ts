@@ -1,4 +1,10 @@
-import type { Insertable, Kysely, Selectable, Updateable } from "kysely";
+import type {
+  Generated,
+  Insertable,
+  Kysely,
+  Selectable,
+  Updateable,
+} from "kysely";
 import type { SnakeCase } from "type-fest";
 
 const kyselyName = "account";
@@ -7,7 +13,7 @@ export const name = kyselyName;
 
 // TODO: 타입 유도? columns
 export interface Table {
-  id: number;
+  id: Generated<number>;
   userId: string;
   name: string;
   description: string;
@@ -22,14 +28,25 @@ export type Row = Selectable<Table>;
 export type NewRow = Insertable<Table>;
 export type RowUpdate = Updateable<Table>;
 
-export const createSchema = async <T>(db: Kysely<T>) => {
-  await db.schema
+export const defineSchema_sqlite = <T>(db: Kysely<T>) => {
+  return db.schema
     .createTable(nativeName)
-    .addColumn("id", "integer", (col) => col.autoIncrement().primaryKey())
+    .addColumn("id", "integer")
     .addColumn("userId", "text")
     .addColumn("name", "text")
     .addColumn("description", "text")
     .addPrimaryKeyConstraint("primary", [...primaryKeyFields])
-    .addUniqueConstraint("userId_name", ["userId", "name"])
-    .execute();
+    .addUniqueConstraint("userId_name", ["userId", "name"]);
+};
+
+export const defineSchema_pg = <T>(db: Kysely<T>) => {
+  const prefix = nativeName;
+  return db.schema
+    .createTable(nativeName)
+    .addColumn("id", "serial")
+    .addColumn("userId", "text")
+    .addColumn("name", "text")
+    .addColumn("description", "text")
+    .addPrimaryKeyConstraint(`${prefix}_primary`, [...primaryKeyFields])
+    .addUniqueConstraint(`${prefix}_userId_name`, ["userId", "name"]);
 };
