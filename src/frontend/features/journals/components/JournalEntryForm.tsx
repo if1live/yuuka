@@ -22,6 +22,8 @@ import { JournalEntryList } from "./JournalEntryList.js";
 import { LedgerCodeView } from "./LedgerCodeView.js";
 
 type Preset = {
+  name: string;
+  brief: string;
   accounts_debit: string[];
   accounts_credit: string[];
 };
@@ -163,7 +165,7 @@ export const JournalEntryForm = (props: {
 
     setValue("lines_debit", lines_debit);
     setValue("lines_credit", lines_credit);
-    setValue("brief", "");
+    setValue("brief", preset.brief);
   };
 
   return (
