@@ -2,7 +2,11 @@ import * as R from "remeda";
 import { Result } from "true-myth";
 import { z } from "zod";
 import { DateOnly } from "../core/types.js";
-import { JournalLine } from "./JournalLine.js";
+import {
+  JournalLine,
+  type JournalLine_Credit,
+  type JournalLine_Debit,
+} from "./JournalLine.js";
 
 const schema = z.object({
   id: z.string(),
@@ -56,9 +60,88 @@ const toLedger = (entry: JournalEntry) => {
   return text;
 };
 
+const swap = (entry: JournalEntry) => {
+  const lines_debit = entry.lines_credit.map(
+    (x): JournalLine_Debit => ({
+      _tag: "debit",
+      account: x.account,
+      debit: x.credit,
+      commodity: "KRW",
+    }),
+  );
+
+  const lines_credit = entry.lines_debit.map(
+    (x): JournalLine_Credit => ({
+      _tag: "credit",
+      account: x.account,
+      credit: x.debit,
+      commodity: "KRW",
+    }),
+  );
+
+  return {
+    ...entry,
+    lines_debit,
+    lines_credit,
+  };
+};
+
+const remove = (entry: JournalEntry, account: string) => {
+  const lines_debit = entry.lines_debit.filter((x) => x.account !== account);
+  const lines_credit = entry.lines_credit.filter((x) => x.account !== account);
+  return {
+    ...entry,
+    lines_debit,
+    lines_credit,
+  };
+};
+
+const derive = (entry: JournalEntry) => {
+  const blankLines_debit = entry.lines_debit.filter((x) => x.debit === 0);
+  const blankLines_credit = entry.lines_credit.filter((x) => x.credit === 0);
+
+  const blankLineCount = blankLines_credit.length + blankLines_debit.length;
+
+  // 모든 수치가 정해져 있으면 작업이 필요없다.
+  if (blankLineCount === 0) {
+    return entry;
+  }
+
+  // 2개 이상의 항목이 비어있으면 값을 유도할수 없다.
+  if (blankLineCount >= 2) {
+    return entry;
+  }
+
+  const sum_debit = R.sumBy(entry.lines_debit, (x) => x.debit);
+  const sum_credit = R.sumBy(entry.lines_credit, (x) => x.credit);
+
+  // debit의 1개가 입력되지 않은 경우
+  if (blankLines_debit.length === 1) {
+    const rest = sum_credit - sum_debit;
+    const lines_debit = entry.lines_debit.map((line) => {
+      return line.debit === 0 ? { ...line, debit: rest } : line;
+    });
+    return { ...entry, lines_debit };
+  }
+
+  // credit의 1개가 입력되지 않은 경우
+  if (blankLines_credit.length === 1) {
+    const rest = sum_debit - sum_credit;
+    const lines_credit = entry.lines_credit.map((line) => {
+      return line.credit === 0 ? { ...line, credit: rest } : line;
+    });
+    return { ...entry, lines_credit };
+  }
+
+  return entry;
+};
+
 export const JournalEntry = {
   schema,
   validate,
   safeValidate,
+  swap,
+  remove,
+  derive,
   toLedger,
 };

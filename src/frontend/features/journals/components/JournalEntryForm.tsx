@@ -51,6 +51,20 @@ export const JournalEntryForm = (props: {
   const result = JournalEntry.safeValidate(values);
   const valid = result.isOk && R.isEmpty(errors);
 
+  const setEntry = (next: JournalEntry) => {
+    const fields = ["lines_credit", "lines_debit", "brief"] as const;
+    const keys: ReadonlyArray<keyof JournalEntry> = fields;
+
+    const prev: JournalEntry = values;
+    for (const field of fields) {
+      const prev_data = prev[field];
+      const next_data = next[field];
+      if (prev_data !== next_data) {
+        setValue(field, next_data);
+      }
+    }
+  };
+
   // TODO: form이 바뀐걸 상위로 전달할 더 좋은 방법?
 
   const findUnusedAccount = (): string => {
@@ -90,26 +104,13 @@ export const JournalEntryForm = (props: {
   };
 
   const swapLines = () => {
-    const lines_debit = values.lines_credit.map(
-      (x): JournalLine_Debit => ({
-        _tag: "debit",
-        account: x.account,
-        debit: x.credit,
-        commodity: "KRW",
-      }),
-    );
+    const next = JournalEntry.swap(values);
+    setEntry(next);
+  };
 
-    const lines_credit = values.lines_debit.map(
-      (x): JournalLine_Credit => ({
-        _tag: "credit",
-        account: x.account,
-        credit: x.debit,
-        commodity: "KRW",
-      }),
-    );
-
-    setValue("lines_debit", lines_debit);
-    setValue("lines_credit", lines_credit);
+  const derive = () => {
+    const next = JournalEntry.derive(values);
+    setEntry(next);
   };
 
   const resetLines = () => {
@@ -119,16 +120,9 @@ export const JournalEntryForm = (props: {
     setValue("lines_credit", props.defaultValue.lines_credit);
   };
 
-  const removeLine_debit = (account: string) => {
-    const lines_debit = values.lines_debit.filter((x) => x.account !== account);
-    setValue("lines_debit", lines_debit);
-  };
-
-  const removeLine_credit = (account: string) => {
-    const lines_credit = values.lines_credit.filter(
-      (x) => x.account !== account,
-    );
-    setValue("lines_credit", lines_credit);
+  const removeLine = (account: string) => {
+    const next = JournalEntry.remove(values, account);
+    setEntry(next);
   };
 
   const filterAvailableAccounts = (line: JournalLine) => {
@@ -202,6 +196,17 @@ export const JournalEntryForm = (props: {
           />
         </Input.Wrapper>
 
+        <h3>actions</h3>
+        <Input.Wrapper>
+          <DebitCreditTableActions
+            debit={addLine_debit}
+            credit={addLine_credit}
+            derive={derive}
+            swap={swapLines}
+            reset={resetLines}
+          />
+        </Input.Wrapper>
+
         <h3>debit</h3>
         {values.lines_debit.map((line, idx) => {
           const key = `${line._tag}-${line.account}`;
@@ -224,6 +229,7 @@ export const JournalEntryForm = (props: {
                   type="number"
                   {...register(`lines_debit.${idx}.debit`, {
                     valueAsNumber: true,
+                    min: 0,
                   })}
                 />
               </Input.Wrapper>
@@ -238,16 +244,7 @@ export const JournalEntryForm = (props: {
 
               <Group>
                 <Button
-                  type="button"
-                  onClick={addLine_debit}
-                  variant="default"
-                  size="xs"
-                >
-                  debit
-                </Button>
-
-                <Button
-                  onClick={() => removeLine_debit(line.account)}
+                  onClick={() => removeLine(line.account)}
                   variant="light"
                   color="red"
                   size="xs"
@@ -280,6 +277,7 @@ export const JournalEntryForm = (props: {
                   type="number"
                   {...register(`lines_credit.${idx}.credit`, {
                     valueAsNumber: true,
+                    min: 0,
                   })}
                 />
               </InputWrapper>
@@ -292,16 +290,7 @@ export const JournalEntryForm = (props: {
               </InputWrapper>
               <Group>
                 <Button
-                  type="button"
-                  onClick={addLine_credit}
-                  variant="default"
-                  size="xs"
-                >
-                  credit
-                </Button>
-
-                <Button
-                  onClick={() => removeLine_credit(line.account)}
+                  onClick={() => removeLine(line.account)}
                   variant="light"
                   color="red"
                   size="xs"
@@ -312,16 +301,6 @@ export const JournalEntryForm = (props: {
             </div>
           );
         })}
-
-        <h3>actions</h3>
-        <Input.Wrapper>
-          <DebitCreditTableActions
-            debit={addLine_debit}
-            credit={addLine_credit}
-            swap={swapLines}
-            reset={resetLines}
-          />
-        </Input.Wrapper>
 
         <Button type="submit" disabled={!valid}>
           submit
@@ -357,11 +336,21 @@ const DebitCreditTableActions = (props: {
   debit: () => void;
   credit: () => void;
   swap: () => void;
+  derive: () => void;
   reset: () => void;
 }) => (
   <Button.Group>
     <Button type="button" onClick={props.swap} variant="default">
       swap
+    </Button>
+    <Button type="button" onClick={props.debit} variant="default">
+      debit
+    </Button>
+    <Button type="button" onClick={props.credit} variant="default">
+      credit
+    </Button>
+    <Button type="button" onClick={props.derive} variant="default">
+      derive
     </Button>
     <Button type="button" onClick={props.reset} color="red">
       reset
