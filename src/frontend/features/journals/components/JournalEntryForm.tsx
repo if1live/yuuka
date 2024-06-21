@@ -24,8 +24,8 @@ import { LedgerCodeView } from "./LedgerCodeView.js";
 type Preset = {
   name: string;
   brief: string;
-  accounts_debit: string[];
-  accounts_credit: string[];
+  lines_debit: Omit<JournalLine_Debit, "_tag">[];
+  lines_credit: Omit<JournalLine_Credit, "_tag">[];
 };
 const presets = masterdata_preset;
 
@@ -139,22 +139,12 @@ export const JournalEntryForm = (props: {
   };
 
   const setPreset = (preset: Preset) => {
-    const lines_debit = preset.accounts_debit.map(
-      (account): JournalLine_Debit => ({
-        _tag: "debit",
-        account,
-        debit: 0,
-        commodity: "KRW",
-      }),
+    const lines_debit = preset.lines_debit.map(
+      (line): JournalLine_Debit => ({ _tag: "debit", ...line }),
     );
 
-    const lines_credit = preset.accounts_credit.map(
-      (account): JournalLine_Credit => ({
-        _tag: "credit",
-        account,
-        credit: 0,
-        commodity: "KRW",
-      }),
+    const lines_credit = preset.lines_credit.map(
+      (line): JournalLine_Credit => ({ _tag: "credit", ...line }),
     );
 
     setValue("lines_debit", lines_debit);
