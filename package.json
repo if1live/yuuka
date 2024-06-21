@@ -40,17 +40,17 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.1",
+    "@biomejs/biome": "^1.8.2",
     "@faker-js/faker": "^8.4.1",
-    "@types/node": "^20.14.2",
+    "@types/node": "^20.14.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@types/sql.js": "^1.4.9",
     "@vitejs/plugin-react": "^4.3.1",
     "rimraf": "^5.0.7",
     "rollup-plugin-visualizer": "^5.12.0",
-    "tsx": "^4.15.5",
-    "typescript": "^5.4.5",
+    "tsx": "^4.15.7",
+    "typescript": "^5.5.2",
     "vite": "^5.3.1",
     "vitest": "^1.6.0"
   },
