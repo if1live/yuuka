@@ -16,7 +16,7 @@ import type {
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as R from "remeda";
-import { MasterDataContext } from "../../../providers/MasterDataContext.js";
+import { useMasterData } from "../../../providers/MasterDataProvider.js";
 import { JournalEntryList } from "./JournalEntryList.js";
 import { LedgerCodeView } from "./LedgerCodeView.js";
 import { LedgerCopyButton } from "./LedgerCopyButton.js";
@@ -34,7 +34,7 @@ export const JournalEntryForm = (props: {
 }) => {
   const { onSubmit } = props;
 
-  const masterdata = useContext(MasterDataContext);
+  const masterdata = useMasterData();
   const presets = masterdata.presets;
 
   const {

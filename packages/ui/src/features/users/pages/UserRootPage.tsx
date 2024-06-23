@@ -1,17 +1,37 @@
-import { Container } from "@mantine/core";
-import { useContext } from "react";
-import { MasterDataContext } from "../../../providers/MasterDataContext.js";
+import { Button, Container, Group } from "@mantine/core";
+import type { ResourceController } from "@yuuka/api";
+import { LocalDatabase } from "../../../db.js";
+import { myfetch } from "../../../fetchers.js";
+import { useMasterData } from "../../../providers/MasterDataProvider.js";
 import { SupabaseSignOutButton } from "../components/SupabaseSignOutButton.js";
 
 export const UserRootPage = () => {
-  const masterdata = useContext(MasterDataContext);
+  const masterdata = useMasterData();
   const { accounts, presets } = masterdata;
+
+  const synchronize = async () => {
+    const endpoint = "/api/resource/masterdata/";
+    const data = await myfetch(endpoint);
+    const resp = data as ResourceController.MasterdataResp;
+    masterdata.synchronize(resp);
+  };
+
+  const clear = async () => {
+    masterdata.synchronize({
+      accounts: [],
+      presets: [],
+    });
+  };
 
   return (
     <Container>
       <h1>user root</h1>
 
-      <SupabaseSignOutButton />
+      <Group>
+        <Button onClick={synchronize}>synchronize</Button>
+        <Button onClick={clear}>clear</Button>
+        <SupabaseSignOutButton />
+      </Group>
 
       <h2>accounts</h2>
       <ul>
