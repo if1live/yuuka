@@ -97,8 +97,14 @@ const remove = (entry: JournalEntry, account: string) => {
 };
 
 const derive = (entry: JournalEntry) => {
-  const blankLines_debit = entry.lines_debit.filter((x) => x.debit === 0);
-  const blankLines_credit = entry.lines_credit.filter((x) => x.credit === 0);
+  const isBlankAmount = (x: number) => x === 0 || Number.isNaN(x);
+
+  const blankLines_debit = entry.lines_debit.filter((x) =>
+    isBlankAmount(x.debit),
+  );
+  const blankLines_credit = entry.lines_credit.filter((x) =>
+    isBlankAmount(x.credit),
+  );
 
   const blankLineCount = blankLines_credit.length + blankLines_debit.length;
 
@@ -112,14 +118,23 @@ const derive = (entry: JournalEntry) => {
     return entry;
   }
 
-  const sum_debit = R.sumBy(entry.lines_debit, (x) => x.debit);
-  const sum_credit = R.sumBy(entry.lines_credit, (x) => x.credit);
+  const sum_debit = R.pipe(
+    entry.lines_debit,
+    R.filter((x) => !isBlankAmount(x.debit)),
+    R.sumBy((x) => x.debit),
+  );
+
+  const sum_credit = R.pipe(
+    entry.lines_credit,
+    R.filter((x) => !isBlankAmount(x.credit)),
+    R.sumBy((x) => x.credit),
+  );
 
   // debit의 1개가 입력되지 않은 경우
   if (blankLines_debit.length === 1) {
     const rest = sum_credit - sum_debit;
     const lines_debit = entry.lines_debit.map((line) => {
-      return line.debit === 0 ? { ...line, debit: rest } : line;
+      return isBlankAmount(line.debit) ? { ...line, debit: rest } : line;
     });
     return { ...entry, lines_debit };
   }
@@ -128,7 +143,7 @@ const derive = (entry: JournalEntry) => {
   if (blankLines_credit.length === 1) {
     const rest = sum_debit - sum_credit;
     const lines_credit = entry.lines_credit.map((line) => {
-      return line.credit === 0 ? { ...line, credit: rest } : line;
+      return isBlankAmount(line.credit) ? { ...line, credit: rest } : line;
     });
     return { ...entry, lines_credit };
   }

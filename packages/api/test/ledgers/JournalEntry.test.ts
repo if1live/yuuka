@@ -143,4 +143,27 @@ describe("JournalEntry#derive", () => {
     const actual = JournalEntry.derive(entry);
     assert.deepStrictEqual(actual, example);
   });
+
+  it("credit에 NaN이 입력된 경우", () => {
+    const lines_debit: JournalLine_Debit[] = [
+      { _tag: "debit", account: "853000", debit: 7740, commodity: "KRW" },
+      { _tag: "debit", account: "854000", debit: 7740, commodity: "KRW" },
+    ];
+    const lines_credit: JournalLine_Credit[] = [
+      {
+        _tag: "credit",
+        account: "102101",
+        credit: Number.NaN,
+        commodity: "KRW",
+      },
+    ];
+
+    const entry: JournalEntry = {
+      ...example,
+      lines_debit,
+      lines_credit,
+    };
+    const actual = JournalEntry.derive(entry);
+    assert.deepStrictEqual(actual, example);
+  });
 });
