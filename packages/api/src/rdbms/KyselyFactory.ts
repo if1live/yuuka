@@ -9,7 +9,6 @@ import {
   SqliteDialect,
   WithSchemaPlugin,
 } from "kysely";
-import { default as pg } from "pg";
 
 const options: Omit<KyselyConfig, "dialect"> = {
   // log: ["query", "error"],
@@ -34,7 +33,10 @@ const createKysely = <T>(dialect: Dialect) => {
   });
 };
 
-const createDialect_postgres = (url: URL) => {
+const createDialect_postgres = async (url: URL) => {
+  const pgPkg = await import("pg");
+  const pg = pgPkg.default;
+
   const database = url.pathname.replace("/", "");
 
   const pool = new pg.Pool({

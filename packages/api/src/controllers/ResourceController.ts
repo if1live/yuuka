@@ -1,7 +1,7 @@
 import type { MyKysely } from "../rdbms/types.js";
 import { AccountRepository, PresetRepository } from "../repositories/index.js";
 
-const masterdata = async (db: MyKysely, userId: string) => {
+export const masterdata = async (db: MyKysely, userId: string) => {
   const [accounts, presets] = await Promise.all([
     AccountRepository.loadAll(db, userId),
     PresetRepository.loadAll(db, userId),
@@ -14,6 +14,4 @@ const masterdata = async (db: MyKysely, userId: string) => {
   };
 };
 
-export const ResourceController = {
-  masterdata,
-};
+export type MasterdataResp = Awaited<ReturnType<typeof masterdata>>;

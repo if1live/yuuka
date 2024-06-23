@@ -16,7 +16,6 @@ import type {
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as R from "remeda";
-import { masterdata_preset } from "../../../hardcoding.js";
 import { MasterDataContext } from "../../../providers/MasterDataContext.js";
 import { JournalEntryList } from "./JournalEntryList.js";
 import { LedgerCodeView } from "./LedgerCodeView.js";
@@ -27,7 +26,6 @@ type Preset = {
   lines_debit: Omit<JournalLine_Debit, "_tag">[];
   lines_credit: Omit<JournalLine_Credit, "_tag">[];
 };
-const presets = masterdata_preset;
 
 export const JournalEntryForm = (props: {
   defaultValue: JournalEntry;
@@ -36,6 +34,7 @@ export const JournalEntryForm = (props: {
   const { onSubmit } = props;
 
   const masterdata = useContext(MasterDataContext);
+  const presets = masterdata.presets;
 
   const {
     register,

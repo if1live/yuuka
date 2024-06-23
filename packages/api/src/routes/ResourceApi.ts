@@ -1,7 +1,7 @@
 import { Hono } from "hono";
+import * as ResourceController from "../controllers/ResourceController.js";
 import { AccessTokenHelper } from "../helpers/tokens.js";
 import { db } from "../instances/database.js";
-import { ResourceController } from "./ResourceController.js";
 
 export const app = new Hono();
 

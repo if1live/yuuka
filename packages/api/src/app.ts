@@ -3,7 +3,7 @@ import { compress } from "hono/compress";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
-import { HealthCheckApp, LedgerApi, ResourceApi } from "./controllers/index.js";
+import { HealthCheckApp, LedgerApi, ResourceApi } from "./routes/index.js";
 
 export const app = new Hono();
 

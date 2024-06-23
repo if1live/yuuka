@@ -1,8 +1,8 @@
 import { Hono } from "hono";
+import { LedgerController } from "../controllers/index.js";
 import { AccessTokenHelper } from "../helpers/tokens.js";
 import { db } from "../instances/database.js";
 import type { JournalEntry } from "../ledgers/JournalEntry.js";
-import { LedgerController } from "./LedgerController.js";
 
 export const app = new Hono();
 

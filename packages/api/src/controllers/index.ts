@@ -1,3 +1,2 @@
-export * as ResourceApi from "./ResourceApi.js";
-export * from "./HealthCheckApp.js";
-export * as LedgerApi from "./LedgerApi.js";
+export * as ResourceController from "./ResourceController.js";
+export * as LedgerController from "./LedgerController.js";
