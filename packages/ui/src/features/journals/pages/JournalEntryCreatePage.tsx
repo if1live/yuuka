@@ -36,7 +36,7 @@ export const JournalEntryCreatePage = () => {
 
   const onSubmit = async (data: JournalEntry) => {
     try {
-      const path = `/api/ledger/create/${data.id}`;
+      const path = "/api/ledger/create";
       const json = await myfetch(path, {
         method: "POST",
         headers: {
