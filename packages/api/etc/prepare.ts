@@ -127,8 +127,8 @@ const execute_preset = async (db: Kysely<MyDatabase>) => {
       userId,
       name: item.name,
       brief: item.brief,
-      lines_debit: JSON.stringify(item.lines_debit),
-      lines_credit: JSON.stringify(item.lines_credit),
+      linesDebit: JSON.stringify(item.lines_debit),
+      linesCredit: JSON.stringify(item.lines_credit),
     };
   });
 
