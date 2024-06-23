@@ -9,7 +9,7 @@ import {
 import { SqlJsDialect } from "kysely-wasm";
 import initSqlJs from "sql.js";
 import { z } from "zod";
-import type { MyDatabase } from "../src/index.js";
+import type { MyDatabase } from "../src/rdbms/types.js";
 import { AccountTable, PresetTable } from "../src/tables/index.js";
 
 const configSchema = z.object({

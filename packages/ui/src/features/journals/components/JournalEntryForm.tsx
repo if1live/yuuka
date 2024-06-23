@@ -10,12 +10,12 @@ import {
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as R from "remeda";
-import { JournalEntry } from "../../../../ledgers/JournalEntry.js";
+import { JournalEntry } from "@yuuka/api";
 import type {
   JournalLine,
   JournalLine_Credit,
   JournalLine_Debit,
-} from "../../../../ledgers/JournalLine.js";
+} from "@yuuka/api";
 import { masterdata_preset } from "../../../hardcoding.js";
 import { MasterDataContext } from "../../../providers/MasterDataContext.js";
 import { JournalEntryList } from "./JournalEntryList.js";

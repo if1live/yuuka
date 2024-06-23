@@ -1,7 +1,7 @@
 import { CamelCasePlugin, Kysely } from "kysely";
 import { SqlJsDialect } from "kysely-wasm";
 import initSqlJs from "sql.js";
-import { KyselyHelper } from "../src/index.js";
+import { KyselyHelper } from "../src/rdbms/index.js";
 import type { MyConfig } from "../src/rdbms/loader.js";
 import type { MyDatabase } from "../src/rdbms/types.js";
 

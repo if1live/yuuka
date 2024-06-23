@@ -1,8 +1,6 @@
 import { Table } from "@mantine/core";
-import { assertNonEmptyArray } from "@toss/assert";
-import { Fragment } from "react/jsx-runtime";
 import * as R from "remeda";
-import type { JournalEntry } from "../../../../ledgers/JournalEntry.js";
+import type { JournalEntry } from "@yuuka/api";
 import { CurrencyDisplay } from "../../../components/CurrencyDisplay.js";
 import { JournalEntryBlock } from "./JournalEntryBlock.js";
 

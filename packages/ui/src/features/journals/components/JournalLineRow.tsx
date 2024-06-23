@@ -1,5 +1,5 @@
 import { Table, Text } from "@mantine/core";
-import { JournalEntry } from "../../../../ledgers/JournalEntry.js";
+import { JournalEntry } from "@yuuka/api";
 import { CurrencyDisplay } from "../../../components/CurrencyDisplay.js";
 
 /** journal line을 Table.Tr로 표현 */

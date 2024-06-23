@@ -1,8 +1,7 @@
 import { sql } from "kysely";
 import type { Database } from "sql.js";
 import { assert, afterAll, beforeAll, describe, it } from "vitest";
-import type { MyKysely } from "../src/index.js";
-import { QueryRunner } from "../src/rdbms/index.js";
+import { type MyKysely, QueryRunner } from "../src/rdbms/index.js";
 import { TestDatabase } from "./TestDatabase.js";
 
 describe("TestDatabase", () => {

@@ -1,4 +1,4 @@
-import type { JournalEntry } from "../../../../ledgers/JournalEntry.js";
+import type { JournalEntry } from "@yuuka/api";
 import { JournalLineRow } from "./JournalLineRow.js";
 
 /** 하나의 journal entry는 여러개의 line을 갖는다 */

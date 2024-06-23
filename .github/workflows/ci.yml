@@ -44,12 +44,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: backend
+      - name: api
+        working-directory: packages/api
         run: |
           pnpm build
           pnpm test
 
-      - name: frontend
+      - name: ui
+        working-directory: packages/api
         run: |
           pnpm build
 
@@ -58,4 +60,4 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist/frontend
+          publish_dir: packages/ui/dist

@@ -1,8 +1,7 @@
 import { Container } from "@mantine/core";
 import { nanoid } from "nanoid";
 import { useState } from "react";
-import type { DateOnly } from "../../../../core/DateOnly.js";
-import type { JournalEntry } from "../../../../ledgers/JournalEntry.js";
+import type { DateOnly, JournalEntry } from "@yuuka/api";
 import { JournalEntryForm } from "../components/JournalEntryForm.js";
 
 export const JournalEntryCreatePage = () => {

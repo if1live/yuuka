@@ -21,14 +21,16 @@ const locateFile_default = undefined;
 // import.meta.env 접근시 내용은 환경에 따라 다르다.
 // vite: {BASE_URL: '/yuuka/', MODE: 'development', DEV: true, PROD: false, SSR: false}
 // node: 환경변수
+/* TODO:
 const locateFile: LocateFileFn | undefined =
   typeof import.meta.env.SSR === "boolean"
     ? locateFile_fetch
     : locateFile_default;
+  */
 
 export const prepareSqlJs = async () => {
   const sqlJs = await initSqlJs({
-    locateFile,
+    locateFile: undefined,
   });
   return sqlJs;
 };

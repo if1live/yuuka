@@ -1,0 +1,30 @@
+{
+  "name": "@yuuka/api",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "module": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "files": [
+    "dist",
+    "!dist/test"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check:watch": "tsc --watch --noEmit",
+    "clean": "rimraf dist artifact",
+    "dev": "vite",
+    "fix": "biome check --write --unsafe .",
+    "lint": "biome check .",
+    "test": "vitest"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@types/node": "^20.14.7"
+  },
+  "packageManager": "pnpm@8.15.4"
+}

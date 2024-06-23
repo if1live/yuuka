@@ -1,6 +1,6 @@
 import { Button } from "@mantine/core";
 import { useClipboard } from "@mantine/hooks";
-import { JournalEntry } from "../../../../ledgers/JournalEntry.js";
+import { JournalEntry } from "@yuuka/api";
 
 export const LedgerCodeView = (props: {
   entry: JournalEntry;
