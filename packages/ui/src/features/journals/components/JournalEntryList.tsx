@@ -1,6 +1,6 @@
 import { Table } from "@mantine/core";
-import * as R from "remeda";
 import type { JournalEntry } from "@yuuka/api";
+import * as R from "remeda";
 import { CurrencyDisplay } from "../../../components/CurrencyDisplay.js";
 import { JournalEntryBlock } from "./JournalEntryBlock.js";
 

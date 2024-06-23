@@ -7,15 +7,15 @@ import {
   NativeSelect,
   Table,
 } from "@mantine/core";
-import { useContext } from "react";
-import { useForm } from "react-hook-form";
-import * as R from "remeda";
 import { JournalEntry } from "@yuuka/api";
 import type {
   JournalLine,
   JournalLine_Credit,
   JournalLine_Debit,
 } from "@yuuka/api";
+import { useContext } from "react";
+import { useForm } from "react-hook-form";
+import * as R from "remeda";
 import { masterdata_preset } from "../../../hardcoding.js";
 import { MasterDataContext } from "../../../providers/MasterDataContext.js";
 import { JournalEntryList } from "./JournalEntryList.js";

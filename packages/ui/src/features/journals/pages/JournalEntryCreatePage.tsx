@@ -1,7 +1,8 @@
 import { Container } from "@mantine/core";
+import type { DateOnly, JournalEntry } from "@yuuka/api";
 import { nanoid } from "nanoid";
 import { useState } from "react";
-import type { DateOnly, JournalEntry } from "@yuuka/api";
+import { myfetch } from "../../../fetchers.js";
 import { JournalEntryForm } from "../components/JournalEntryForm.js";
 
 export const JournalEntryCreatePage = () => {
@@ -34,12 +35,15 @@ export const JournalEntryCreatePage = () => {
   };
 
   const onSubmit = async (data: JournalEntry) => {
-    // TODO: 서버 연동은 될수있는 한 미루기
-    /*
     try {
-      const path = `${JournalApi.path}/transaction`;
-      const resp = await MyFetch.doPost(dataSource, path, data);
-      const json = await resp.json();
+      const path = `/api/ledger/create/${data.id}`;
+      const json = await myfetch(path, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       setResult(json);
       setError(null);
@@ -47,7 +51,6 @@ export const JournalEntryCreatePage = () => {
       setResult(null);
       setError(e as Error);
     }
-    */
   };
 
   return (

@@ -13,7 +13,7 @@ app.get("/list", async (c) => {
   return c.json(entries);
 });
 
-app.post("/create/:txid", async (c) => {
+app.post("/create/", async (c) => {
   const userId = AccessTokenHelper.extractOrThrow(c);
   const json = await c.req.json();
 
