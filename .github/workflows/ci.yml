@@ -51,7 +51,7 @@ jobs:
           pnpm test
 
       - name: ui
-        working-directory: packages/api
+        working-directory: packages/ui
         run: |
           pnpm build
 
