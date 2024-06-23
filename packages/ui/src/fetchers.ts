@@ -32,14 +32,16 @@ export const myfetch = async (input: string, init?: RequestInit) => {
     headers,
   });
   if (resp.status < 400) {
-    const json = await resp.json();
+    const resp2 = resp.clone();
+    const json = await resp2.json();
     return json;
   }
 
   // json으로 읽을수 있는 경우
   let json: Record<string, string> | undefined = undefined;
   try {
-    json = await resp.json();
+    const resp2 = resp.clone();
+    json = await resp2.json();
   } catch (e) {
     json = undefined;
   }
