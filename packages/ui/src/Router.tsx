@@ -5,6 +5,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 import { JournalRoute } from "./routes/JournalRoute.js";
+import { LedgerRoute } from "./routes/LedgerRoute.js";
 import { Root } from "./routes/Root.js";
 import { UserRoute } from "./routes/UserRoute.js";
 
@@ -12,6 +13,7 @@ const router = createHashRouter(
   createRoutesFromElements(
     <Route path="/" element={<Root />}>
       <Route path="/journal/*" element={<JournalRoute />} />
+      <Route path="/ledger/*" element={<LedgerRoute />} />
       <Route path="/user/*" element={<UserRoute />} />
     </Route>,
   ),

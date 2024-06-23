@@ -1,8 +1,8 @@
-import type { PropsWithChildren } from "react";
 import type { ResourceController } from "@yuuka/api";
-import { MasterDataContext, type MasterDataRoot } from "./MasterDataContext.js";
+import type { PropsWithChildren } from "react";
 import useSWR from "swr";
 import { myfetch } from "../fetchers.js";
+import { MasterDataContext, type MasterDataRoot } from "./MasterDataContext.js";
 
 export const MasterDataProvider = (props: PropsWithChildren) => {
   const endpoint = "/api/resource/masterdata/";

@@ -39,5 +39,6 @@ export type RemoveReq = z.infer<typeof RemoveReq>;
 
 export const remove = async (db: MyKysely, req: RemoveReq) => {
   const { userId, txid } = req;
-  return await LedgerRepository.remove(db, userId, txid);
+  const result = await LedgerRepository.remove(db, userId, txid);
+  return Number(result.numDeletedRows);
 };

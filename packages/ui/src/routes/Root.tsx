@@ -17,6 +17,10 @@ export const Root = () => {
           journal
         </Anchor>
         {" | "}
+        <Anchor component={Link} to="/ledger">
+          ledger
+        </Anchor>
+        {" | "}
         <Anchor component={Link} to="/user">
           user
         </Anchor>

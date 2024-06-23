@@ -19,6 +19,7 @@ import * as R from "remeda";
 import { MasterDataContext } from "../../../providers/MasterDataContext.js";
 import { JournalEntryList } from "./JournalEntryList.js";
 import { LedgerCodeView } from "./LedgerCodeView.js";
+import { LedgerCopyButton } from "./LedgerCopyButton.js";
 
 type Preset = {
   name: string;
@@ -302,6 +303,7 @@ export const JournalEntryForm = (props: {
         <>
           <h2>ledger</h2>
           <LedgerCodeView entry={values} />
+          <LedgerCopyButton entry={values} />
         </>
       ) : null}
 

@@ -1,7 +1,7 @@
 import { Container } from "@mantine/core";
-import { SupabaseSignOutButton } from "../components/SupabaseSignOutButton.js";
 import { useContext } from "react";
 import { MasterDataContext } from "../../../providers/MasterDataContext.js";
+import { SupabaseSignOutButton } from "../components/SupabaseSignOutButton.js";
 
 export const UserRootPage = () => {
   const masterdata = useContext(MasterDataContext);

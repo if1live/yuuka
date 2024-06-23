@@ -19,17 +19,23 @@ app.post("/create/", async (c) => {
   const json = await c.req.json();
   const paylod = json as JournalEntry;
 
-  const result = await LedgerController.create(db, userId, paylod);
+  const result = await db.transaction().execute(async (trx) => {
+    return await LedgerController.create(trx, userId, paylod);
+  });
   return c.json(result);
 });
 
 app.post("/remove/:txid", async (c) => {
   const txid = c.req.param("txid");
   const userId = AccessTokenHelper.extractOrThrow(c);
-  const result = await LedgerController.remove(db, {
-    userId,
-    txid,
+
+  const result = await db.transaction().execute(async (trx) => {
+    return await LedgerController.remove(trx, {
+      userId,
+      txid,
+    });
   });
+
   return c.json(result);
 });
 
