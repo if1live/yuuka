@@ -12,6 +12,8 @@
     "ignore": [
       "biome.json",
       "package.json",
+      "tsconfig.app.json",
+      "tsconfig.node.json",
       "tsconfig.json"
     ]
   },
