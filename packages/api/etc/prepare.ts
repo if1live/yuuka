@@ -10,7 +10,7 @@ import { SqlJsDialect } from "kysely-wasm";
 import initSqlJs from "sql.js";
 import { z } from "zod";
 import type { MyDatabase } from "../src/rdbms/types.js";
-import { AccountTable, PresetTable } from "../src/tables/index.js";
+import { AccountTable, LedgerTable, PresetTable } from "../src/tables/index.js";
 
 const configSchema = z.object({
   userId: z.string(),
@@ -75,6 +75,7 @@ const query_schema = async (db: Kysely<MyDatabase>) => {
   const sqls = [
     AccountTable.defineSchema_pg(db).compile().sql,
     PresetTable.defineSchema_pg(db).compile().sql,
+    LedgerTable.defineSchema_pg(db).compile().sql,
   ];
   for (const sql of sqls) {
     console.log(`${sql};`);
@@ -84,6 +85,7 @@ const query_schema = async (db: Kysely<MyDatabase>) => {
 const execute_schema = async (db: Kysely<MyDatabase>) => {
   await AccountTable.defineSchema_sqlite(db).execute();
   await PresetTable.defineSchema_sqlite(db).execute();
+  await LedgerTable.defineSchema_sqlite(db).execute();
 };
 
 const query_account = async (db: Kysely<MyDatabase>) => {

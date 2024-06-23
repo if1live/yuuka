@@ -3,7 +3,7 @@ import { SqlJsDialect } from "kysely-wasm";
 import initSqlJs from "sql.js";
 import type { MyConfig } from "../src/rdbms/loader.js";
 import type { MyDatabase } from "../src/rdbms/types.js";
-import { AccountTable } from "../src/tables/index.js";
+import { AccountTable, LedgerTable } from "../src/tables/index.js";
 
 const SQL = await initSqlJs({});
 
@@ -20,6 +20,7 @@ export const fromEmpty = <T = MyDatabase>(opts: MyConfig) => {
 
 const synchronize = async <T>(db: Kysely<T>) => {
   await AccountTable.defineSchema_sqlite(db).execute();
+  await LedgerTable.defineSchema_sqlite(db).execute();
 };
 
 export const TestDatabase = {

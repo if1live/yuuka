@@ -3,21 +3,34 @@ import {
   type Dialect,
   Kysely,
   type KyselyConfig,
+  type KyselyPlugin,
   ParseJSONResultsPlugin,
   PostgresDialect,
   SqliteDialect,
+  WithSchemaPlugin,
 } from "kysely";
 import { default as pg } from "pg";
 
 const options: Omit<KyselyConfig, "dialect"> = {
-  plugins: [new ParseJSONResultsPlugin(), new CamelCasePlugin()],
   // log: ["query", "error"],
 };
 
 const createKysely = <T>(dialect: Dialect) => {
+  let plugins_dialect: KyselyPlugin[] = [];
+  if (dialect instanceof PostgresDialect) {
+    plugins_dialect = [...plugins_dialect, new WithSchemaPlugin("yuuka")];
+  }
+
+  const plugins: KyselyPlugin[] = [
+    new ParseJSONResultsPlugin(),
+    new CamelCasePlugin(),
+    ...plugins_dialect,
+  ];
+
   return new Kysely<T>({
-    dialect,
     ...options,
+    dialect,
+    plugins,
   });
 };
 

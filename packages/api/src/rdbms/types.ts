@@ -1,5 +1,5 @@
 import type { Kysely } from "kysely";
-import { AccountTable, PresetTable } from "../tables/index.js";
+import { AccountTable, LedgerTable, PresetTable } from "../tables/index.js";
 
 /**
  * Database 쓰면 sqlite같은것과 이름 겹쳐서 원하지 않은 형태로 자동완성된다.
@@ -8,6 +8,7 @@ import { AccountTable, PresetTable } from "../tables/index.js";
 export interface MyDatabase {
   [AccountTable.name]: AccountTable.Table;
   [PresetTable.name]: PresetTable.Table;
+  [LedgerTable.name]: LedgerTable.Table;
 }
 
 /** 많은곳에서 사용되는데 import 줄이고 싶어서 단축 정의 */
