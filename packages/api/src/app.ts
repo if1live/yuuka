@@ -1,4 +1,6 @@
 import { Hono } from "hono";
+import { sql } from "kysely";
+import { db } from "./instances/index.js";
 import { settings } from "./settings/index.js";
 
 export const app = new Hono();
@@ -16,5 +18,9 @@ app.get("/", async (c) => {
 });
 
 app.get("/api/foo", async (c) => {
-  return c.json({ ok: true });
+  type Row = { v: number };
+  const compiledQuery = sql<Row>`select 1+2 as v`.compile(db);
+  const output = await db.executeQuery(compiledQuery);
+  const row = output.rows[0];
+  return c.json(row);
 });

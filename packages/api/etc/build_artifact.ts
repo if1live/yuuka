@@ -26,6 +26,8 @@ const opts_common: esbuild.BuildOptions = {
   platform: "node",
   external: [
     // database
+    "sql.js",
+    "kysely-wasm",
     "better-sqlite3",
     "ioredis-mock",
     "typeorm",

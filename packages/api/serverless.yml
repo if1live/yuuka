@@ -2,6 +2,8 @@ service: yuuka
 
 frameworkVersion: "3"
 
+useDotenv: true
+
 plugins:
   - serverless-git-info
   - serverless-scriptable-plugin
@@ -29,6 +31,8 @@ provider:
 
     AWS_ACCOUNT_ID: ${aws:accountId}
     STAGE: ${self:provider.stage}
+
+    DATABASE_URL: ${env:DATABASE_URL}
 
     GIT_COMMIT: ${git:commit}
     GIT_BRANCH: ${git:branch}

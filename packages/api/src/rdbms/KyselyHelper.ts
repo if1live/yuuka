@@ -1,8 +1,6 @@
 import fs from "node:fs/promises";
-import type { Kysely } from "kysely";
 import type { Database } from "sql.js";
 import { NodeSystemError } from "../core/NodeSystemError.js";
-import { AccountTable } from "../tables/index.js";
 
 export const exportFile = async (database: Database, fp: string) => {
   try {
@@ -20,8 +18,4 @@ export const exportFile = async (database: Database, fp: string) => {
   database.exec("VACUUM");
   const buffer = database.export();
   await fs.writeFile(fp, buffer);
-};
-
-export const createSchema = async <T>(db: Kysely<T>) => {
-  await AccountTable.defineSchema_sqlite(db).execute();
 };
