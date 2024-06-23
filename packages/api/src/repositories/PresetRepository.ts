@@ -13,8 +13,8 @@ export const loadAll = async (db: MyKysely, userId: string) => {
     return {
       brief: row.brief,
       name: row.name,
-      lines_credit: row.lines_credit,
-      lines_debit: row.lines_debit,
+      lines_credit: row.linesCredit,
+      lines_debit: row.linesDebit,
     };
   });
   return presets;

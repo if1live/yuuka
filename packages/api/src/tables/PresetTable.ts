@@ -21,7 +21,7 @@ export interface Table {
 
   // 개발 편의상 다 떄려박았다.
   // row 1개가 preset 1개인게 db 관리하기 편해서.
-  lines_debit: JSONColumnType<
+  linesDebit: JSONColumnType<
     Array<{
       account: string;
       debit: number;
@@ -29,7 +29,7 @@ export interface Table {
     }>
   >;
 
-  lines_credit: JSONColumnType<
+  linesCredit: JSONColumnType<
     Array<{
       account: string;
       credit: number;
@@ -54,8 +54,8 @@ export const defineSchema_sqlite = <T>(db: Kysely<T>) => {
     .addColumn("userId", "text")
     .addColumn("name", "text")
     .addColumn("brief", "text")
-    .addColumn("lines_debit", "json")
-    .addColumn("lines_credit", "json")
+    .addColumn("linesDebit", "json")
+    .addColumn("linesCredit", "json")
     .addPrimaryKeyConstraint("primary", [...primaryKeyFields])
     .addUniqueConstraint("userId_name", ["userId", "name"]);
 };
@@ -68,8 +68,8 @@ export const defineSchema_pg = <T>(db: Kysely<T>) => {
     .addColumn("userId", "text")
     .addColumn("name", "text")
     .addColumn("brief", "text")
-    .addColumn("lines_debit", "json")
-    .addColumn("lines_credit", "json")
+    .addColumn("linesDebit", "json")
+    .addColumn("linesCredit", "json")
     .addPrimaryKeyConstraint(`${prefix}_primary`, [...primaryKeyFields])
     .addUniqueConstraint(`${prefix}_userId_name`, ["userId", "name"]);
 };
