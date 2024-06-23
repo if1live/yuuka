@@ -13,18 +13,23 @@
     "!dist/test"
   ],
   "scripts": {
+    "artifact": "tsx etc/build_artifact.ts",
     "build": "tsc",
     "check:watch": "tsc --watch --noEmit",
     "clean": "rimraf dist artifact",
-    "dev": "vite",
+    "dev": "tsx ./src/dev.ts",
     "fix": "biome check --write --unsafe .",
     "lint": "biome check .",
     "test": "vitest"
   },
-  "dependencies": {},
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
-    "@types/node": "^20.14.7"
-  },
-  "packageManager": "pnpm@8.15.4"
+    "@types/aws-lambda": "^8.10.140",
+    "@types/node": "^20.14.7",
+    "esbuild": "^0.21.5",
+    "serverless": "^3.39.0",
+    "serverless-git-info": "^1.2.4",
+    "serverless-scriptable-plugin": "^1.3.1",
+    "serverless-standalone": "^0.0.15"
+  }
 }
