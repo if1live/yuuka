@@ -1,38 +1,33 @@
 import { ErrorMessage } from "@hookform/error-message";
 import {
   Button,
+  Divider,
   Group,
   Input,
   InputWrapper,
   NativeSelect,
   Table,
 } from "@mantine/core";
-import { JournalEntry } from "@yuuka/api";
+import { JournalEntry, type Preset } from "@yuuka/api";
 import type {
   JournalLine,
   JournalLine_Credit,
   JournalLine_Debit,
 } from "@yuuka/api";
-import { useContext } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as R from "remeda";
 import { useMasterData } from "../../../providers/MasterDataProvider.js";
 import { JournalEntryList } from "./JournalEntryList.js";
+import { JournalPresetList } from "./JournalPresetList.js";
 import { LedgerCodeView } from "./LedgerCodeView.js";
 import { LedgerCopyButton } from "./LedgerCopyButton.js";
-
-type Preset = {
-  name: string;
-  brief: string;
-  lines_debit: Omit<JournalLine_Debit, "_tag">[];
-  lines_credit: Omit<JournalLine_Credit, "_tag">[];
-};
 
 export const JournalEntryForm = (props: {
   defaultValue: JournalEntry;
   onSubmit: (entry: JournalEntry) => Promise<void>;
 }) => {
-  const { onSubmit } = props;
+  const [loading, setLoading] = useState(false);
 
   const masterdata = useMasterData();
   const presets = masterdata.presets;
@@ -152,6 +147,12 @@ export const JournalEntryForm = (props: {
     setValue("brief", preset.brief);
   };
 
+  const onSubmit = async (data: JournalEntry) => {
+    setLoading(true);
+    await props.onSubmit(data);
+    setLoading(false);
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -186,7 +187,8 @@ export const JournalEntryForm = (props: {
           />
         </Input.Wrapper>
 
-        <h3>actions</h3>
+        <Divider my="sm" />
+
         <Input.Wrapper>
           <DebitCreditTableActions
             debit={addLine_debit}
@@ -292,12 +294,12 @@ export const JournalEntryForm = (props: {
           );
         })}
 
-        <Button type="submit" disabled={!valid}>
+        <JournalEntryList entries={[values]} />
+
+        <Button type="submit" disabled={!valid} loading={loading}>
           submit
         </Button>
       </form>
-
-      <JournalEntryList entries={[values]} />
 
       {valid ? (
         <>
@@ -308,17 +310,7 @@ export const JournalEntryForm = (props: {
       ) : null}
 
       <h2>Presets</h2>
-      <Group>
-        {presets.map((preset) => (
-          <Button
-            key={preset.name}
-            variant="default"
-            onClick={() => setPreset(preset)}
-          >
-            preset: {preset.name}
-          </Button>
-        ))}
-      </Group>
+      <JournalPresetList onPreset={setPreset} />
     </>
   );
 };
@@ -331,19 +323,19 @@ const DebitCreditTableActions = (props: {
   reset: () => void;
 }) => (
   <Button.Group>
-    <Button type="button" onClick={props.swap} variant="default">
+    <Button type="button" onClick={props.swap} variant="default" size="xs">
       swap
     </Button>
-    <Button type="button" onClick={props.debit} variant="default">
+    <Button type="button" onClick={props.debit} variant="default" size="xs">
       debit
     </Button>
-    <Button type="button" onClick={props.credit} variant="default">
+    <Button type="button" onClick={props.credit} variant="default" size="xs">
       credit
     </Button>
-    <Button type="button" onClick={props.derive} variant="default">
+    <Button type="button" onClick={props.derive} variant="default" size="xs">
       derive
     </Button>
-    <Button type="button" onClick={props.reset} color="red">
+    <Button type="button" onClick={props.reset} color="red" size="xs">
       reset
     </Button>
   </Button.Group>

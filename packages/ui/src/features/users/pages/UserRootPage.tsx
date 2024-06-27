@@ -10,6 +10,10 @@ export const UserRootPage = () => {
   const { accounts, presets } = masterdata;
 
   const synchronize = async () => {
+    // 목록이 사라졋다가 새로 채워지는 연출을 하고 싶다.
+    // 이렇게 안하니까 갱신해도 갱신되었다는 느낌이 없어서.
+    clear();
+
     const endpoint = "/api/resource/masterdata/";
     const data = await myfetch(endpoint);
     const resp = data as ResourceController.MasterdataResp;

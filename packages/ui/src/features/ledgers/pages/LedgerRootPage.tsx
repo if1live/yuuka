@@ -1,5 +1,6 @@
-import { Button, Container, Group, Table } from "@mantine/core";
+import { Button, Container, Divider, Group, Table } from "@mantine/core";
 import type { JournalEntry, LedgerController } from "@yuuka/api";
+import { Fragment } from "react/jsx-runtime";
 import useSWR, { mutate } from "swr";
 import { myfetch } from "../../../fetchers";
 import { LedgerCodeView } from "../../journals/components/LedgerCodeView";
@@ -28,8 +29,11 @@ const LedgerRootView = (props: {
   return (
     <Container>
       <h1>ledger: {entries.length}</h1>
-      {entries.map((entry) => (
-        <LedgerBlock key={entry.id} entry={entry} />
+      {entries.map((entry, idx) => (
+        <Fragment key={idx.toString()}>
+          <LedgerBlock key={entry.id} entry={entry} />
+          <Divider my="sm" />
+        </Fragment>
       ))}
     </Container>
   );
@@ -58,8 +62,8 @@ const LedgerBlock = (props: {
     <>
       <LedgerCodeView entry={entry} />
       <Group>
-        <LedgerCopyButton entry={entry} variant="default" />
-        <Button onClick={handleClick} color="red">
+        <LedgerCopyButton entry={entry} variant="default" size="xs" />
+        <Button onClick={handleClick} color="red" size="xs">
           remove
         </Button>
       </Group>

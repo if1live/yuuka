@@ -1,3 +1,4 @@
+import { Code } from "@mantine/core";
 import { JournalEntry } from "@yuuka/api";
 
 export const LedgerCodeView = (props: {
@@ -5,5 +6,5 @@ export const LedgerCodeView = (props: {
 }) => {
   const { entry } = props;
   const text = JournalEntry.toLedger(entry);
-  return <pre>{text}</pre>;
+  return <Code block>{text}</Code>;
 };

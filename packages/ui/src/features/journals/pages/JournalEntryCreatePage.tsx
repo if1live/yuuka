@@ -1,4 +1,4 @@
-import { Container } from "@mantine/core";
+import { Code, Container } from "@mantine/core";
 import type { DateOnly, JournalEntry } from "@yuuka/api";
 import { nanoid } from "nanoid";
 import { useState } from "react";
@@ -61,14 +61,14 @@ export const JournalEntryCreatePage = () => {
       {error && (
         <>
           <h3>error</h3>
-          <pre>{error.message}</pre>
+          <p>{error.message}</p>
         </>
       )}
 
       {result && (
         <>
           <h3>success</h3>
-          <pre>{JSON.stringify(result, null, 2)}</pre>
+          <Code block>{JSON.stringify(result, null, 2)}</Code>
         </>
       )}
     </Container>
