@@ -14,7 +14,7 @@ app.get("/list", async (c) => {
   return c.json(result);
 });
 
-app.post("/create/", async (c) => {
+app.post("/create", async (c) => {
   const userId = AccessTokenHelper.extractOrThrow(c);
   const json = await c.req.json();
   const paylod = json as JournalEntry;
