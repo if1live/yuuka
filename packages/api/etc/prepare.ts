@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import { assert } from "@toss/assert";
 import {
   CamelCasePlugin,
   Kysely,
@@ -40,7 +41,7 @@ const presetSchema = z.object({
   ),
 });
 
-const dataPath = "./etc/";
+const dataPath = "d:/dev/yuuka/personal-financial-statements/fixtures";
 
 const readConfig = async () => {
   const fp = path.resolve(dataPath, "config.json");
@@ -90,20 +91,26 @@ const execute_schema = async (db: Kysely<MyDatabase>) => {
 
 const query_account = async (db: Kysely<MyDatabase>) => {
   // 복사해서 바로 돌릴수 있는 쿼리를 기대
-  for (const item of accounts) {
+  for (let i = 0; i < accounts.length; i++) {
+    const item = accounts[i];
+    assert(item);
+
+    const sortKey = (i + 1) * 10;
     const sql = `
-insert into "yuuka"."account" ("user_id", "name", "description")
-values ('${userId}', '${item.name}', '${item.description}');`.trimStart();
+insert into "yuuka"."account" ("user_id", "name", "description", "sort_key")
+values ('${userId}', '${item.name}', '${item.description}', ${sortKey});`.trimStart();
     console.log(sql);
   }
 };
 
 const execute_account = async (db: Kysely<MyDatabase>) => {
-  const items = accounts.map((item): AccountTable.NewRow => {
+  const items = accounts.map((item, idx): AccountTable.NewRow => {
+    const sortKey = (idx + 1) * 10;
     return {
       userId,
       name: item.name,
       description: item.description,
+      sortKey,
     };
   });
 
@@ -180,5 +187,15 @@ const main_sqlite = async () => {
   await fs.writeFile(filename, Buffer.from(bytes));
 };
 
-// await main_pg();
-await main_sqlite();
+const target = process.argv[process.argv.length - 1];
+switch (target) {
+  case "pg":
+    await main_pg();
+    break;
+  case "sqlite":
+    await main_sqlite();
+    break;
+  default:
+    console.log("Usage: prepare.ts pg|sqlite");
+    break;
+}

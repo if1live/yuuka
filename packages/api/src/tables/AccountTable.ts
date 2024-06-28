@@ -17,6 +17,7 @@ export interface Table {
   userId: string;
   name: string;
   description: string;
+  sortKey: number;
 }
 
 // TODO: 타입 유도?
@@ -35,6 +36,7 @@ export const defineSchema_sqlite = <T>(db: Kysely<T>) => {
     .addColumn("userId", "text")
     .addColumn("name", "text")
     .addColumn("description", "text")
+    .addColumn("sortKey", "integer")
     .addPrimaryKeyConstraint("primary", [...primaryKeyFields])
     .addUniqueConstraint("userId_name", ["userId", "name"]);
 };
@@ -47,6 +49,7 @@ export const defineSchema_pg = <T>(db: Kysely<T>) => {
     .addColumn("userId", "text")
     .addColumn("name", "text")
     .addColumn("description", "text")
+    .addColumn("sortKey", "integer")
     .addPrimaryKeyConstraint(`${prefix}_primary`, [...primaryKeyFields])
     .addUniqueConstraint(`${prefix}_userId_name`, ["userId", "name"]);
 };

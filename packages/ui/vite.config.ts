@@ -1,7 +1,7 @@
 import react from "@vitejs/plugin-react";
-import { VitePWA } from "vite-plugin-pwa";
 import { visualizer } from "rollup-plugin-visualizer";
 import { defineConfig } from "vite";
+import { VitePWA } from "vite-plugin-pwa";
 
 const baseUrl_ghpage = "/yuuka/";
 const baseUrl_vercel = undefined;
@@ -11,7 +11,8 @@ const baseUrl = process.env.VERCEL ? baseUrl_vercel : baseUrl_ghpage;
 export default defineConfig({
   plugins: [
     react(),
-    visualizer(),
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    visualizer() as any,
     VitePWA({
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
       manifest: {

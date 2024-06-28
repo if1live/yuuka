@@ -26,8 +26,11 @@ const synchronize = async (props: {
 };
 
 const load = async () => {
-  const accounts = await db.accounts.toArray();
+  const accounts_naive = await db.accounts.toArray();
+  const accounts = accounts_naive.sort((a, b) => a.sortKey - b.sortKey);
+
   const presets = await db.presets.toArray();
+
   return {
     accounts,
     presets,
