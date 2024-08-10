@@ -6,7 +6,6 @@ import {
   Input,
   InputWrapper,
   NativeSelect,
-  NumberInput,
   Table,
 } from "@mantine/core";
 import { JournalEntry, type Preset } from "@yuuka/api";
@@ -218,12 +217,12 @@ export const JournalEntryForm = (props: {
               </Input.Wrapper>
 
               <Input.Wrapper label="debit">
-                <NumberInput
-                  {...(register(`lines_debit.${idx}.debit`, {
+                <Input
+                  type="number"
+                  {...register(`lines_debit.${idx}.debit`, {
                     valueAsNumber: true,
                     min: 0,
-                    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-                  }) as any)}
+                  })}
                 />
               </Input.Wrapper>
 
@@ -266,12 +265,12 @@ export const JournalEntryForm = (props: {
                 </NativeSelect>
               </InputWrapper>
               <InputWrapper label="credit">
-                <NumberInput
-                  {...(register(`lines_credit.${idx}.credit`, {
+                <Input
+                  type="number"
+                  {...register(`lines_credit.${idx}.credit`, {
                     valueAsNumber: true,
                     min: 0,
-                    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-                  }) as any)}
+                  })}
                 />
               </InputWrapper>
               <InputWrapper label="commodity">
